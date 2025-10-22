@@ -19,7 +19,13 @@ const nextConfig = {
         }
       }),
     ],
+    // Add quality 100 to support Payload CMS image optimization
+    // Next.js 16 changed default from [1..100] to just [75]
+    qualities: [100, 75],
   },
+  // Externalize server components packages for Payload CMS compatibility
+  // Moved out of experimental in Next.js 16
+  serverExternalPackages: ['drizzle-kit', 'esbuild', '@esbuild/darwin-arm64'],
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
@@ -29,6 +35,9 @@ const nextConfig = {
 
     return webpackConfig
   },
+  // Empty turbopack config to silence Next.js 16 warning
+  // The webpack config is needed by Payload CMS and works fine under Turbopack
+  turbopack: {},
   reactStrictMode: true,
   redirects,
 }
