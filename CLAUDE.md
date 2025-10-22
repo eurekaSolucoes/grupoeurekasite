@@ -125,7 +125,7 @@ Note: Image cache requires republishing the page if images are cropped/changed.
 - **TailwindCSS**: Configured in `tailwind.config.mjs`
 - **shadcn/ui**: Component library with customizable UI components
 - **Geist Font**: Typography via `geist` package
-- Dark mode support via CSS variables
+- Light mode only (dark mode has been removed from the project)
 
 ### Type Safety
 
