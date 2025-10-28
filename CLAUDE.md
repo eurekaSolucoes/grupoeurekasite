@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Payload CMS website template built with Next.js 15, featuring a full-stack application with both admin panel and frontend website capabilities. The project uses Payload CMS 3.60.0 with PostgreSQL as the database adapter.
+This is a Payload CMS website template built with Next.js 16, featuring a full-stack application with both admin panel and frontend website capabilities. The project uses Payload CMS 3.60.0 with MongoDB as the database adapter.
 
 ## Development Commands
 
@@ -24,24 +24,16 @@ This is a Payload CMS website template built with Next.js 15, featuring a full-s
 - `pnpm payload` - Run Payload CLI
 - `pnpm generate:types` - Generate TypeScript types from Payload config
 - `pnpm generate:importmap` - Generate import map for admin panel
-- `pnpm payload migrate:create` - Create a new database migration
-- `pnpm payload migrate` - Run pending database migrations
 
-### Database Migrations
+### Database Management
 
-**CRITICAL for Postgres**: When making schema changes (adding/modifying collections, fields), you must create and run migrations:
-
-1. Make changes to Payload collections/fields
-2. Create migration: `pnpm payload migrate:create`
-3. Before deployment, run migrations: `pnpm payload migrate`
-
-Note: In development, `push: true` is set by default, allowing schema changes without migrations. For production, set `push: false` to avoid data loss.
+**MongoDB**: This project uses MongoDB Atlas with Mongoose adapter. Schema changes are handled automatically by Mongoose - simply update your collections and restart the dev server. No migrations needed!
 
 ## Architecture
 
 ### Next.js App Router Structure
 
-The project uses Next.js 15 App Router with route groups:
+The project uses Next.js 16 App Router with route groups:
 - `src/app/(frontend)` - Public-facing website routes
 - `src/app/(payload)` - Payload admin panel and API routes
 
@@ -144,7 +136,7 @@ Generated types: `src/payload-types.ts` (regenerated with `pnpm generate:types`)
 ## Environment Variables
 
 Required variables (see `.env.example`):
-- `DATABASE_URI` - PostgreSQL connection string
+- `DATABASE_URI` - MongoDB connection string (e.g., `mongodb://127.0.0.1/your-database-name` or `mongodb+srv://user:pass@cluster.mongodb.net/dbname`)
 - `PAYLOAD_SECRET` - JWT encryption secret
 - `NEXT_PUBLIC_SERVER_URL` - Public URL for link generation
 - `CRON_SECRET` - Authenticates cron job requests
@@ -156,7 +148,7 @@ Required variables (see `.env.example`):
 1. Create collection config in `src/collections/[Name]/index.ts`
 2. Import and add to `collections` array in `src/payload.config.ts`
 3. Run `pnpm generate:types` to update TypeScript types
-4. Create migration: `pnpm payload migrate:create`
+4. Restart dev server - MongoDB will automatically create the collection
 
 **Adding a new block**:
 1. Create `src/blocks/[BlockName]/config.ts` (Payload schema)
