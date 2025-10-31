@@ -12,6 +12,7 @@ import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -43,6 +44,19 @@ type Args = {
   }>
 }
 
+const testBlocks = [
+  'red',
+  'blue',
+  'green',
+  'yellow',
+  'purple',
+  'orange',
+  'pink',
+  'brown',
+  'gray',
+  'black',
+]
+
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = 'home' } = await paramsPromise
@@ -68,14 +82,25 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   return (
     <article className="pt-16 pb-24">
-      <PageClient />
+      {/* <PageClient /> */}
       {/* Allows redirects for valid pages too */}
-      <PayloadRedirects disableNotFound url={url} />
+      {/* <PayloadRedirects disableNotFound url={url} /> */}
 
-      {draft && <LivePreviewListener />}
+      {/* {draft && <LivePreviewListener />} */}
 
-      <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+      {/* <RenderHero {...hero} /> */}
+      {/* <RenderBlocks blocks={layout} /> */}
+      {testBlocks.map((block, index) => (
+        <HeaderThemeSetter key={block} theme={index % 2 === 0 ? 'light' : 'dark'}>
+          <div
+            key={block}
+            style={{ backgroundColor: block }}
+            className={'w-full h-screen grid place-items-center text-2xl font-medium text-white'}
+          >
+            {index + 1}
+          </div>
+        </HeaderThemeSetter>
+      ))}
     </article>
   )
 }
