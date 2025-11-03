@@ -105,12 +105,12 @@ export interface Config {
     defaultIDType: string;
   };
   globals: {
-    header: Header;
-    footer: Footer;
+    navigation: Navigation;
+    homepage: Homepage;
   };
   globalsSelect: {
-    header: HeaderSelect<false> | HeaderSelect<true>;
-    footer: FooterSelect<false> | FooterSelect<true>;
+    navigation: NavigationSelect<false> | NavigationSelect<true>;
+    homepage: HomepageSelect<false> | HomepageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -1637,11 +1637,11 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header".
+ * via the `definition` "navigation".
  */
-export interface Header {
+export interface Navigation {
   id: string;
-  navItems?:
+  headerMenu?:
     | {
         link: {
           type?: ('reference' | 'custom') | null;
@@ -1661,17 +1661,90 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  footerMenu: {
+    solutions: {
+      title: string;
+      links?:
+        | {
+            link: {
+              type?: ('reference' | 'custom') | null;
+              newTab?: boolean | null;
+              reference?:
+                | ({
+                    relationTo: 'pages';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'posts';
+                    value: string | Post;
+                  } | null);
+              url?: string | null;
+              label: string;
+            };
+            id?: string | null;
+          }[]
+        | null;
+    };
+    access: {
+      title: string;
+      links?:
+        | {
+            link: {
+              type?: ('reference' | 'custom') | null;
+              newTab?: boolean | null;
+              reference?:
+                | ({
+                    relationTo: 'pages';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'posts';
+                    value: string | Post;
+                  } | null);
+              url?: string | null;
+              label: string;
+            };
+            id?: string | null;
+          }[]
+        | null;
+    };
+    social: {
+      title: string;
+      links?:
+        | {
+            icon: 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'youtube' | 'tiktok' | 'whatsapp' | 'telegram';
+            url: string;
+            /**
+             * Texto alternativo para acessibilidade
+             */
+            label?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
+  };
+  /**
+   * Cole o link completo do WhatsApp (ex: https://wa.me/5511999999999)
+   */
+  whatsappLink?: string | null;
+  /**
+   * Endereço completo. Pode usar múltiplas linhas.
+   */
+  address?: string | null;
+  phone?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer".
+ * via the `definition` "homepage".
  */
-export interface Footer {
+export interface Homepage {
   id: string;
-  navItems?:
+  banners?:
     | {
+        subtitle?: string | null;
+        title: string;
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
@@ -1687,18 +1760,111 @@ export interface Footer {
           url?: string | null;
           label: string;
         };
+        backgroundImage: string | Media;
+        featuredImage: string | Media;
         id?: string | null;
       }[]
     | null;
+  solutions?: {
+    title?: string | null;
+    subtitle?: string | null;
+    cards?:
+      | {
+          image: string | Media;
+          title: string;
+          /**
+           * Link opcional para o card
+           */
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    description?: string | null;
+    animatedPhrase?: string | null;
+  };
+  about: {
+    mainText: string;
+    secondaryText?: string | null;
+    rightImages?:
+      | {
+          image: string | Media;
+          id?: string | null;
+        }[]
+      | null;
+    leftImages?:
+      | {
+          image: string | Media;
+          id?: string | null;
+        }[]
+      | null;
+    link: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+    };
+    animatedPhrase?: string | null;
+  };
+  stories: {
+    title?: string | null;
+    subtitle?: string | null;
+    description?: string | null;
+    link: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+    };
+    cards?:
+      | {
+          image: string | Media;
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header_select".
+ * via the `definition` "navigation_select".
  */
-export interface HeaderSelect<T extends boolean = true> {
-  navItems?:
+export interface NavigationSelect<T extends boolean = true> {
+  headerMenu?:
     | T
     | {
         link?:
@@ -1712,18 +1878,78 @@ export interface HeaderSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  footerMenu?:
+    | T
+    | {
+        solutions?:
+          | T
+          | {
+              title?: T;
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                        };
+                    id?: T;
+                  };
+            };
+        access?:
+          | T
+          | {
+              title?: T;
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                        };
+                    id?: T;
+                  };
+            };
+        social?:
+          | T
+          | {
+              title?: T;
+              links?:
+                | T
+                | {
+                    icon?: T;
+                    url?: T;
+                    label?: T;
+                    id?: T;
+                  };
+            };
+      };
+  whatsappLink?: T;
+  address?: T;
+  phone?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer_select".
+ * via the `definition` "homepage_select".
  */
-export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+export interface HomepageSelect<T extends boolean = true> {
+  banners?:
     | T
     | {
+        subtitle?: T;
+        title?: T;
         link?:
           | T
           | {
@@ -1733,7 +1959,85 @@ export interface FooterSelect<T extends boolean = true> {
               url?: T;
               label?: T;
             };
+        backgroundImage?: T;
+        featuredImage?: T;
         id?: T;
+      };
+  solutions?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        cards?:
+          | T
+          | {
+              image?: T;
+              title?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
+        description?: T;
+        animatedPhrase?: T;
+      };
+  about?:
+    | T
+    | {
+        mainText?: T;
+        secondaryText?: T;
+        rightImages?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
+        leftImages?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        animatedPhrase?: T;
+      };
+  stories?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        description?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        cards?:
+          | T
+          | {
+              image?: T;
+              title?: T;
+              description?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

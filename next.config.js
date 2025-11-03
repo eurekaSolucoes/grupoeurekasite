@@ -18,6 +18,15 @@ const nextConfig = {
           protocol: url.protocol.replace(':', ''),
         }
       }),
+      // AWS S3 bucket for media storage
+      {
+        protocol: 'https',
+        hostname: 'grupo-eureka-site.s3.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'grupo-eureka-site.s3.us-east-1.amazonaws.com',
+      },
     ],
     // Add quality 100 to support Payload CMS image optimization
     // Next.js 16 changed default from [1..100] to just [75]

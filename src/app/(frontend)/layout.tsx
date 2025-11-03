@@ -6,8 +6,9 @@ import { GeistSans } from 'geist/font/sans'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
-import { Footer } from '@/Footer/Component'
-import { Header } from '@/Header/Component'
+// TODO: Implement Navigation components for Header/Footer
+// import { Footer } from '@/Footer/Component'
+// import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
@@ -32,9 +33,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           />
 
-          <Header />
+          {/* TODO: Implement Header component using Navigation global */}
+          {/* <Header /> */}
           {children}
-          <Footer />
+          {/* TODO: Implement Footer component using Navigation global */}
+          {/* <Footer /> */}
         </Providers>
       </body>
     </html>

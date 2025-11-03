@@ -14,6 +14,7 @@ This is a Payload CMS website template built with Next.js 16, featuring a full-s
 - `pnpm dev` - Start development server (http://localhost:3000)
 - `pnpm build` - Build for production
 - `pnpm start` - Start production server
+- `pnpm dev:prod` - Clean build and test production mode locally
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Fix linting issues automatically
 
@@ -33,6 +34,23 @@ This is a Payload CMS website template built with Next.js 16, featuring a full-s
 
 ## Architecture
 
+### Directory Structure
+
+Key directories in `src/`:
+- `app/` - Next.js App Router with (frontend) and (payload) route groups
+- `blocks/` - Payload layout builder blocks (Content, Hero, MediaBlock, etc.)
+- `collections/` - Payload collections (Pages, Posts, Projects, Media, Categories, Users)
+- `components/` - Reusable React components (RichText, Media, CollectionArchive, etc.)
+- `providers/` - React context providers (Theme, HeaderTheme)
+- `utilities/` - Helper functions (generatePreviewPath, getURL, generateMeta)
+- `access/` - Access control policies (authenticated, authenticatedOrPublished)
+- `fields/` - Reusable Payload field configurations (defaultLexical)
+- `heros/` - Hero block configurations
+- `hooks/` - Payload hooks (revalidation, etc.)
+- `plugins/` - Plugin configurations
+- `Navigation/` & `Homepage/` - Global configurations
+- `search/` - Search functionality (field overrides, beforeSync)
+
 ### Next.js App Router Structure
 
 The project uses Next.js 16 App Router with route groups:
@@ -40,7 +58,7 @@ The project uses Next.js 16 App Router with route groups:
   - `/[slug]` - Dynamic page routes
   - `/posts` - Blog posts listing and individual post pages
   - `/search` - Search functionality
-  - `/page.tsx` - Homepage (renders from `src/Homepage` collection or default content)
+  - `/page.tsx` - Homepage (renders a Page with slug='home' from Pages collection)
 - `src/app/(payload)` - Payload admin panel and API routes
   - `/admin` - Payload CMS admin panel
   - `/api` - Payload API endpoints
@@ -60,20 +78,21 @@ Core config: `src/payload.config.ts`
 - **Users**: Auth-enabled collection for admin access
 
 **Globals** (site-wide settings):
-- **Header**: Navigation and header configuration
-- **Footer**: Footer configuration
+- **Navigation**: Menu superior, menu rodapé (3 seções), WhatsApp link, endereço e telefone
+- **Homepage**: Homepage customizada com 4 seções específicas (Banner, Soluções, Sobre, Histórias)
 
 ### Layout Builder System
 
 Pages use a flexible layout builder with blocks defined in `src/blocks/`:
-- **Hero**: Multiple impact levels (high/medium/low/none) with rich text and media
+- **Hero**: Multiple impact levels (high/medium/low/none) with rich text and media (configured in `src/heros/config.ts`)
 - **Content**: Rich text content block
 - **MediaBlock**: Image/video display with captions
 - **CallToAction**: CTA sections
 - **Archive**: Display collections of posts/pages
 - **FormBlock**: Form builder integration
-- **Banner**: Inline banners
-- **Code**: Syntax-highlighted code blocks
+- **Banner**: Inline banners (can be embedded in Lexical editor)
+- **Code**: Syntax-highlighted code blocks with client-side copy button
+- **RelatedPosts**: Display related posts (typically used in post detail pages)
 
 Block configs are in `[BlockName]/config.ts` and React components in `[BlockName]/Component.tsx`.
 
@@ -165,6 +184,32 @@ Required variables (see `.env.example`):
 - `PREVIEW_SECRET` - Validates draft preview requests
 
 ## Key Patterns
+
+**Configuring the homepage**:
+The homepage is a **Global** (not a collection) located in **Globais → Homepage** in the admin panel.
+
+**Homepage structure** (4 customized sections):
+1. **Banners**: Array de banners (Subtítulo, Título, Link, Imagem de Fundo, Imagem em Destaque)
+2. **Soluções**: Título, Subtítulo, Cards (array com imagem, título e link opcional), Descrição, Frase Animada
+3. **Sobre**: Texto Principal, Texto Secundário, Imagens Direita (2), Imagens Esquerda (2), Link, Frase Animada
+4. **Histórias**: Título, Subtítulo, Descrição, Link, Cards (array com imagem, título e descrição)
+
+All fields use the existing `link` field from `@/fields/link` for consistent link handling (internal pages/posts or custom URLs).
+
+**Configuring navigation (Header & Footer)**:
+The navigation is a **Global** (not a collection) located in **Globais → Navegação** in the admin panel.
+
+**Navigation structure**:
+1. **Menu Superior**: Array de links para o menu header (1 nível apenas)
+2. **Menu Rodapé** (3 grupos):
+   - **Soluções**: Título + array de links
+   - **Acesse**: Título + array de links
+   - **Socialize**: Título + array de links com ícone (facebook, instagram, linkedin, twitter, youtube, tiktok, whatsapp, telegram)
+3. **Link do WhatsApp**: Campo texto para URL completa do WhatsApp
+4. **Endereço**: Campo textarea para endereço completo (múltiplas linhas)
+5. **Telefone**: Campo texto para número de telefone
+
+All menu links use the existing `link` field for consistent handling. Social media links use a custom structure with icon selector + URL.
 
 **Adding a new collection**:
 1. Create collection config in `src/collections/[Name]/index.ts`
