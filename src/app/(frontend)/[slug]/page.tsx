@@ -82,15 +82,15 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   return (
     <article className="pt-16 pb-24">
-      {/* <PageClient /> */}
+      <PageClient />
       {/* Allows redirects for valid pages too */}
-      {/* <PayloadRedirects disableNotFound url={url} /> */}
+      <PayloadRedirects disableNotFound url={url} />
 
-      {/* {draft && <LivePreviewListener />} */}
+      {draft && <LivePreviewListener />}
 
-      {/* <RenderHero {...hero} /> */}
-      {/* <RenderBlocks blocks={layout} /> */}
-      {testBlocks.map((block, index) => (
+      <RenderHero {...hero} />
+      <RenderBlocks blocks={layout} />
+      {/* {testBlocks.map((block, index) => (
         <HeaderThemeSetter key={block} theme={index % 2 === 0 ? 'light' : 'dark'}>
           <div
             key={block}
@@ -100,7 +100,7 @@ export default async function Page({ params: paramsPromise }: Args) {
             {index + 1}
           </div>
         </HeaderThemeSetter>
-      ))}
+      ))} */}
     </article>
   )
 }

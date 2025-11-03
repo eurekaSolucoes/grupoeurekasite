@@ -15,8 +15,8 @@ import { draftMode } from 'next/headers'
 import { TypedLocale } from 'payload'
 
 import './globals.css'
-import { getMessages, setRequestLocale } from 'next-intl/server'
-import { NextIntlClientProvider } from 'next-intl'
+// import { getMessages, setRequestLocale } from 'next-intl/server'
+// import { NextIntlClientProvider } from 'next-intl'
 import { routing } from '@/i18n/routing'
 import { notFound } from 'next/navigation'
 import localization from '@/i18n/localization'
@@ -36,10 +36,10 @@ export default async function RootLayout({ children, params }: Args) {
   if (!routing.locales.includes(locale as any)) {
     notFound()
   }
-  setRequestLocale(locale)
+  // setRequestLocale(locale)
 
   const { isEnabled } = await draftMode()
-  const messages = await getMessages()
+  // const messages = await getMessages()
 
   return (
     <html
@@ -55,12 +55,12 @@ export default async function RootLayout({ children, params }: Args) {
       </head>
       <body>
         <Providers>
-          <NextIntlClientProvider messages={messages}>
+          {/* <NextIntlClientProvider messages={messages}> */}
             <LivePreviewListener />
             <Header locale={locale} />
             {children}
             <Footer locale={locale} />
-          </NextIntlClientProvider>
+          {/* </NextIntlClientProvider> */}
         </Providers>
       </body>
     </html>
