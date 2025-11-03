@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Payload CMS website template built with Next.js 16, featuring a full-stack application with both admin panel and frontend website capabilities. The project uses Payload CMS 3.60.0 with MongoDB as the database adapter.
+This is a Payload CMS website template built with Next.js 16, featuring a full-stack application with both admin panel and frontend website capabilities. The project uses Payload CMS 3.62.1 with MongoDB (Mongoose adapter) as the database.
+
+**Language**: The project is configured with Portuguese (pt) as the default language. Admin labels use "Globais" for globals grouping.
 
 ## Development Commands
 
@@ -35,7 +37,13 @@ This is a Payload CMS website template built with Next.js 16, featuring a full-s
 
 The project uses Next.js 16 App Router with route groups:
 - `src/app/(frontend)` - Public-facing website routes
+  - `/[slug]` - Dynamic page routes
+  - `/posts` - Blog posts listing and individual post pages
+  - `/search` - Search functionality
+  - `/page.tsx` - Homepage (renders from `src/Homepage` collection or default content)
 - `src/app/(payload)` - Payload admin panel and API routes
+  - `/admin` - Payload CMS admin panel
+  - `/api` - Payload API endpoints
 
 This separation allows both admin and frontend to coexist at the same domain.
 
@@ -46,6 +54,7 @@ Core config: `src/payload.config.ts`
 **Collections** (main content types):
 - **Pages**: Layout builder enabled, draft previews, SEO plugin integration
 - **Posts**: Rich content with Lexical editor, categories, authors, related posts
+- **Projects**: Portfolio/project showcase with image upload and SEO support
 - **Media**: Upload collection with image resizing and focal point support
 - **Categories**: Nested docs plugin enabled for hierarchical organization
 - **Users**: Auth-enabled collection for admin access
@@ -83,17 +92,18 @@ Defined in `src/access/`:
 Configured in `src/plugins/index.ts`:
 - **SEO Plugin**: Meta tags, OpenGraph, title/description generation
 - **Search Plugin**: Full-text search on posts collection
-- **Redirects Plugin**: URL redirect management with Next.js revalidation
-- **Nested Docs Plugin**: Hierarchical categories
-- **Form Builder Plugin**: Dynamic form creation
+- **Redirects Plugin**: URL redirect management for pages, posts, and projects with Next.js revalidation
+- **Nested Docs Plugin**: Hierarchical categories with URL generation
+- **Form Builder Plugin**: Dynamic form creation with Lexical editor for confirmation messages
 - **Payload Cloud Plugin**: Cloud hosting integration
 
 ### Hooks & Revalidation
 
 Payload hooks trigger Next.js on-demand revalidation:
-- `src/collections/Pages/hooks/revalidatePage.ts` - Revalidates pages on change
-- `src/collections/Posts/hooks/revalidatePost.ts` - Revalidates posts on change
-- `src/hooks/revalidateRedirects.ts` - Rebuilds redirects
+- `src/collections/Pages/hooks/revalidatePage.ts` - Revalidates pages on change/delete
+- `src/collections/Posts/hooks/revalidatePost.ts` - Revalidates posts on change/delete
+- `src/collections/Projects/hooks/revalidateProject.ts` - Revalidates projects on change/delete
+- `src/hooks/revalidateRedirects.ts` - Rebuilds redirects on change
 
 Note: Image cache requires republishing the page if images are cropped/changed.
 
@@ -126,6 +136,18 @@ TypeScript paths configured in `tsconfig.json`:
 - `@payload-config` - Maps to `src/payload.config.ts`
 
 Generated types: `src/payload-types.ts` (regenerated with `pnpm generate:types`)
+
+### Next.js 16 Configuration
+
+The project has been updated for Next.js 16 compatibility. Key changes in `next.config.js`:
+
+- **Image optimization**:
+  - Quality settings explicitly set to `[100, 75]` (Next.js 16 changed default from `[1..100]` to just `[75]`)
+  - Local patterns allow `/api/media/file/**` with query strings for Payload CMS media
+  - `dangerouslyAllowLocalIP` enabled for development only (default changed to false in Next.js 16)
+- **Server externals**: Moved from `experimental.serverExternalPackages` to `serverExternalPackages` (no longer experimental)
+- **Webpack config**: Custom extension aliases needed for Payload CMS compatibility (`.js` → `.ts/.tsx`, etc.)
+- **Turbopack**: Empty config to silence warning while using webpack (Payload CMS requires webpack)
 
 ### Deployment Considerations
 
