@@ -87,7 +87,7 @@ export function FooterMock() {
         </div>
         <div className="xl:flex-1">
           <h3 className="text-xs text-accent mb-3 xl:text-sm">Redes</h3>
-          <ul className="flex items-center gap-4 xl:flex-col xl:items-start xl:gap-3">
+          <ul className="flex items-center gap-4 xl:flex-col xl:items-start">
             {footerMockData.socialLinks.map((social) => {
               const Icon = socialIcons[social.platform] // pega o ícone correto
 
