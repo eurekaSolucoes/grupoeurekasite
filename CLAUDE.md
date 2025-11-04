@@ -4,33 +4,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Payload CMS website template built with Next.js 16, featuring a full-stack application with both admin panel and frontend website capabilities. The project uses Payload CMS 3.60.0 with MongoDB as the database adapter.
+This is a Payload CMS website template built with Next.js 16, featuring a full-stack application with both admin panel and frontend website capabilities. The project uses Payload CMS 3.62.1 with MongoDB (Mongoose adapter) as the database.
 
-**Key Technologies:**
-- Next.js 16 with App Router and Turbopack
-- React 19.2.0
-- Payload CMS 3.60.0
-- MongoDB with Mongoose adapter
-- TailwindCSS 4.1.15 with shadcn/ui
-- TypeScript with strict mode
-- pnpm package manager (required v9 or v10)
-- Node.js ^18.20.2 || >=20.9.0
-
-**Localization:** Default language is Portuguese (`pt`). Admin panel groupings and some labels use Portuguese (e.g., "Globais").
+**Language**: The project is configured with Portuguese (pt) as the default language. Admin labels use "Globais" for globals grouping.
 
 ## Development Commands
 
 ### Essential Commands
 - `pnpm dev` - Start development server (http://localhost:3000)
-- `pnpm build` - Build for production (includes sitemap generation)
+- `pnpm build` - Build for production
 - `pnpm start` - Start production server
+- `pnpm dev:prod` - Clean build and test production mode locally
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Fix linting issues automatically
 
 ### Testing
 - `pnpm test` - Run all tests (integration + e2e)
-- `pnpm test:int` - Run integration tests with Vitest (jsdom environment)
-- `pnpm test:e2e` - Run end-to-end tests with Playwright (auto-starts dev server)
+- `pnpm test:int` - Run integration tests with Vitest
+- `pnpm test:e2e` - Run end-to-end tests with Playwright
 
 ### Payload-Specific Commands
 - `pnpm payload` - Run Payload CLI
@@ -39,172 +30,123 @@ This is a Payload CMS website template built with Next.js 16, featuring a full-s
 
 ### Database Management
 
-**MongoDB**: This project uses MongoDB with Mongoose adapter. Schema changes are handled automatically by Mongoose - simply update your collections and restart the dev server. **No migrations needed!**
-
-**When to regenerate types:**
-- After adding/modifying collections
-- After adding/modifying fields
-- After changing global configs
-- Run: `pnpm generate:types` then restart dev server
+**MongoDB**: This project uses MongoDB Atlas with Mongoose adapter. Schema changes are handled automatically by Mongoose - simply update your collections and restart the dev server. No migrations needed!
 
 ## Architecture
+
+### Directory Structure
+
+Key directories in `src/`:
+- `app/` - Next.js App Router with (frontend) and (payload) route groups
+- `blocks/` - Payload layout builder blocks (Content, Hero, MediaBlock, etc.)
+- `collections/` - Payload collections (Pages, Posts, Projects, Media, Categories, Users)
+- `components/` - Reusable React components (RichText, Media, CollectionArchive, etc.)
+- `providers/` - React context providers (Theme, HeaderTheme)
+- `utilities/` - Helper functions (generatePreviewPath, getURL, generateMeta)
+- `access/` - Access control policies (authenticated, authenticatedOrPublished)
+- `fields/` - Reusable Payload field configurations (defaultLexical)
+- `heros/` - Hero block configurations
+- `hooks/` - Payload hooks (revalidation, etc.)
+- `plugins/` - Plugin configurations
+- `Navigation/` & `Homepage/` - Global configurations
+- `search/` - Search functionality (field overrides, beforeSync)
 
 ### Next.js App Router Structure
 
 The project uses Next.js 16 App Router with route groups:
 - `src/app/(frontend)` - Public-facing website routes
+  - `/[slug]` - Dynamic page routes
+  - `/posts` - Blog posts listing and individual post pages
+  - `/search` - Search functionality
+  - `/page.tsx` - Homepage (renders a Page with slug='home' from Pages collection)
 - `src/app/(payload)` - Payload admin panel and API routes
+  - `/admin` - Payload CMS admin panel
+  - `/api` - Payload API endpoints
 
 This separation allows both admin and frontend to coexist at the same domain.
-
-**Key Next.js 16 Configurations:**
-- Turbopack enabled by default
-- Custom webpack config for extension aliasing (`.js` → `.ts`)
-- Image optimization configured for Payload CMS:
-  - Qualities: `[100, 75]` (100 added for Payload compatibility)
-  - Local patterns for `/api/media/file/**`
-  - `dangerouslyAllowLocalIP: true` in dev only (Next.js 16 security requirement)
-- Server external packages: `drizzle-kit`, `esbuild`, `@esbuild/darwin-arm64`
 
 ### Payload CMS Configuration
 
 Core config: `src/payload.config.ts`
 
 **Collections** (main content types):
-- **Pages**: Layout builder enabled, draft previews, live preview, SEO plugin integration, scheduled publishing
-- **Posts**: Rich content with Lexical editor, categories, authors, related posts, embedded blocks
-- **Projects**: Simple collection with single image, SEO integration, draft/scheduled publishing
-- **Media**: Upload collection with 7 image sizes, focal point support, stored in `public/media/`
+- **Pages**: Layout builder enabled, draft previews, SEO plugin integration
+- **Posts**: Rich content with Lexical editor, categories, authors, related posts
+- **Projects**: Portfolio/project showcase with image upload and SEO support
+- **Media**: Upload collection with image resizing and focal point support
 - **Categories**: Nested docs plugin enabled for hierarchical organization
-- **Users**: Auth-enabled collection for admin access (simple: name + email)
+- **Users**: Auth-enabled collection for admin access
 
 **Globals** (site-wide settings):
-- **Header**: Navigation items (max 6), auto-revalidation
-- **Footer**: Footer configuration, auto-revalidation
+- **Navigation**: Menu superior, menu rodapé (3 seções), WhatsApp link, endereço e telefone
+- **Homepage**: Homepage customizada com 4 seções específicas (Banner, Soluções, Sobre, Histórias)
 
 ### Layout Builder System
 
 Pages use a flexible layout builder with blocks defined in `src/blocks/`:
-- **CallToAction**: CTA sections with rich text + link groups
+- **Hero**: Multiple impact levels (high/medium/low/none) with rich text and media (configured in `src/heros/config.ts`)
 - **Content**: Rich text content block
-- **MediaBlock**: Image/video display with captions (can be embedded in rich text)
-- **ArchiveBlock**: Display collections of posts/pages with filtering
-- **Form**: Form builder integration
+- **MediaBlock**: Image/video display with captions
+- **CallToAction**: CTA sections
+- **Archive**: Display collections of posts/pages
+- **FormBlock**: Form builder integration
+- **Banner**: Inline banners (can be embedded in Lexical editor)
+- **Code**: Syntax-highlighted code blocks with client-side copy button
+- **RelatedPosts**: Display related posts (typically used in post detail pages)
 
 Block configs are in `[BlockName]/config.ts` and React components in `[BlockName]/Component.tsx`.
 
-**RenderBlocks component** (`src/blocks/RenderBlocks.tsx`) maps block types to React components.
-
-### Hero System
-
-Separate from blocks, heroes are configured in `src/heros/config.ts`:
-- **4 impact levels**: `none`, `lowImpact`, `mediumImpact`, `highImpact`
-- Rich text content with link groups (max 2 links)
-- Media upload required for high/medium impact
-- **RenderHero component** renders different variants
-
 ### Rich Text Editor
 
-Uses Lexical editor (`@payloadcms/richtext-lexical`) configured in `src/fields/defaultLexical.ts`.
-
-**Default features:**
-- Paragraph, Bold, Italic, Underline, Link
-- Links can reference internal pages/posts or external URLs
-
-**Posts use enhanced Lexical:**
-- H1-H4 headings
-- Embedded blocks: Banner, Code, MediaBlock
-- Fixed + Inline toolbars
-- Horizontal rules
-
-**Banner block**: Inline alert banners (success, warning, error, info)
-**Code block**: Syntax-highlighted code with language selection
+Uses Lexical editor (`@payloadcms/richtext-lexical`) configured in `src/fields/defaultLexical.ts`. Posts can embed blocks (Banner, Code, MediaBlock) within content.
 
 ### Access Control
 
 Defined in `src/access/`:
-- `anyone`: Public access (returns `true`)
 - `authenticated`: Only logged-in users can access
 - `authenticatedOrPublished`: Public can read published content, users can access drafts
 
-Applied at collection level in config to control CRUD operations.
-
 ### Plugins
 
-Configured in `src/plugins/index.ts` (all grouped under "Globais" in admin panel):
-- **SEO Plugin**: Meta tags, OpenGraph, custom `generateTitle` and `generateURL` functions
-- **Search Plugin**: Full-text search on posts collection with custom field overrides (`src/search/fieldOverrides.ts`)
-- **Redirects Plugin**: URL redirect management with Next.js revalidation
-- **Nested Docs Plugin**: Hierarchical categories
-- **Form Builder Plugin**: Dynamic form creation (payment disabled)
+Configured in `src/plugins/index.ts`:
+- **SEO Plugin**: Meta tags, OpenGraph, title/description generation
+- **Search Plugin**: Full-text search on posts collection
+- **Redirects Plugin**: URL redirect management for pages, posts, and projects with Next.js revalidation
+- **Nested Docs Plugin**: Hierarchical categories with URL generation
+- **Form Builder Plugin**: Dynamic form creation with Lexical editor for confirmation messages
 - **Payload Cloud Plugin**: Cloud hosting integration
 
 ### Hooks & Revalidation
 
-Payload hooks trigger Next.js on-demand revalidation using `revalidatePath()` and `revalidateTag()`:
+Payload hooks trigger Next.js on-demand revalidation:
+- `src/collections/Pages/hooks/revalidatePage.ts` - Revalidates pages on change/delete
+- `src/collections/Posts/hooks/revalidatePost.ts` - Revalidates posts on change/delete
+- `src/collections/Projects/hooks/revalidateProject.ts` - Revalidates projects on change/delete
+- `src/hooks/revalidateRedirects.ts` - Rebuilds redirects on change
 
-**Collection hooks:**
-- `src/collections/Pages/hooks/revalidatePage.ts` - Revalidates pages on change (supports home page as `/`)
-- `src/collections/Posts/hooks/revalidatePost.ts` - Revalidates posts on change
-- `src/collections/Projects/hooks/revalidateProject.ts` - Revalidates projects on change
-- `src/collections/Posts/hooks/populateAuthors.ts` - Safely populates author data (privacy protection)
-- `src/hooks/revalidateRedirects.ts` - Rebuilds redirects
-
-**Global hooks:**
-- `src/Header/hooks/revalidateHeader.ts` - Revalidates on header changes
-- `src/Footer/hooks/revalidateFooter.ts` - Revalidates on footer changes
-
-**Important:** Image cache requires republishing the page if images are cropped/changed.
+Note: Image cache requires republishing the page if images are cropped/changed.
 
 ### Frontend Architecture
 
 - **Components**: Reusable React components in `src/components/`
-  - `RichText`: Serializes Lexical editor content to React
+  - `RichText`: Serializes Lexical editor content
   - `Media`: Image/video rendering with Next.js Image optimization
   - `CollectionArchive`: Post/page listings with pagination
   - `AdminBar`: Edit links for authenticated users
-  - `Card`: Reusable card component
-  - `Link`: Smart link component (internal/external)
-  - `Logo`: Custom Eureka logo component
-  - `PayloadRedirects`: Handles redirects from CMS
-  - `LivePreviewListener`: Enables live preview mode
-  - `Pagination` / `PageRange`: Pagination UI
 - **Providers**: React context providers in `src/providers/`
-  - `HeaderTheme`: Dynamic header styling (active in main app)
-  - `Theme`: Dark/light mode toggle (code exists but not used)
+  - `Theme`: Dark/light mode toggle
+  - `HeaderTheme`: Dynamic header styling
 - **Utilities**: Helper functions in `src/utilities/`
   - `generatePreviewPath.ts`: Draft preview URL generation
   - `getURL.ts`: Server/client URL resolution
   - `generateMeta.ts`: SEO meta tag generation
-  - `getDocument.ts`: Fetch Payload documents
-  - `getGlobals.ts`: Fetch global data
-  - `getMeUser.ts`: Get current user
-  - `getRedirects.ts`: Fetch all redirects
-  - `formatDateTime.ts` / `formatAuthors.ts`: Data formatting
-  - `deepMerge.ts`: Object merging for field configs
-  - `useClickableCard.ts`: Hook for card interactions
-
-### Reusable Fields
-
-**link field** (`src/fields/link.ts`):
-- Internal reference or custom URL
-- Optional "open in new tab"
-- Optional label
-- Appearance variants: `default`, `outline`
-
-**linkGroup field** (`src/fields/linkGroup.ts`):
-- Array of links
-- Wraps `link` field
 
 ### Styling
 
-- **TailwindCSS 4.1.15**: Configured in `tailwind.config.mjs`
-  - Plugins: animate, typography
-  - Custom theme with HSL color variables
-  - Safelist for dynamic classes (grid spans, alert states)
+- **TailwindCSS**: Configured in `tailwind.config.mjs`
 - **shadcn/ui**: Component library with customizable UI components
-- **Geist Font**: Typography via `geist` package (sans + mono)
-- **Light mode only**: Dark mode has been removed from the project (ThemeProvider code exists but is not used in main app)
+- **Geist Font**: Typography via `geist` package
+- Light mode only (dark mode has been removed from the project)
 
 ### Type Safety
 
@@ -214,70 +156,23 @@ TypeScript paths configured in `tsconfig.json`:
 
 Generated types: `src/payload-types.ts` (regenerated with `pnpm generate:types`)
 
-**Target:** ES2022, strict mode enabled
+### Next.js 16 Configuration
 
-### Custom Admin Components
+The project has been updated for Next.js 16 compatibility. Key changes in `next.config.js`:
 
-Located in `src/components/`:
-- **BeforeLogin** - Message on login screen
-- **BeforeDashboard** - Dashboard customization
-- **Icon** - Custom admin icon
-- **Logo** - Custom admin logo
-- **HeaderThemeSetter** - Programmatic header theme control
-
-### Draft Preview & Live Preview
-
-**Draft Preview:**
-- Collections with `versions.drafts` enabled get preview functionality
-- Preview URL format: `/next/preview?slug=...&collection=...&path=...&previewSecret=...`
-- Frontend checks `draftMode()` and fetches draft versions
-- Utility: `generatePreviewPath` in `src/utilities/`
-
-**Live Preview:**
-- Configured in `payload.config.ts` with breakpoints: mobile (375px), tablet (768px), desktop (1440px)
-- Auto-saves drafts every 100ms for optimal preview
-- `LivePreviewListener` component enables real-time preview
-- Frontend routes handle `?draft=true` query param
-
-### Scheduled Publishing
-
-**Jobs queue configured:**
-- Collections have `versions.schedulePublish: true`
-- Access control: Requires authenticated user OR `CRON_SECRET` header
-- **Vercel note:** Cron may be limited to daily runs depending on plan tier
-
-### Search Implementation
-
-**Search plugin on posts:**
-- Custom field overrides: `src/search/fieldOverrides.ts`
-- Search component: `src/search/Component.tsx`
-- Frontend route: `app/(frontend)/search/`
-- `beforeSync` hook customizes search data
-
-### SEO & Sitemap
-
-**SEO Plugin:**
-- Meta title, description, image fields on Pages/Posts/Projects
-- Auto-generates OpenGraph tags
-- Preview field shows how content appears in search
-- Custom `generateTitle` and `generateURL` functions
-
-**Sitemap generation:**
-- `next-sitemap` runs postbuild (configured in `next-sitemap.config.cjs`)
-- Dynamic sitemaps: `/pages-sitemap.xml`, `/posts-sitemap.xml`
-- Robots.txt generated with admin panel disallowed
+- **Image optimization**:
+  - Quality settings explicitly set to `[100, 75]` (Next.js 16 changed default from `[1..100]` to just `[75]`)
+  - Local patterns allow `/api/media/file/**` with query strings for Payload CMS media
+  - `dangerouslyAllowLocalIP` enabled for development only (default changed to false in Next.js 16)
+- **Server externals**: Moved from `experimental.serverExternalPackages` to `serverExternalPackages` (no longer experimental)
+- **Webpack config**: Custom extension aliases needed for Payload CMS compatibility (`.js` → `.ts/.tsx`, etc.)
+- **Turbopack**: Empty config to silence warning while using webpack (Payload CMS requires webpack)
 
 ### Deployment Considerations
 
-**Caching**: Next.js caching is disabled by default (`export const dynamic = 'force-dynamic'`) because Payload Cloud uses Cloudflare caching. If self-hosting, remove `no-store` directives from `src/app/_api` fetches and `force-dynamic` exports from pages to enable Next.js caching.
+**Caching**: Next.js caching is disabled by default (`export const dynamic = 'force-dynamic'`) because Payload Cloud uses Cloudflare caching. If self-hosting, remove `no-store` directives and `force-dynamic` exports to enable Next.js caching.
 
 **Jobs & Scheduled Publishing**: Uses Payload jobs queue for scheduled publish/unpublish. On Vercel, cron may be limited to daily runs depending on plan tier. Job access controlled via user auth or `CRON_SECRET` environment variable.
-
-**Deployment options:**
-- **Payload Cloud** (recommended): One-click deployment from GitHub
-- **Vercel**: Supports Vercel DB (PostgreSQL) and Vercel Blob Storage adapters
-- **Self-hosting**: Deploy to any Node.js hosting (VPS, DigitalOcean, Coolify, etc.)
-- **Docker**: `docker-compose.yml` and `Dockerfile` included (auto-uses `.env` file)
 
 ## Environment Variables
 
@@ -290,6 +185,32 @@ Required variables (see `.env.example`):
 
 ## Key Patterns
 
+**Configuring the homepage**:
+The homepage is a **Global** (not a collection) located in **Globais → Homepage** in the admin panel.
+
+**Homepage structure** (4 customized sections):
+1. **Banners**: Array de banners (Subtítulo, Título, Link, Imagem de Fundo, Imagem em Destaque)
+2. **Soluções**: Título, Subtítulo, Cards (array com imagem, título e link opcional), Descrição, Frase Animada
+3. **Sobre**: Texto Principal, Texto Secundário, Imagens Direita (2), Imagens Esquerda (2), Link, Frase Animada
+4. **Histórias**: Título, Subtítulo, Descrição, Link, Cards (array com imagem, título e descrição)
+
+All fields use the existing `link` field from `@/fields/link` for consistent link handling (internal pages/posts or custom URLs).
+
+**Configuring navigation (Header & Footer)**:
+The navigation is a **Global** (not a collection) located in **Globais → Navegação** in the admin panel.
+
+**Navigation structure**:
+1. **Menu Superior**: Array de links para o menu header (1 nível apenas)
+2. **Menu Rodapé** (3 grupos):
+   - **Soluções**: Título + array de links
+   - **Acesse**: Título + array de links
+   - **Socialize**: Título + array de links com ícone (facebook, instagram, linkedin, twitter, youtube, tiktok, whatsapp, telegram)
+3. **Link do WhatsApp**: Campo texto para URL completa do WhatsApp
+4. **Endereço**: Campo textarea para endereço completo (múltiplas linhas)
+5. **Telefone**: Campo texto para número de telefone
+
+All menu links use the existing `link` field for consistent handling. Social media links use a custom structure with icon selector + URL.
+
 **Adding a new collection**:
 1. Create collection config in `src/collections/[Name]/index.ts`
 2. Import and add to `collections` array in `src/payload.config.ts`
@@ -300,21 +221,9 @@ Required variables (see `.env.example`):
 1. Create `src/blocks/[BlockName]/config.ts` (Payload schema)
 2. Create `src/blocks/[BlockName]/Component.tsx` (React component)
 3. Import and add block to layout builder in Page/Post collection configs
-4. Update `src/blocks/RenderBlocks.tsx` to render the new component
-
-**Adding a new global**:
-1. Create `src/[GlobalName]/config.ts` (Payload schema)
-2. Optionally create `src/[GlobalName]/Component.tsx` (React component)
-3. Import and add to `globals` array in `src/payload.config.ts`
-4. Add revalidation hook if needed (e.g., `src/[GlobalName]/hooks/revalidate[GlobalName].ts`)
-5. Run `pnpm generate:types` to update TypeScript types
-6. Restart dev server
+4. Update `RenderBlocks.tsx` to render the new component
 
 **Creating previews**: Collections with `versions.drafts` enabled automatically get preview functionality via `generatePreviewPath` utility. Frontend routes handle `?draft=true` query param to fetch draft versions.
-
-**Revalidation pattern**: Use `afterChange` hooks to call `revalidatePath()` or `revalidateTag()` for on-demand ISR when content changes.
-
-**TypeScript imports**: Always use `@/` path alias for imports from `src/` directory.
 
 ## Database Seeding
 
@@ -323,56 +232,3 @@ The admin panel includes a "seed database" button that populates demo content. *
 Demo credentials after seeding:
 - Email: `demo-author@payloadcms.com`
 - Password: `password`
-
-Seed script location: `src/endpoints/seed/`
-
-**Static home fallback**: If database is not seeded, project uses static home page from `src/endpoints/seed/home-static.ts`.
-
-## Testing
-
-**Integration tests (Vitest):**
-- Config: `vitest.config.mts`
-- Environment: jsdom
-- Files: `tests/int/**/*.int.spec.ts`
-- Example: `tests/int/api.int.spec.ts`
-
-**E2E tests (Playwright):**
-- Config: `playwright.config.ts`
-- Browser: Chromium (Desktop Chrome)
-- Files: `tests/e2e/**/*.e2e.spec.ts`
-- Example: `tests/e2e/frontend.e2e.spec.ts`
-- Auto-starts dev server on port 3000
-
-## Performance Optimizations
-
-**Image handling:**
-- Sharp for image processing
-- 7 responsive sizes: thumbnail, square, small, medium, large, xlarge, og (1200x630 for social)
-- Focal point support for cropping
-- Next.js Image component integration
-
-**Next.js 16 features:**
-- Turbopack bundler (faster builds)
-- React 19.2 (latest)
-- App Router with server components by default
-
-## Common Development Workflow
-
-**Typical development session:**
-1. `pnpm dev` - Start dev server
-2. Make changes to collections/components
-3. `pnpm generate:types` - Update types (if schema changed)
-4. Test changes in browser
-5. `pnpm lint` - Check code quality
-6. `pnpm test` - Run tests before commit
-7. Commit changes
-
-**When adding new content types:**
-1. Create collection config
-2. Add to `payload.config.ts`
-3. Generate types
-4. Create frontend route/component
-5. Add revalidation hooks
-6. Test draft preview
-7. Test live preview
-8. Test SEO plugin integration

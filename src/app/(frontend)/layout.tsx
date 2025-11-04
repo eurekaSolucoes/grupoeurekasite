@@ -11,6 +11,9 @@ import { AdminBar } from '@/components/AdminBar'
 // import { Footer } from '@/Footer/Component'
 import { FooterMock } from '@/components/FooterMock/FooterMock'
 import { Header } from '@/Header/Component'
+// TODO: Implement Navigation components for Header/Footer
+// import { Footer } from '@/Footer/Component'
+// import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
@@ -34,7 +37,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const { isEnabled } = await draftMode()
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable, jost.variable, albertSans.variable)} lang="en">
+    <html
+      className={cn(GeistSans.variable, GeistMono.variable, jost.variable, albertSans.variable)}
+      lang="en"
+    >
       <head>
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
@@ -47,9 +53,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           />
 
-          <Header />
+          {/* TODO: Implement Header component using Navigation global */}
+          {/* <Header /> */}
           {children}
           <FooterMock />
+          {/* TODO: Implement Footer component using Navigation global */}
+          {/* <Footer /> */}
         </Providers>
       </body>
     </html>
