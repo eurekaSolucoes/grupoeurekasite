@@ -3,17 +3,12 @@ import type { Metadata } from 'next'
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
-import { Jost } from 'next/font/google'
-import { Albert_Sans } from 'next/font/google'
-import React from 'react'
+import { Jost, Albert_Sans } from 'next/font/google'
 
 import { AdminBar } from '@/components/AdminBar'
-// import { Footer } from '@/Footer/Component'
-import { FooterMock } from '@/components/FooterMock/FooterMock'
-import { Header } from '@/Header/Component'
-// TODO: Implement Navigation components for Header/Footer
-// import { Footer } from '@/Footer/Component'
+import { Footer } from '@/Footer/Component'
 // import { Header } from '@/Header/Component'
+// TODO: Implement Header component using Navigation global
 import { Providers } from '@/providers'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
@@ -56,9 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {/* TODO: Implement Header component using Navigation global */}
           {/* <Header /> */}
           {children}
-          <FooterMock />
-          {/* TODO: Implement Footer component using Navigation global */}
-          {/* <Footer /> */}
+          <Footer />
         </Providers>
       </body>
     </html>
