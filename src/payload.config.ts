@@ -23,11 +23,28 @@ import { getServerSideURL } from './utilities/getURL'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const autoLoginEmail = process.env.NEXT_AUTO_LOGIN_EMAIL
+const autoLoginPassword = process.env.NEXT_AUTO_LOGIN_PASSWORD
+
+const hasAutoLogin = !!autoLoginEmail && !!autoLoginPassword
+
+const isDevelopment = process.env.NODE_ENV === 'development'
+
 export default buildConfig({
   admin: {
+    autoLogin:
+      isDevelopment && hasAutoLogin
+        ? {
+            email: autoLoginEmail,
+            password: autoLoginPassword,
+            prefillOnly: true,
+          }
+        : false,
+
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below.
+
       beforeLogin: ['@/components/BeforeLogin'],
       graphics: {
         Icon: '@/components/Icon',

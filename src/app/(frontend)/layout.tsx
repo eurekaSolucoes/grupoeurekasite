@@ -7,8 +7,7 @@ import { Jost, Albert_Sans } from 'next/font/google'
 
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
-// import { Header } from '@/Header/Component'
-// TODO: Implement Header component using Navigation global
+import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
@@ -48,8 +47,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           />
 
-          {/* TODO: Implement Header component using Navigation global */}
-          {/* <Header /> */}
+          <Header />
           {children}
           <Footer />
         </Providers>

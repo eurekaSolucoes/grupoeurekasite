@@ -19,6 +19,7 @@ import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f
 import { BlocksFeatureClient as BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
+import { SubitemRowLabel as SubitemRowLabel_2cfe2e364368a03eb7e153423c97fea0 } from '@/Navigation/RowLabel'
 import { HeaderMenuRowLabel as HeaderMenuRowLabel_2cfe2e364368a03eb7e153423c97fea0 } from '@/Navigation/RowLabel'
 import { FooterLinkRowLabel as FooterLinkRowLabel_2cfe2e364368a03eb7e153423c97fea0 } from '@/Navigation/RowLabel'
 import { SocialLinkRowLabel as SocialLinkRowLabel_2cfe2e364368a03eb7e153423c97fea0 } from '@/Navigation/RowLabel'
@@ -52,6 +53,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#BlocksFeatureClient": BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
+  "@/Navigation/RowLabel#SubitemRowLabel": SubitemRowLabel_2cfe2e364368a03eb7e153423c97fea0,
   "@/Navigation/RowLabel#HeaderMenuRowLabel": HeaderMenuRowLabel_2cfe2e364368a03eb7e153423c97fea0,
   "@/Navigation/RowLabel#FooterLinkRowLabel": FooterLinkRowLabel_2cfe2e364368a03eb7e153423c97fea0,
   "@/Navigation/RowLabel#SocialLinkRowLabel": SocialLinkRowLabel_2cfe2e364368a03eb7e153423c97fea0,

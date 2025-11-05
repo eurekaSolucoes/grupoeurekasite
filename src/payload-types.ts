@@ -1643,7 +1643,14 @@ export interface Navigation {
   id: string;
   headerMenu?:
     | {
-        link: {
+        /**
+         * Escolha se este item é um link direto ou um menu dropdown com subitens
+         */
+        type: 'link' | 'dropdown';
+        /**
+         * Destino do link (página interna ou URL customizada)
+         */
+        link?: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
@@ -1658,6 +1665,44 @@ export interface Navigation {
           url?: string | null;
           label: string;
         };
+        /**
+         * Texto que aparecerá no botão do dropdown
+         */
+        label?: string | null;
+        /**
+         * Itens que aparecerão no menu dropdown
+         */
+        subitems?:
+          | {
+              /**
+               * Destino do subitem
+               */
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              /**
+               * Imagem opcional para o subitem (aparece no menu dropdown)
+               */
+              image?: (string | null) | Media;
+              /**
+               * Descrição opcional do subitem
+               */
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -1867,6 +1912,7 @@ export interface NavigationSelect<T extends boolean = true> {
   headerMenu?:
     | T
     | {
+        type?: T;
         link?:
           | T
           | {
@@ -1875,6 +1921,23 @@ export interface NavigationSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               label?: T;
+            };
+        label?: T;
+        subitems?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              image?: T;
+              description?: T;
+              id?: T;
             };
         id?: T;
       };
