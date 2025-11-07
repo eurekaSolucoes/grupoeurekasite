@@ -31,7 +31,7 @@
   }
 
   body {
-    @apply bg-background text-foreground min-h-screen flex flex-col;
+    @apply flex min-h-screen flex-col bg-background text-foreground;
   }
 
   h1,
@@ -56,6 +56,16 @@
 
 @utility underline-on-hover {
   @apply underline decoration-transparent hover:decoration-current;
+}
+
+@utility progressive-blur {
+  @apply relative before:absolute before:inset-0 before:-z-10 before:rounded-full before:backdrop-blur-3xl;
+}
+
+.progressive-blur::before {
+  /* Máscara cria o "fade de blur" */
+
+  mask: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 30%);
 }
 
 @theme inline {
@@ -95,7 +105,10 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-brand-orange: var(--brand-orange);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-dark-blue: var(--brand-dark-blue);
   --color-sioux-blue: var(--sioux-blue);
+  --color-whatsapp-green: var(--whatsapp-green);
 }
 
 /*
@@ -112,8 +125,8 @@
   --popover-foreground: #000;
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary: var(--brand-blue);
+  --secondary-foreground: #fff;
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: var(--brand-orange);
@@ -137,6 +150,9 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   --brand-orange: #f37021;
+  --brand-blue: #233e94;
+  --brand-dark-blue: #162a6b;
 
   --sioux-blue: #0074ff;
+  --whatsapp-green: #01b13c;
 }

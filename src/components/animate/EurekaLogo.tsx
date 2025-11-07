@@ -5,10 +5,11 @@ import { motion } from 'motion/react'
 // TYPES
 // ============================================================================
 
-export type EurekaLogoVariants = 'full' | 'icon-blue' | 'icon-white' | 'icon-dark'
+export type EurekaLogoVariants = 'full' | 'icon-blue' | 'icon-white' | 'icon-full-white'
 
 interface EurekaLogoProps {
   variant?: EurekaLogoVariants
+  height?: number
 }
 
 // ============================================================================
@@ -18,7 +19,7 @@ interface EurekaLogoProps {
 /** Cores utilizadas na logo */
 const COLORS = {
   ORANGE: '#F37021',
-  BLUE: '#3B5998',
+  BLUE: '#233E94',
   DARK: '#1a1a1a',
   WHITE: '#fff',
 } as const
@@ -33,6 +34,7 @@ const VIEWBOX = {
 const SVG_DIMENSIONS = {
   WIDTH: 192,
   HEIGHT: 69,
+  ICON_WIDTH: 70,
 } as const
 
 /** Centro da letra "k" - ponto de convergência para animação */
@@ -106,7 +108,17 @@ const getKColor = (variant: EurekaLogoVariants): string => {
     full: COLORS.WHITE,
     'icon-blue': COLORS.BLUE,
     'icon-white': COLORS.WHITE,
-    'icon-dark': COLORS.DARK,
+    'icon-full-white': COLORS.WHITE,
+  }
+  return colorMap[variant]
+}
+
+const getCirclesColor = (variant: EurekaLogoVariants): string => {
+  const colorMap: Record<EurekaLogoVariants, string> = {
+    full: COLORS.ORANGE,
+    'icon-blue': COLORS.ORANGE,
+    'icon-white': COLORS.ORANGE,
+    'icon-full-white': COLORS.WHITE,
   }
   return colorMap[variant]
 }
@@ -124,19 +136,23 @@ const getLetterAnimation = (letterPosition: { x: number; y: number }, isIcon: bo
 // COMPONENT
 // ============================================================================
 
-export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
+export function EurekaLogo({
+  variant = 'full',
+  height = SVG_DIMENSIONS.HEIGHT,
+}: Readonly<EurekaLogoProps>) {
   const isIcon = variant !== 'full'
   const kColor = getKColor(variant)
 
   return (
     <motion.svg
-      width={SVG_DIMENSIONS.WIDTH}
-      height={SVG_DIMENSIONS.HEIGHT}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       animate={{
         viewBox: isIcon ? VIEWBOX.ICON : VIEWBOX.FULL,
+        width: isIcon ? SVG_DIMENSIONS.ICON_WIDTH : SVG_DIMENSIONS.WIDTH,
+        height: height,
       }}
+      initial={false}
       transition={DEFAULT_TRANSITION}
     >
       {/* ===== BOLINHAS (círculos laranjas) ===== */}
@@ -145,12 +161,14 @@ export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
         fill={COLORS.ORANGE}
         animate={{ x: isIcon ? CIRCLES_OFFSET_X : 0 }}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
       <motion.path
         d={SVG_PATHS.CIRCLE_LARGE}
         fill={COLORS.ORANGE}
         animate={{ x: isIcon ? CIRCLES_OFFSET_X : 0 }}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
 
       {/* ===== PALAVRA "eureka" ===== */}
@@ -160,6 +178,7 @@ export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
         fill={COLORS.ORANGE}
         animate={getLetterAnimation(LETTER_POSITIONS.E1, isIcon)}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
       <motion.path
         id="u"
@@ -167,6 +186,7 @@ export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
         fill={COLORS.WHITE}
         animate={getLetterAnimation(LETTER_POSITIONS.U, isIcon)}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
       <motion.path
         id="r"
@@ -174,6 +194,7 @@ export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
         fill={COLORS.WHITE}
         animate={getLetterAnimation(LETTER_POSITIONS.R, isIcon)}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
       <motion.path
         id="e2"
@@ -181,12 +202,14 @@ export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
         fill={COLORS.WHITE}
         animate={getLetterAnimation(LETTER_POSITIONS.E2, isIcon)}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
       <motion.path
         id="k"
         d={SVG_PATHS.LETTER_K}
         animate={{ fill: kColor }}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
       <motion.path
         id="a"
@@ -194,6 +217,7 @@ export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
         fill={COLORS.WHITE}
         animate={getLetterAnimation(LETTER_POSITIONS.A, isIcon)}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
 
       {/* ===== PALAVRA "GRUPO" ===== */}
@@ -203,6 +227,7 @@ export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
         fill={COLORS.ORANGE}
         animate={getLetterAnimation(LETTER_POSITIONS.G, isIcon)}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
       <motion.path
         id="r-grupo"
@@ -210,6 +235,7 @@ export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
         fill={COLORS.ORANGE}
         animate={getLetterAnimation(LETTER_POSITIONS.R_GRUPO, isIcon)}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
       <motion.path
         id="u-grupo"
@@ -217,6 +243,7 @@ export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
         fill={COLORS.ORANGE}
         animate={getLetterAnimation(LETTER_POSITIONS.U_GRUPO, isIcon)}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
       <motion.path
         id="p"
@@ -224,6 +251,7 @@ export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
         fill={COLORS.ORANGE}
         animate={getLetterAnimation(LETTER_POSITIONS.P, isIcon)}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
       <motion.path
         id="o"
@@ -231,6 +259,7 @@ export function EurekaLogo({ variant = 'full' }: Readonly<EurekaLogoProps>) {
         fill={COLORS.ORANGE}
         animate={getLetterAnimation(LETTER_POSITIONS.O, isIcon)}
         transition={DEFAULT_TRANSITION}
+        initial={false}
       />
     </motion.svg>
   )

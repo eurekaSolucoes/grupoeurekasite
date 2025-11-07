@@ -36,13 +36,11 @@ const socialIcons = {
  * Renderiza menu de rodapé, informações de contato e redes sociais.
  */
 export async function Footer() {
-  const navigationData: Navigation = await getCachedGlobal('navigation', 1)()
-
-  const { footerMenu, address, phone } = navigationData
+  const { footerMenu, address, phone } = (await getCachedGlobal('navigation', 1)()) as Navigation
 
   return (
     <footer className="mt-auto">
-      <section className="container flex flex-col gap-y-7 pt-12 pb-7 xl:flex-row xl:gap-16 xl:items-end">
+      <section className="container flex flex-col gap-y-7 pt-12 pb-7 xl:flex-row xl:items-end xl:gap-16">
         {/* Logo + Contact Info */}
         <div className="flex flex-col gap-7 xl:basis-1/4 xl:gap-20">
           <Link href="/">
@@ -51,13 +49,13 @@ export async function Footer() {
               alt="Eureka Logo"
               width={56}
               height={69}
-              className="w-10 h-14 xl:size-auto"
+              className="h-14 w-10 xl:size-auto"
             />
           </Link>
-          <div className="flex flex-col gap-3 xl:gap-4 text-sm xl:text-xl">
+          <div className="flex flex-col gap-3 text-sm xl:gap-4 xl:text-xl">
             {address && (
-              <p className="flex items-start gap-2 text-balance w-3/5 xl:w-full">
-                <MapPin className="size-4 xl:size-5 xl:mt-1 text-accent shrink-0" />
+              <p className="flex w-3/5 items-start gap-2 text-balance xl:w-full">
+                <MapPin className="size-4 shrink-0 text-accent xl:mt-1 xl:size-5" />
                 <Link
                   title="Ver no Mapa"
                   href="https://maps.app.goo.gl/Ca1bn3aFVCy9zWpi9"
@@ -71,7 +69,7 @@ export async function Footer() {
             )}
             {phone && (
               <p className="flex items-center gap-2">
-                <Phone className="size-4 xl:size-5 xl:mt-1 text-accent shrink-0" />
+                <Phone className="size-4 shrink-0 text-accent xl:mt-1 xl:size-5" />
                 <Link
                   title="Fale conosco pelo telefone"
                   href={`tel:${phone.replace(/\D/g, '')}`}
@@ -85,15 +83,13 @@ export async function Footer() {
         </div>
 
         {/* Navigation Columns */}
-        <div className="grid grid-cols-2 gap-5 xl:grid-cols-none xl:grid-flow-col xl:basis-1/2 xl:gap-16">
+        <div className="grid grid-cols-2 gap-5 xl:basis-1/2 xl:grid-flow-col xl:grid-cols-none xl:gap-16">
           {/* Solutions Column */}
           {footerMenu?.solutions && (
             <div className="space-y-1.5 xl:space-y-4">
-              <h3 className="text-xs text-accent xl:text-sm">
-                {footerMenu.solutions.title}
-              </h3>
+              <h3 className="text-xs text-accent xl:text-sm">{footerMenu.solutions.title}</h3>
               {footerMenu.solutions.links && footerMenu.solutions.links.length > 0 && (
-                <ul className="space-y-3 xl:space-y-4 text-sm xl:text-xl leading-none">
+                <ul className="space-y-3 text-sm leading-none xl:space-y-4 xl:text-xl">
                   {footerMenu.solutions.links.map((item, idx) => (
                     <li key={idx}>
                       <CMSLink {...item.link} className="underline-on-hover" />
@@ -109,7 +105,7 @@ export async function Footer() {
             <div className="space-y-1.5 xl:space-y-4">
               <h3 className="text-xs text-accent xl:text-sm">{footerMenu.access.title}</h3>
               {footerMenu.access.links && footerMenu.access.links.length > 0 && (
-                <ul className="space-y-3 xl:space-y-4 text-sm xl:text-xl leading-none">
+                <ul className="space-y-3 text-sm leading-none xl:space-y-4 xl:text-xl">
                   {footerMenu.access.links.map((item, idx) => (
                     <li key={idx}>
                       <CMSLink {...item.link} className="underline-on-hover" />
@@ -124,7 +120,7 @@ export async function Footer() {
         {/* Social Links */}
         {footerMenu?.social && (
           <div className="xl:flex-1">
-            <h3 className="text-xs text-accent mb-3 xl:text-sm">{footerMenu.social.title}</h3>
+            <h3 className="mb-3 text-xs text-accent xl:text-sm">{footerMenu.social.title}</h3>
             {footerMenu.social.links && footerMenu.social.links.length > 0 && (
               <ul className="flex items-center gap-4 xl:flex-col xl:items-start">
                 {footerMenu.social.links.map((social, idx) => {
@@ -140,7 +136,7 @@ export async function Footer() {
                         rel="noopener noreferrer"
                         title={social.label || social.icon}
                       >
-                        <Icon className="size-5 text-foreground hover:text-accent transition-colors" />
+                        <Icon className="size-5 text-foreground transition-colors hover:text-accent" />
                       </Link>
                     </li>
                   )
@@ -153,13 +149,13 @@ export async function Footer() {
 
       {/* Bottom: Legal Info */}
       <section className="container text-xs xl:text-sm">
-        <div className="border-black/20 pt-7 pb-5 border-t gap-5 flex flex-col md:flex-row justify-between text-black/50">
+        <div className="flex flex-col justify-between gap-5 border-t border-black/20 pt-7 pb-5 text-black/50 md:flex-row">
           <p>
             © Grupo Eureka I CNPJ 06.982.873/0001-23. Todos os direitos reservados.{' '}
             <Link
               title="Política de Privacidade"
               href="/politica-de-privacidade"
-              className="hover:text-black underline"
+              className="underline hover:text-black"
             >
               Política de Privacidade
             </Link>

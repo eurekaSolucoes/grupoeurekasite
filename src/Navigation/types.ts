@@ -1,29 +1,32 @@
+import type { Media, Page, Post } from '@/payload-types'
+
 // Tipo que espelha o campo Link (@/fields/link)
 export interface LinkField {
-  type?: 'reference' | 'custom'
+  type?: 'reference' | 'custom' | null
   label?: string | null
   url?: string | null
   newTab?: boolean | null
   reference?: {
-    relationTo?: 'pages' | 'posts'
-    value?: string | number | object
+    relationTo: 'pages' | 'posts'
+    value: string | Page | Post
   } | null
 }
 
 // Tipo para subitem do dropdown
 export interface DropdownSubitem {
   link?: LinkField
-  image?: string | number | object | null
+  image?: string | number | Media | null
   description?: string | null
 }
 
-// Tipo para o item do headerMenu (combina link e dropdown)
-// Quando type é 'dropdown', label e subitems ficam no mesmo nível
+// Tipo para o item do headerMenu (estrutura flat)
+// Quando type é 'link': só tem campo 'link'
+// Quando type é 'dropdown': tem campos 'label' e 'subitems'
 export interface HeaderMenuItem {
   type: 'link' | 'dropdown'
   link?: LinkField
-  label?: string
-  subitems?: DropdownSubitem[]
+  label?: string | null
+  subitems?: DropdownSubitem[] | null
 }
 
 // Tipo para links do footer (só tem link field)
@@ -60,24 +63,15 @@ export const SOCIAL_ICON_LABELS: Record<SocialIconType, string> = {
 }
 
 // Type Guards
-export function isDropdownItem(
-  item: HeaderMenuItem,
-): item is HeaderMenuItem & {
+export function isDropdownItem(item: HeaderMenuItem): item is HeaderMenuItem & {
   type: 'dropdown'
   label: string
   subitems: DropdownSubitem[]
 } {
-  return (
-    item.type === 'dropdown' &&
-    item.label !== undefined &&
-    item.subitems !== undefined &&
-    item.subitems.length > 0
-  )
+  return item.type === 'dropdown' && !!item.label && !!item.subitems && item.subitems.length > 0
 }
 
-export function isLinkItem(
-  item: HeaderMenuItem,
-): item is HeaderMenuItem & {
+export function isLinkItem(item: HeaderMenuItem): item is HeaderMenuItem & {
   type: 'link'
   link: LinkField
 } {
