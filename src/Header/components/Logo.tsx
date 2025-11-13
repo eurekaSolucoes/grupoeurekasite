@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { EurekaLogo } from '@/components/animate/EurekaLogo'
+import { EurekaLogo, EurekaLogoVariants } from '@/components/animate/EurekaLogo'
 import { cn } from '@/utilities/ui'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 
@@ -18,17 +18,18 @@ interface HeaderLogoProps {
  * Mobile: altura reduzida (64px)
  */
 
-const DEFAULT_VARIANT = 'icon-blue'
+const DEFAULT_MOBILE_VARIANT: EurekaLogoVariants = 'icon-blue'
+const DEFAULT_DESKTOP_VARIANT: EurekaLogoVariants = 'full'
 export function Logo({ href = '/', className }: Readonly<HeaderLogoProps>) {
   const { headerTheme } = useHeaderTheme()
-  const logoTheme = headerTheme?.logoTheme ?? DEFAULT_VARIANT
+  const logoTheme = headerTheme?.logoTheme
   return (
     <Link href={href} className={cn('flex items-center', className)}>
-      <span className="hidden md:block">
-        <EurekaLogo variant={logoTheme} />
+      <span className="hidden xl:block">
+        <EurekaLogo variant={logoTheme ?? DEFAULT_DESKTOP_VARIANT} />
       </span>
-      <span className="block md:hidden">
-        <EurekaLogo variant={logoTheme} height={64} />
+      <span className="block xl:hidden">
+        <EurekaLogo variant={logoTheme ?? DEFAULT_MOBILE_VARIANT} height={64} />
       </span>
     </Link>
   )

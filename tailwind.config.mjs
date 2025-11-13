@@ -1,4 +1,3 @@
-import tailwindcssAnimate from 'tailwindcss-animate'
 import typography from '@tailwindcss/typography'
 
 /** @type {import('tailwindcss').Config} */
@@ -9,7 +8,7 @@ const config = {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
-  plugins: [tailwindcssAnimate, typography],
+  plugins: [typography],
   prefix: '',
   safelist: [
     'lg:col-span-4',
@@ -26,24 +25,6 @@ const config = {
     'bg-warning/30',
   ],
   theme: {
-    container: {
-      center: true,
-      padding: {
-        '2xl': '2rem',
-        DEFAULT: '1rem',
-        lg: '2rem',
-        md: '2rem',
-        sm: '1rem',
-        xl: '2rem',
-      },
-      screens: {
-        '2xl': '86rem',
-        lg: '64rem',
-        md: '48rem',
-        sm: '40rem',
-        xl: '80rem',
-      },
-    },
     extend: {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -96,6 +77,110 @@ const config = {
         mono: ['var(--font-geist-mono)'],
         sans: ['var(--font-albert-sans)'],
         heading: ['var(--font-jost)'],
+      },
+      fontSize: {
+        // Display / Hero - Jost (Título 1)
+        display: [
+          '2.75rem',
+          {
+            lineHeight: '1.1',
+            letterSpacing: '-0.01em',
+            fontWeight: '400',
+          },
+        ],
+        'lg-display': [
+          '5rem',
+          {
+            lineHeight: '1',
+            letterSpacing: '0',
+            fontWeight: '400',
+          },
+        ],
+        // Heading - Jost (Título 2)
+        heading: [
+          '2.375rem',
+          {
+            lineHeight: '1',
+            letterSpacing: '-0.01em',
+            fontWeight: '400',
+          },
+        ],
+        'lg-heading': [
+          '3.375rem',
+          {
+            lineHeight: '1.2',
+            letterSpacing: '0',
+            fontWeight: '400',
+          },
+        ],
+        // Subheading - Jost (Título 3)
+        subheading: [
+          '1.5rem',
+          {
+            lineHeight: '1.2',
+            letterSpacing: '0',
+            fontWeight: '400',
+          },
+        ],
+        'lg-subheading': [
+          '2rem',
+          {
+            lineHeight: '1.2',
+            letterSpacing: '0',
+            fontWeight: '400',
+          },
+        ],
+        // Body Large - Albert Sans (Parágrafo XL)
+        'body-large': [
+          '1.125rem',
+          {
+            lineHeight: '1.6',
+            letterSpacing: '0',
+            fontWeight: '400',
+          },
+        ],
+        'lg-body-large': [
+          '1.25rem',
+          {
+            lineHeight: '1.8',
+            letterSpacing: '0',
+            fontWeight: '400',
+          },
+        ],
+        // Body - Albert Sans (Parágrafo padrão)
+        body: [
+          '1rem',
+          {
+            lineHeight: '1.6',
+            letterSpacing: '0',
+            fontWeight: '400',
+          },
+        ],
+        'lg-body': [
+          '1.125rem',
+          {
+            lineHeight: 'normal',
+            letterSpacing: '0',
+            fontWeight: '400',
+          },
+        ],
+        // Caption / Small - Albert Sans (Parágrafo SM)
+        caption: [
+          '0.6875rem',
+          {
+            lineHeight: 'normal',
+            letterSpacing: '0',
+            fontWeight: '400',
+          },
+        ],
+        'lg-caption': [
+          '0.8125rem',
+          {
+            lineHeight: 'normal',
+            letterSpacing: '0',
+            fontWeight: '400',
+          },
+        ],
       },
       keyframes: {
         'accordion-down': {

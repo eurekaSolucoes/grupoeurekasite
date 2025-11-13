@@ -3,8 +3,8 @@ import type { Navigation } from '@/payload-types'
 import { Logo } from './components/Logo'
 import { NavContainer } from './components/NavContainer'
 import { WhatsAppButton } from './components/WhatsAppButton'
-import { DesktopNav } from './components/DesktopNav'
 import { MobileNav } from './components/MobileNav'
+import { DesktopNav } from '@/Header/components/DesktopNav'
 
 /**
  * Header Component
@@ -17,7 +17,7 @@ export async function Header() {
 
   return (
     <header className="pointer-events-auto sticky top-0 z-60 w-full">
-      <div className="container mt-5 flex h-16 items-center justify-between">
+      <div className="container mt-5 flex h-16 items-center justify-between lg:h-18">
         <Logo />
 
         <NavContainer>

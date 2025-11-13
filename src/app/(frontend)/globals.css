@@ -2,7 +2,7 @@
 /*
   ---break---
 */
-@plugin 'tailwindcss-animate';
+@import 'tw-animate-css';
 /*
   ---break---
 */
@@ -128,7 +128,7 @@
   --secondary: var(--brand-blue);
   --secondary-foreground: #fff;
   --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted-foreground: #686868;
   --accent: var(--brand-orange);
   --accent-foreground: #fff;
   --destructive: oklch(0.577 0.245 27.325);

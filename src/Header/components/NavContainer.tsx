@@ -18,13 +18,13 @@ export function NavContainer({ children, className }: Readonly<NavContainerProps
   const { headerTheme, changeHeaderTheme } = useHeaderTheme()
 
   return (
-    <nav
+    <div
       className={cn(
-        'progressive-blur flex items-center space-x-4 rounded-[calc((infinity*1px)-1px)] border-t border-white/50 bg-[#bbb]/30 p-2',
+        'progressive-blur flex items-center gap-x-4 rounded-[calc((infinity*1px)-1px)] border-t border-white/50 bg-[#bbb]/30 p-2 lg:gap-x-2.5 lg:p-2.5',
         className,
       )}
     >
       {children}
-    </nav>
+    </div>
   )
 }
