@@ -68,6 +68,31 @@
   mask: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 30%);
 }
 
+/* Typography Utilities - Responsive Text Styles */
+@utility text-display {
+  @apply font-heading text-display-mobile/[1.1] tracking-tight lg:text-display-desktop/none lg:tracking-normal;
+}
+
+@utility text-heading {
+  @apply font-heading text-heading-mobile/none tracking-tight lg:text-heading-desktop/tight lg:tracking-normal;
+}
+
+@utility text-subheading {
+  @apply font-heading text-subheading-mobile/tight lg:text-subheading-desktop/tight;
+}
+
+@utility text-body-large {
+  @apply font-sans text-body-large-mobile/relaxed lg:text-body-large-desktop/loose;
+}
+
+@utility text-body {
+  @apply font-sans text-body-mobile/relaxed lg:text-body-desktop/normal;
+}
+
+@utility text-caption {
+  @apply font-sans text-caption-mobile/normal lg:text-caption-desktop/normal;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -109,6 +134,19 @@
   --color-brand-dark-blue: var(--brand-dark-blue);
   --color-sioux-blue: var(--sioux-blue);
   --color-whatsapp-green: var(--whatsapp-green);
+
+  --text-display-mobile: var(--font-size-display-mobile);
+  --text-display-desktop: var(--font-size-display-desktop);
+  --text-heading-mobile: var(--font-size-heading-mobile);
+  --text-heading-desktop: var(--font-size-heading-desktop);
+  --text-subheading-mobile: var(--font-size-subheading-mobile);
+  --text-subheading-desktop: var(--font-size-subheading-desktop);
+  --text-body-large-mobile: var(--font-size-body-large-mobile);
+  --text-body-large-desktop: var(--font-size-body-large-desktop);
+  --text-body-mobile: var(--font-size-body-mobile);
+  --text-body-desktop: var(--font-size-body-desktop);
+  --text-caption-mobile: var(--font-size-caption-mobile);
+  --text-caption-desktop: var(--font-size-caption-desktop);
 }
 
 /*
@@ -155,4 +193,19 @@
 
   --sioux-blue: #0074ff;
   --whatsapp-green: #01b13c;
+
+  /* Typography Scale - Based on Figma Design System */
+  /* Font Sizes - Mobile First */
+  --font-size-display-mobile: 2.75rem; /* 44px - Page Title Mobile */
+  --font-size-display-desktop: 5rem; /* 80px - Page Title Desktop */
+  --font-size-heading-mobile: 2.375rem; /* 38px - Section Heading Mobile */
+  --font-size-heading-desktop: 3.375rem; /* 54px - Section Heading Desktop */
+  --font-size-subheading-mobile: 1.5rem; /* 24px - Box Title Mobile */
+  --font-size-subheading-desktop: 2rem; /* 32px - Box Title Desktop */
+  --font-size-body-large-mobile: 1.125rem; /* 18px - Large Paragraph Mobile */
+  --font-size-body-large-desktop: 1.25rem; /* 20px - Large Paragraph Desktop */
+  --font-size-body-mobile: 1rem; /* 16px - Standard Paragraph Mobile */
+  --font-size-body-desktop: 1.125rem; /* 18px - Standard Paragraph Desktop */
+  --font-size-caption-mobile: 0.6875rem; /* 11px - Small Text Mobile */
+  --font-size-caption-desktop: 0.8125rem; /* 13px - Small Text Desktop */
 }
