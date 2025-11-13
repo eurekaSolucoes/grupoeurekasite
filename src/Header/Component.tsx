@@ -16,7 +16,7 @@ export async function Header() {
   const { headerMenu, whatsappLink } = (await getCachedGlobal('navigation', 1)()) as Navigation
 
   return (
-    <header className="pointer-events-auto sticky top-0 z-60 w-full">
+    <header className="pointer-events-auto fixed inset-x-0 top-0 z-60 w-full">
       <div className="container mt-5 flex h-16 items-center justify-between lg:h-18">
         <Logo />
 

@@ -9,6 +9,7 @@ import { homeStatic } from '@/endpoints/seed/home-static'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './[slug]/page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { BannerSection } from '@/components/Sections/Home/BannerSection'
 
 export default async function HomePage() {
   const { isEnabled: draft } = await draftMode()
@@ -27,7 +28,7 @@ export default async function HomePage() {
   }
 
   return (
-    <article className="pt-16 pb-24">
+    <article className="pb-24">
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
@@ -36,7 +37,7 @@ export default async function HomePage() {
 
       {/* TODO: Implement custom Homepage sections rendering */}
       {/* Homepage has custom structure: banner, solutions, about, stories */}
-      <div>Homepage content goes here</div>
+      {!!homepage.banners && <BannerSection banners={homepage.banners} />}
     </article>
   )
 }
@@ -50,5 +51,5 @@ export async function generateMetadata(): Promise<Metadata> {
     draft,
   })
 
-  return generateMeta({ doc: homepage })
+  return generateMeta({ doc: homepage as any })
 }
