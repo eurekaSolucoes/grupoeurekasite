@@ -69,27 +69,27 @@
 }
 
 /* Typography Utilities - Responsive Text Styles */
-@utility text-display {
+@utility typography-display {
   @apply font-heading text-display-mobile/[1.1] tracking-tight lg:text-display-desktop/none lg:tracking-normal;
 }
 
-@utility text-heading {
-  @apply font-heading text-heading-mobile/none tracking-tight lg:text-heading-desktop/tight lg:tracking-normal;
+@utility typography-heading {
+  @apply font-heading text-heading-mobile/none tracking-tight lg:text-heading-desktop/[1.2] lg:tracking-normal;
 }
 
-@utility text-subheading {
+@utility typography-subheading {
   @apply font-heading text-subheading-mobile/tight lg:text-subheading-desktop/tight;
 }
 
-@utility text-body-large {
+@utility typography-body-large {
   @apply font-sans text-body-large-mobile/relaxed lg:text-body-large-desktop/loose;
 }
 
-@utility text-body {
+@utility typography-body {
   @apply font-sans text-body-mobile/relaxed lg:text-body-desktop/normal;
 }
 
-@utility text-caption {
+@utility typography-caption {
   @apply font-sans text-caption-mobile/normal lg:text-caption-desktop/normal;
 }
 
