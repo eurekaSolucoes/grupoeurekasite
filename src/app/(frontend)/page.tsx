@@ -10,6 +10,7 @@ import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './[slug]/page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { BannerSection } from '@/components/Sections/Home/BannerSection'
+import { SolutionsSection } from '@/components/Sections/Home/SolutionsSection'
 
 export default async function HomePage() {
   const { isEnabled: draft } = await draftMode()
@@ -38,6 +39,8 @@ export default async function HomePage() {
       {/* TODO: Implement custom Homepage sections rendering */}
       {/* Homepage has custom structure: banner, solutions, about, stories */}
       {!!homepage.banners && <BannerSection banners={homepage.banners} />}
+
+      {!!homepage.solutions && <SolutionsSection solutions={homepage.solutions} />}
     </article>
   )
 }

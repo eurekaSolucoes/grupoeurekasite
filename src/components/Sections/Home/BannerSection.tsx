@@ -73,7 +73,7 @@ export function BannerSection({ banners = [] }: Readonly<BannerSectionProps>) {
       aria-atomic="false"
       onKeyDown={handleKeyDown}
       tabIndex={0}
-      className="relative h-screen w-full overflow-hidden focus-visible:outline-none"
+      className="sticky top-0 h-screen w-full overflow-hidden focus-visible:outline-none"
     >
       <div ref={sliderRef} className="relative size-full select-none">
         {banners.map((banner, index) => {
