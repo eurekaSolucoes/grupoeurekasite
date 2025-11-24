@@ -1,7 +1,7 @@
 'use client'
 
-import { motion, useScroll, useSpring, useTransform } from 'motion/react'
-import { useRef } from 'react'
+import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from 'motion/react'
+import { useRef, useState } from 'react'
 import Image from 'next/image'
 
 import type { Homepage } from '@/payload-types'
@@ -18,9 +18,16 @@ interface SolutionsSectionProps {
 export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>) {
   const isDesktop = useMediaQuery('(min-width: 1024px)')
   const containerRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress, scrollY } = useScroll({
     target: containerRef,
     offset: ['start end', 'end end'],
+  })
+
+  const [scrollDirection, setScrollDirection] = useState('down')
+
+  useMotionValueEvent(scrollY, 'change', (current) => {
+    const diff = current - (scrollY.getPrevious() ?? 0)
+    setScrollDirection(diff > 0 ? 'down' : 'up')
   })
 
   const rawScale = useTransform(scrollYProgress, [0, 0.3], ['0%', '100%'])
@@ -30,36 +37,46 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
     restDelta: 0.001,
   })
 
+  const rawCircleY = useTransform(scrollYProgress, [0.5, 0.8], [0, -100])
+  const circleY = useSpring(rawCircleY, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  })
+
   if (!solutions) return null
   return (
     <motion.section className="relative z-10 min-h-[140vh] overflow-x-hidden pt-[45vh] pb-40 sm:pt-[50vh]">
       <motion.div
-        className="absolute top-1/4 z-5 size-200 -translate-x-1/2 rounded-full border-2 border-red-500"
-        initial={{ opacity: 0, x: -100 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-        viewport={{
-          once: true,
-          amount: 0.4,
-        }}
-      />
-      <motion.div
         ref={containerRef}
-        className="absolute inset-y-0 top-0 left-1/2 w-[180vw] -translate-x-1/2 overflow-x-hidden rounded-t-full bg-linear-to-tl from-brand-dark-blue from-25% to-secondary lg:rounded-[50%_50%_0_0/100%_100%_0_0]"
+        className="absolute inset-y-0 top-0 left-1/2 w-[180vw] -translate-x-1/2 overflow-hidden overflow-x-hidden rounded-t-full bg-linear-to-tl from-brand-dark-blue from-25% to-secondary lg:rounded-[50%_50%_0_0/100%_100%_0_0]"
         style={{
           scale,
         }}
-      />
+      >
+        <div className="relative z-20 mx-auto h-full w-screen">
+          <motion.div
+            className="absolute top-1/5 left-0 z-20 hidden size-130 -translate-x-1/2 rounded-full border-[0.75px] border-black/50 lg:block"
+            style={{
+              y: circleY,
+            }}
+          />
+          <motion.div
+            className="absolute right-0 bottom-1/4 z-20 hidden size-100 translate-x-1/2 rounded-full border-[0.75px] border-black/50 lg:block"
+            transition={{ duration: 0.5 }}
+            viewport={{
+              once: true,
+            }}
+          />
+        </div>{' '}
+      </motion.div>
 
       <div className="relative z-10 container flex flex-col items-center">
         {solutions.title && solutions.subtitle && (
           <motion.header
-            initial={{ x: -50, opacity: 0 }}
+            initial={scrollDirection === 'down' ? { x: 0, opacity: 1 } : { x: -50, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            viewport={{
-              once: isDesktop,
-            }}
+            transition={{ duration: 0.7 }}
             className="relative flex w-full max-w-90 flex-col justify-center self-start sm:self-center lg:max-w-155"
           >
             <h2 className="pr-20 font-heading text-[3.125rem]/none font-bold text-secondary-foreground lg:text-[6.25rem]/none">
@@ -97,7 +114,7 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
                   whileInView={{ transform: 'rotate(0deg)' }}
                   transition={{ duration: 0.5, delay: isDesktop ? 0 : index * 0.1 }}
                   viewport={{
-                    amount: isDesktop ? 'all' : 0.5,
+                    amount: isDesktop ? 0.9 : 0.5,
                     once: true,
                   }}
                   style={{
@@ -126,7 +143,7 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
             viewport={{
               once: true,
             }}
-            className="pt-15 text-center typography-body-large text-pretty text-secondary-foreground lg:pt-22"
+            className="pt-15 text-center typography-body-large text-balance text-secondary-foreground lg:pt-22"
           >
             {solutions.description}
           </motion.p>
@@ -155,7 +172,7 @@ function SolutionCard({ cardData }: Readonly<SolutionCardProps>) {
         imgClassName="object-cover size-full"
       />
       {cardData.title && (
-        <h3 className="typography-subheading text-secondary-foreground lg:text-xl xl:text-[2rem]/[1.2]">
+        <h3 className="typography-subheading text-secondary-foreground lg:text-xl xl:text-2xl 2xl:text-[2rem]/[1.2]">
           {cardData.title}
         </h3>
       )}
