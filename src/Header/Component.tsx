@@ -18,9 +18,9 @@ export async function Header() {
   return (
     <header className="pointer-events-auto fixed inset-x-0 top-0 z-60 w-full">
       <div className="container mt-5 flex h-16 items-center justify-between lg:h-18">
-        <Logo />
+        <Logo className="animate-in duration-700 fade-in slide-in-from-top" />
 
-        <NavContainer>
+        <NavContainer className="animate-in duration-1000 fade-in slide-in-from-top">
           {headerMenu && headerMenu.length > 0 && (
             <>
               <DesktopNav menuItems={headerMenu} />
