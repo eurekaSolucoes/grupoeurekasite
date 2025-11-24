@@ -9,6 +9,7 @@ import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import { ArrowRight } from '@/components/Icons/ArrowRight'
 import { useMediaQuery } from 'usehooks-ts'
+import { ScrollingText } from '@/components/animate/ScrollingText'
 
 interface SolutionsSectionProps {
   solutions: Homepage['solutions']
@@ -22,7 +23,7 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
     offset: ['start end', 'end end'],
   })
 
-  const rawScale = useTransform(scrollYProgress, [0, 0.5], ['0%', '100%'])
+  const rawScale = useTransform(scrollYProgress, [0, 0.3], ['0%', '100%'])
   const scale = useSpring(rawScale, {
     stiffness: 100,
     damping: 30,
@@ -33,6 +34,16 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
   return (
     <motion.section className="relative z-10 min-h-[140vh] overflow-x-hidden pt-[45vh] pb-40 sm:pt-[50vh]">
       <motion.div
+        className="absolute top-1/4 z-5 size-200 -translate-x-1/2 rounded-full border-2 border-red-500"
+        initial={{ opacity: 0, x: -100 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{
+          once: true,
+          amount: 0.4,
+        }}
+      />
+      <motion.div
         ref={containerRef}
         className="absolute inset-y-0 top-0 left-1/2 w-[180vw] -translate-x-1/2 overflow-x-hidden rounded-t-full bg-linear-to-tl from-brand-dark-blue from-25% to-secondary lg:rounded-[50%_50%_0_0/100%_100%_0_0]"
         style={{
@@ -40,7 +51,7 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
         }}
       />
 
-      <div className="container flex flex-col items-center">
+      <div className="relative z-10 container flex flex-col items-center">
         {solutions.title && solutions.subtitle && (
           <motion.header
             initial={{ x: -50, opacity: 0 }}
@@ -74,7 +85,7 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
           </motion.header>
         )}
         {solutions.cards && solutions.cards.length > 0 && (
-          <ul className="relative z-10 grid w-full grid-cols-1 gap-5 pt-7 sm:max-w-4/5 lg:grid-cols-3 lg:gap-6">
+          <ul className="grid w-full grid-cols-1 gap-5 pt-7 sm:max-w-4/5 lg:grid-cols-3 lg:gap-6">
             {solutions.cards.map((card, index) => {
               const isEven = index % 2 === 0
               const rotateDirection = isEven ? -1 : 1
@@ -86,8 +97,8 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
                   whileInView={{ transform: 'rotate(0deg)' }}
                   transition={{ duration: 0.5, delay: isDesktop ? 0 : index * 0.1 }}
                   viewport={{
-                    amount: isDesktop ? 0.5 : 1,
-                    once: isDesktop,
+                    amount: isDesktop ? 'all' : 0.5,
+                    once: true,
                   }}
                   style={{
                     zIndex: index,
@@ -107,7 +118,23 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
             })}
           </ul>
         )}
+        {solutions.description && (
+          <motion.p
+            initial={{ opacity: 0, x: -100 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{
+              once: true,
+            }}
+            className="pt-15 text-center typography-body-large text-pretty text-secondary-foreground lg:pt-22"
+          >
+            {solutions.description}
+          </motion.p>
+        )}
       </div>
+      {solutions.animatedPhrase && (
+        <ScrollingText className="pt-16 opacity-8" text={solutions.animatedPhrase} />
+      )}
     </motion.section>
   )
 }
@@ -128,7 +155,7 @@ function SolutionCard({ cardData }: Readonly<SolutionCardProps>) {
         imgClassName="object-cover size-full"
       />
       {cardData.title && (
-        <h3 className="typography-subheading text-secondary-foreground lg:text-[2rem]/[1.2]">
+        <h3 className="typography-subheading text-secondary-foreground lg:text-xl xl:text-[2rem]/[1.2]">
           {cardData.title}
         </h3>
       )}
