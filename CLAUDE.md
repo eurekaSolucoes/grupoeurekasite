@@ -106,6 +106,14 @@ Defined in `src/access/`:
 - `authenticated`: Only logged-in users can access
 - `authenticatedOrPublished`: Public can read published content, users can access drafts
 
+### Reusable Fields
+
+Custom field configurations in `src/fields/`:
+- **`link`** (`@/fields/link`): Reusable link field supporting internal page/post references or custom URLs with optional appearance styles
+- **`linkGroup`**: Array of links with optional group configuration
+- **`dropdown`**: Dropdown field configuration for selects
+- **`defaultLexical`**: Base Lexical editor configuration with common features (bold, italic, underline, links to pages/posts)
+
 ### Plugins
 
 Configured in `src/plugins/index.ts`:
@@ -182,11 +190,18 @@ Required variables (see `.env.example`):
 - `NEXT_PUBLIC_SERVER_URL` - Public URL for link generation
 - `CRON_SECRET` - Authenticates cron job requests
 - `PREVIEW_SECRET` - Validates draft preview requests
+- `S3_ACCESS_KEY_ID` - AWS S3 access key for media storage
+- `S3_SECRET_ACCESS_KEY` - AWS S3 secret key
+- `S3_BUCKET` - S3 bucket name for media uploads
+- `S3_REGION` - AWS region (default: us-east-1)
+- `S3_ENDPOINT` - S3 endpoint URL
+
+**Media Storage**: This project uses AWS S3 for media storage via `@payloadcms/storage-s3`. All media uploads are stored in S3, not locally. Ensure S3 credentials are configured before uploading media.
 
 ## Key Patterns
 
 **Configuring the homepage**:
-The homepage is a **Global** (not a collection) located in **Globais → Homepage** in the admin panel.
+The homepage is a **Global** (not a collection) located in **Globais → Homepage** in the admin panel. **IMPORTANT**: The homepage does NOT use the layout builder. It uses custom React components for each section.
 
 **Homepage structure** (4 customized sections):
 1. **Banners**: Array de banners (Subtítulo, Título, Link, Imagem de Fundo, Imagem em Destaque)
@@ -196,11 +211,20 @@ The homepage is a **Global** (not a collection) located in **Globais → Homepag
 
 All fields use the existing `link` field from `@/fields/link` for consistent link handling (internal pages/posts or custom URLs).
 
+**Rendering homepage sections**:
+- Homepage sections are rendered in `src/app/(frontend)/page.tsx`
+- Each section has a custom React component in `src/components/Sections/Home/`
+- Currently implemented: `BannerSection.tsx`, `SolutionsSection.tsx`
+- To add a new section: create component in `src/components/Sections/Home/`, import in `page.tsx`, and render conditionally
+
 **Configuring navigation (Header & Footer)**:
 The navigation is a **Global** (not a collection) located in **Globais → Navegação** in the admin panel.
 
 **Navigation structure**:
-1. **Menu Superior**: Array de links para o menu header (1 nível apenas)
+1. **Menu Superior**: Array de links/dropdowns para o menu header
+   - Each item can be either:
+     - **Link Simples**: Direct link using the standard `link` field
+     - **Menu Dropdown**: Dropdown menu with label and subitems (each subitem has link, optional image, and optional description)
 2. **Menu Rodapé** (3 grupos):
    - **Soluções**: Título + array de links
    - **Acesse**: Título + array de links
@@ -209,7 +233,7 @@ The navigation is a **Global** (not a collection) located in **Globais → Naveg
 4. **Endereço**: Campo textarea para endereço completo (múltiplas linhas)
 5. **Telefone**: Campo texto para número de telefone
 
-All menu links use the existing `link` field for consistent handling. Social media links use a custom structure with icon selector + URL.
+All menu links use the existing `link` field from `@/fields/link` for consistent handling. Social media links use a custom structure with icon selector + URL.
 
 **Adding a new collection**:
 1. Create collection config in `src/collections/[Name]/index.ts`
