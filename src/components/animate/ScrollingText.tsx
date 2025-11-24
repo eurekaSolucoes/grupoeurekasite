@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useEffect, useState } from 'react'
-import { motion, useScroll, useTransform } from 'motion/react'
+import { motion, useScroll, useTransform, useSpring } from 'motion/react'
 import { cn } from '@/lib/utils'
 
 interface ScrollingTextProps {
@@ -48,7 +48,14 @@ export const ScrollingText = ({ text, tag: Tag = 'p', className }: ScrollingText
   const maxTranslate = shouldAnimate ? -(textWidth - viewportWidth) : 0
 
   // Animação: scroll 0 → mostra início (x=0), scroll 1 → mostra final (x=maxTranslate negativo)
-  const x = useTransform(scrollYProgress, [0.1, 0.7], [0, maxTranslate])
+  const xRaw = useTransform(scrollYProgress, [0.1, 0.7], [0, maxTranslate])
+
+  // Suaviza com spring physics
+  const x = useSpring(xRaw, {
+    stiffness: 100,
+    damping: 30,
+    mass: 1,
+  })
 
   return (
     <div ref={containerRef} className={cn('flex items-center overflow-hidden', className)}>
