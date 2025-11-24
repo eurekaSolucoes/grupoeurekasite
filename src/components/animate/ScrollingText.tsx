@@ -48,13 +48,13 @@ export const ScrollingText = ({ text, tag: Tag = 'p', className }: ScrollingText
   const maxTranslate = shouldAnimate ? -(textWidth - viewportWidth) : 0
 
   // Animação: scroll 0 → mostra início (x=0), scroll 1 → mostra final (x=maxTranslate negativo)
-  const xRaw = useTransform(scrollYProgress, [0.1, 0.7], [0, maxTranslate])
+  const xRaw = useTransform(scrollYProgress, [0.3, 0.7], [0, maxTranslate])
 
-  // Suaviza com spring physics
+  // Suaviza com spring physics - mais inércia para movimento orgânico
   const x = useSpring(xRaw, {
-    stiffness: 100,
-    damping: 30,
-    mass: 1,
+    stiffness: 50,
+    damping: 20,
+    mass: 2,
   })
 
   return (
