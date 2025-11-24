@@ -256,3 +256,90 @@ The admin panel includes a "seed database" button that populates demo content. *
 Demo credentials after seeding:
 - Email: `demo-author@payloadcms.com`
 - Password: `password`
+
+## Git Workflow and Commit Guidelines
+
+### Conventional Commits
+
+**ALWAYS** follow Conventional Commits specification for all commits. This ensures clear, semantic commit history.
+
+**Format**: `<type>(<scope>): <description>`
+
+**Types**:
+- `feat`: New feature or functionality
+- `fix`: Bug fix
+- `refactor`: Code refactoring without changing functionality
+- `style`: Formatting, styling changes (CSS, whitespace, etc)
+- `perf`: Performance improvements
+- `docs`: Documentation changes
+- `test`: Adding or updating tests
+- `chore`: Maintenance tasks, dependencies, build config
+
+**Scope** (optional): Component, file, or feature area (e.g., `header`, `solutions`, `api`)
+
+**Examples**:
+```bash
+feat(homepage): add animated banner section
+fix(navigation): resolve dropdown menu positioning
+refactor(media): simplify image upload logic
+style(solutions): adjust card typography and spacing
+docs: update environment variables in CLAUDE.md
+```
+
+### Commit Best Practices
+
+1. **Modular commits**: One logical change per commit
+   - Group related changes (e.g., all changes for one feature)
+   - Separate unrelated changes into different commits
+   - Makes code review and rollback easier
+
+2. **Complete functionality**: Commit when a feature/fix is complete and working
+   - Don't commit broken code
+   - Ensure changes don't break existing functionality
+   - Test before committing
+
+3. **Clear descriptions**: Write descriptive commit messages
+   - First line: concise summary (50-72 chars)
+   - Body (optional): detailed explanation with bullet points
+   - Include "why" not just "what"
+
+4. **Use HEREDOC for multi-line messages**:
+   ```bash
+   git commit -m "$(cat <<'EOF'
+   feat(solutions): add scroll-based animations
+
+   - Implement scroll direction detection
+   - Add conditional header animation
+   - Add animated decorative circles
+
+   🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+   Co-Authored-By: Claude <noreply@anthropic.com>
+   EOF
+   )"
+   ```
+
+5. **Always include attribution** in commits:
+   ```
+   🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+   Co-Authored-By: Claude <noreply@anthropic.com>
+   ```
+
+### Example Workflow
+
+```bash
+# 1. Check status and review changes
+git status
+git diff
+
+# 2. Stage related changes
+git add src/components/Feature.tsx
+
+# 3. Commit with conventional format
+git commit -m "feat(feature): add new feature description"
+
+# 4. Repeat for each logical change
+git add src/styles/feature.css
+git commit -m "style(feature): add feature styling"
+```
