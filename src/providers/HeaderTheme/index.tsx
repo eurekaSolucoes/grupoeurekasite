@@ -9,7 +9,10 @@ import { EurekaLogoVariants } from '@/components/animate/EurekaLogo'
 
 export type HeaderTheme = {
   theme?: Theme
-  logoTheme: EurekaLogoVariants | null
+  logoTheme: {
+    mobile: EurekaLogoVariants | null
+    desktop: EurekaLogoVariants | null
+  } | null
 }
 
 export interface ContextType {
@@ -29,7 +32,12 @@ export const HeaderThemeProvider = ({ children }: { children: React.ReactNode })
     canUseDOM
       ? {
           theme: document.documentElement.dataset.theme as Theme,
-          logoTheme: (document.documentElement.dataset.logoTheme as EurekaLogoVariants) ?? null,
+          logoTheme: {
+            mobile:
+              (document.documentElement.dataset.logoThemeMobile as EurekaLogoVariants) ?? null,
+            desktop:
+              (document.documentElement.dataset.logoThemeDesktop as EurekaLogoVariants) ?? null,
+          },
         }
       : null,
   )

@@ -142,6 +142,7 @@ export function EurekaLogo({
 }: Readonly<EurekaLogoProps>) {
   const isIcon = variant !== 'full'
   const kColor = getKColor(variant)
+  const circlesColor = getCirclesColor(variant)
 
   return (
     <motion.svg
@@ -155,18 +156,16 @@ export function EurekaLogo({
       initial={false}
       transition={DEFAULT_TRANSITION}
     >
-      {/* ===== BOLINHAS (círculos laranjas) ===== */}
+      {/* ===== BOLINHAS (círculos) ===== */}
       <motion.path
         d={SVG_PATHS.CIRCLE_SMALL}
-        fill={COLORS.ORANGE}
-        animate={{ x: isIcon ? CIRCLES_OFFSET_X : 0 }}
+        animate={{ fill: circlesColor, x: isIcon ? CIRCLES_OFFSET_X : 0 }}
         transition={DEFAULT_TRANSITION}
         initial={false}
       />
       <motion.path
         d={SVG_PATHS.CIRCLE_LARGE}
-        fill={COLORS.ORANGE}
-        animate={{ x: isIcon ? CIRCLES_OFFSET_X : 0 }}
+        animate={{ fill: circlesColor, x: isIcon ? CIRCLES_OFFSET_X : 0 }}
         transition={DEFAULT_TRANSITION}
         initial={false}
       />
