@@ -11,6 +11,8 @@ import PageClient from './[slug]/page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { BannerSection } from '@/components/Sections/Home/BannerSection'
 import { SolutionsSection } from '@/components/Sections/Home/SolutionsSection'
+import { StoriesSection } from '@/components/Sections/Home/StoriesSection'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
 export default async function HomePage() {
   const { isEnabled: draft } = await draftMode()
@@ -38,9 +40,23 @@ export default async function HomePage() {
 
       {/* TODO: Implement custom Homepage sections rendering */}
       {/* Homepage has custom structure: banner, solutions, about, stories */}
-      {!!homepage.banners && <BannerSection banners={homepage.banners} />}
+      {!!homepage.banners && (
+        <HeaderThemeSetter logoMobile="icon-white" logoDesktop="full">
+          <BannerSection banners={homepage.banners} />
+        </HeaderThemeSetter>
+      )}
 
-      {!!homepage.solutions && <SolutionsSection solutions={homepage.solutions} />}
+      {!!homepage.solutions && (
+        <HeaderThemeSetter logoMobile="icon-white" logoDesktop="full">
+          <SolutionsSection solutions={homepage.solutions} />
+        </HeaderThemeSetter>
+      )}
+
+      {!!homepage.stories && (
+        <HeaderThemeSetter logoMobile="icon-full-white" logoDesktop="icon-full-white">
+          <StoriesSection stories={homepage.stories} />
+        </HeaderThemeSetter>
+      )}
     </article>
   )
 }
