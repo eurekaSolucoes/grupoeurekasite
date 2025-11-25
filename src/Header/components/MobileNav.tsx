@@ -45,12 +45,17 @@ export function MobileNav({ menuItems }: Readonly<MobileNavProps>) {
     setOpen((prev) => !prev)
     const isOpening = !open
     if (isOpening) {
+      // Quando abre: muda mobile para branco, mantém desktop
       changeHeaderTheme({
         ...headerTheme,
-        logoTheme: 'icon-white',
+        logoTheme: {
+          mobile: 'icon-white',
+          desktop: headerTheme?.logoTheme?.desktop ?? null,
+        },
       })
       return
     }
+    // Quando fecha: restaura tema anterior
     changeHeaderTheme({
       ...headerTheme,
       logoTheme: previousHeaderThemeRef.current?.logoTheme ?? null,

@@ -4,11 +4,14 @@ import React, { useEffect } from 'react'
 
 const PageClient: React.FC = () => {
   /* Force the header to be dark mode while we have an image behind it */
-  const { setHeaderTheme } = useHeaderTheme()
+  const { changeHeaderTheme } = useHeaderTheme()
 
   useEffect(() => {
-    setHeaderTheme('dark')
-  }, [setHeaderTheme])
+    changeHeaderTheme({
+      theme: 'dark',
+      logoTheme: null, // Use defaults
+    })
+  }, [changeHeaderTheme])
   return <React.Fragment />
 }
 

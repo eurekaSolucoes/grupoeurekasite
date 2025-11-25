@@ -26,8 +26,8 @@ export default function LogoDemoPage() {
       bgHex: '#000000',
     },
     {
-      variant: 'icon-dark',
-      label: 'Icon Dark',
+      variant: 'icon-full-white',
+      label: 'Icon Full White',
       bgHex: '#000000',
     },
   ]
