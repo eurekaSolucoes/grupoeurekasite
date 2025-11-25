@@ -1,15 +1,26 @@
 'use client'
 
-import type { ArrayFieldRowLabel } from 'payload'
+import { useRowLabel } from '@payloadcms/ui'
 
-export const BannerRowLabel: ArrayFieldRowLabel = ({ data, index }) => {
-  return data?.title || `Banner ${String(index + 1).padStart(2, '0')}`
+interface BannerData {
+  title?: string
 }
 
-export const SolutionCardRowLabel: ArrayFieldRowLabel = ({ data, index }) => {
-  return data?.title || `Card ${String(index).padStart(2, '0')}`
+interface CardData {
+  title?: string
 }
 
-export const StoryCardRowLabel: ArrayFieldRowLabel = ({ data, index }) => {
-  return data?.title || `História ${String(index).padStart(2, '0')}`
+export const BannerRowLabel = () => {
+  const { data, rowNumber = 0 } = useRowLabel<BannerData>()
+  return data?.title || `Banner ${String(rowNumber + 1).padStart(2, '0')}`
+}
+
+export const SolutionCardRowLabel = () => {
+  const { data, rowNumber = 0 } = useRowLabel<CardData>()
+  return data?.title || `Card ${String(rowNumber + 1).padStart(2, '0')}`
+}
+
+export const StoryCardRowLabel = () => {
+  const { data, rowNumber = 0 } = useRowLabel<CardData>()
+  return data?.title || `História ${String(rowNumber + 1).padStart(2, '0')}`
 }
