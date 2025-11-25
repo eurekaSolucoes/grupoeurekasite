@@ -13,7 +13,7 @@ export interface ScrollContextValue {
   /** Absolute scroll Y position */
   scrollY: MotionValue<number>
   /** Ref to the scroll container element */
-  containerRef: React.RefObject<HTMLDivElement>
+  containerRef: React.RefObject<HTMLDivElement | null>
 }
 
 /**
