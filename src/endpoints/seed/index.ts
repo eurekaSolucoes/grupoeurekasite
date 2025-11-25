@@ -20,7 +20,7 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
+const globals: GlobalSlug[] = ['navigation', 'homepage']
 
 const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
@@ -48,9 +48,7 @@ export const seed = async ({
     globals.map((global) =>
       payload.updateGlobal({
         slug: global,
-        data: {
-          navItems: [],
-        },
+        data: {},
         depth: 0,
         context: {
           disableRevalidate: true,
@@ -217,62 +215,54 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding globals...`)
 
-  await Promise.all([
-    payload.updateGlobal({
-      slug: 'header',
-      data: {
-        navItems: [
-          {
-            link: {
-              type: 'custom',
-              label: 'Posts',
-              url: '/posts',
+  await payload.updateGlobal({
+    slug: 'navigation',
+    data: {
+      headerMenu: [
+        {
+          type: 'link',
+          link: {
+            type: 'custom',
+            label: 'Posts',
+            url: '/posts',
+          },
+        },
+        {
+          type: 'link',
+          link: {
+            type: 'reference',
+            label: 'Contact',
+            reference: {
+              relationTo: 'pages',
+              value: contactPage.id,
             },
           },
-          {
-            link: {
-              type: 'reference',
-              label: 'Contact',
-              reference: {
-                relationTo: 'pages',
-                value: contactPage.id,
+        },
+      ],
+      footerMenu: {
+        solutions: {
+          title: 'Soluções',
+          links: [],
+        },
+        access: {
+          title: 'Acesse',
+          links: [
+            {
+              link: {
+                type: 'custom',
+                label: 'Admin',
+                url: '/admin',
               },
             },
-          },
-        ],
+          ],
+        },
+        social: {
+          title: 'Socialize',
+          links: [],
+        },
       },
-    }),
-    payload.updateGlobal({
-      slug: 'footer',
-      data: {
-        navItems: [
-          {
-            link: {
-              type: 'custom',
-              label: 'Admin',
-              url: '/admin',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Source Code',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Payload',
-              newTab: true,
-              url: 'https://payloadcms.com/',
-            },
-          },
-        ],
-      },
-    }),
-  ])
+    },
+  })
 
   payload.logger.info('Seeded database successfully!')
 }
