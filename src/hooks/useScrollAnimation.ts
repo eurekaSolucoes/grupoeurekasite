@@ -82,7 +82,7 @@ export function useScrollAnimation(
   options: UseScrollAnimationOptions = {},
 ): UseScrollAnimationReturn {
   const {
-    initialWidth = '60vw',
+    initialWidth = '50vw',
     finalWidth = '100vw',
     initialBorderRadius = 50,
     finalBorderRadius = 0,
