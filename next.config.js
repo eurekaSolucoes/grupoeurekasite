@@ -38,6 +38,9 @@ const nextConfig = {
         pathname: '/api/media/file/**',
         search: '',
       },
+      {
+        pathname: '/assets/**',
+      },
     ],
     // Allow localhost IPs only in development with Payload CMS
     // Next.js 16 changed default from true to false for security
