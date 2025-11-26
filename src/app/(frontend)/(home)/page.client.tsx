@@ -12,7 +12,7 @@ const PageClient: React.FC = () => {
       logoTheme: null, // Use defaults: icon-blue (mobile) and full (desktop)
     })
   }, [changeHeaderTheme])
-  return <React.Fragment />
+  return null
 }
 
 export default PageClient
