@@ -1817,10 +1817,7 @@ export interface Homepage {
       | {
           image: string | Media;
           title: string;
-          /**
-           * Link opcional para o card
-           */
-          link: {
+          link?: {
             type?: ('reference' | 'custom') | null;
             newTab?: boolean | null;
             reference?:
@@ -1833,7 +1830,6 @@ export interface Homepage {
                   value: string | Post;
                 } | null);
             url?: string | null;
-            label: string;
           };
           id?: string | null;
         }[]
@@ -1842,8 +1838,36 @@ export interface Homepage {
     animatedPhrase?: string | null;
   };
   about: {
-    mainText: string;
-    secondaryText?: string | null;
+    mainText: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    secondaryText?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
     rightImages?:
       | {
           image: string | Media;
@@ -1897,6 +1921,20 @@ export interface Homepage {
           image: string | Media;
           title: string;
           description: string;
+          link?: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
+            url?: string | null;
+          };
           id?: string | null;
         }[]
       | null;
@@ -2043,7 +2081,6 @@ export interface HomepageSelect<T extends boolean = true> {
                     newTab?: T;
                     reference?: T;
                     url?: T;
-                    label?: T;
                   };
               id?: T;
             };
@@ -2099,6 +2136,14 @@ export interface HomepageSelect<T extends boolean = true> {
               image?: T;
               title?: T;
               description?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                  };
               id?: T;
             };
       };

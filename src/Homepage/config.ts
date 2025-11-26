@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import { authenticated } from '@/access/authenticated'
+import { defaultLexical } from '@/fields/defaultLexical'
 import { link } from '@/fields/link'
 
 export const Homepage: GlobalConfig = {
@@ -100,12 +101,10 @@ export const Homepage: GlobalConfig = {
                     },
                     link({
                       appearances: false,
+                      disableLabel: true,
                       overrides: {
                         name: 'link',
-                        label: 'Link (Opcional)',
-                        admin: {
-                          description: 'Link opcional para o card',
-                        },
+                        label: 'Link',
                       },
                     }),
                   ],
@@ -139,20 +138,21 @@ export const Homepage: GlobalConfig = {
               fields: [
                 {
                   name: 'mainText',
-                  type: 'textarea',
+                  type: 'richText',
+                  editor: defaultLexical,
                   label: 'Texto Principal',
                   required: true,
                 },
                 {
                   name: 'secondaryText',
-                  type: 'textarea',
+                  type: 'richText',
+                  editor: defaultLexical,
                   label: 'Texto Secundário',
                 },
                 {
                   name: 'rightImages',
                   type: 'array',
                   label: 'Imagens Direita',
-                  minRows: 2,
                   maxRows: 2,
                   fields: [
                     {
@@ -168,7 +168,6 @@ export const Homepage: GlobalConfig = {
                   name: 'leftImages',
                   type: 'array',
                   label: 'Imagens Esquerda',
-                  minRows: 2,
                   maxRows: 2,
                   fields: [
                     {
@@ -249,6 +248,14 @@ export const Homepage: GlobalConfig = {
                       label: 'Descrição',
                       required: true,
                     },
+                    link({
+                      appearances: false,
+                      disableLabel: true,
+                      overrides: {
+                        name: 'link',
+                        label: 'Link',
+                      },
+                    }),
                   ],
                   admin: {
                     initCollapsed: true,
