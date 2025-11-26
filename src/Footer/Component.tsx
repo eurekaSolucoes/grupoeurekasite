@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Phone } from 'lucide-react'
+import { cn } from '@/utilities/ui'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import type { Navigation } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
@@ -29,17 +30,21 @@ const socialIcons = {
   telegram: TelegramIcon,
 }
 
+interface FooterProps {
+  className?: string
+}
+
 /**
  * Footer Component
  *
  * Componente de footer que consome dados do Navigation global do Payload CMS.
  * Renderiza menu de rodapé, informações de contato e redes sociais.
  */
-export async function Footer() {
+export async function Footer({ className }: FooterProps = {}) {
   const { footerMenu, address, phone } = (await getCachedGlobal('navigation', 1)()) as Navigation
 
   return (
-    <footer className="mt-auto">
+    <footer className={cn('mt-auto', className)}>
       <section className="container flex flex-col gap-y-7 pt-12 pb-7 xl:flex-row xl:items-end xl:gap-16">
         {/* Logo + Contact Info */}
         <div className="flex flex-col gap-7 xl:basis-1/4 xl:gap-20">
