@@ -137,13 +137,14 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
         )}
         {solutions.description && (
           <motion.p
-            initial={{ opacity: 0, x: -100 }}
+            initial={{ opacity: 0, x: 'var(--entry-distance-y)' }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{
-              once: true,
+              // once: true,
+              amount: 0.8,
             }}
-            className="pt-15 text-center typography-body-large text-balance text-secondary-foreground lg:pt-22"
+            className="pt-15 text-center typography-body-large text-balance text-secondary-foreground [--entry-distance-y:-50px] md:[--entry-distance-y:-100px] lg:pt-22"
           >
             {solutions.description}
           </motion.p>

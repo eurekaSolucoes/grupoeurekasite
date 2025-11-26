@@ -9,13 +9,29 @@ import {
   useScrollAnimation,
 } from '@/components/animate/ScrollAnimatedWrapper'
 import Image from 'next/image'
+import { motion, useSpring, useTransform } from 'motion/react'
 
 interface StoriesSectionProps {
   stories: Homepage['stories']
 }
 
 export function StoriesSection({ stories }: Readonly<StoriesSectionProps>) {
-  const scrollAnimation = useScrollAnimation()
+  const scrollAnimation = useScrollAnimation({ scrollRange: [0, 0.4] })
+  const { scrollYProgress } = scrollAnimation
+
+  const rawHeaderX = useTransform(scrollYProgress, [0, 0.4], [-100, 0])
+  const headerX = useSpring(rawHeaderX, {
+    stiffness: 50,
+    damping: 20,
+    restDelta: 0.001,
+  })
+
+  const rawCardsX = useTransform(scrollYProgress, [0, 0.4], [100, 0])
+  const cardsX = useSpring(rawCardsX, {
+    stiffness: 50,
+    damping: 20,
+    restDelta: 0.001,
+  })
 
   if (!stories) return null
 
@@ -25,9 +41,12 @@ export function StoriesSection({ stories }: Readonly<StoriesSectionProps>) {
       background="bg-white"
       innerClassName="bg-accent"
     >
-      <section className="relative container space-y-7 py-16 lg:flex lg:gap-20 lg:space-y-0">
+      <section className="relative container space-y-7 py-16 lg:flex lg:gap-20 lg:space-y-0 lg:pt-60 lg:pb-35">
         {/* Header */}
-        <header className="mx-auto sm:max-w-90 lg:sticky lg:top-28 lg:z-50 lg:h-fit">
+        <motion.header
+          style={{ x: headerX }}
+          className="mx-auto sm:max-w-90 lg:sticky lg:top-28 lg:z-50 lg:h-fit"
+        >
           <div className="relative mx-6 flex flex-col pb-2.5 lg:mr-0 lg:pb-3">
             {stories.title && (
               <h2 className="max-w-45 typography-display font-bold text-accent-foreground lg:max-w-none">
@@ -61,11 +80,11 @@ export function StoriesSection({ stories }: Readonly<StoriesSectionProps>) {
               className="hidden self-start lg:mt-7 lg:inline-flex"
             />
           )}
-        </header>
+        </motion.header>
 
         {/* Cards */}
         {stories.cards && stories.cards.length > 0 && (
-          <ul className="flex flex-col gap-5">
+          <motion.ul style={{ x: cardsX }} className="flex flex-col gap-5">
             {stories.cards.map((card) => (
               <li key={card.id ?? card.title}>
                 <HoverScaleCard arrowClassName="bg-secondary lg:size-13">
@@ -73,7 +92,7 @@ export function StoriesSection({ stories }: Readonly<StoriesSectionProps>) {
                 </HoverScaleCard>
               </li>
             ))}
-          </ul>
+          </motion.ul>
         )}
 
         {/* CTA Button */}
@@ -97,8 +116,8 @@ interface StoryCardProps {
 }
 
 function StoryCard({ cardData }: Readonly<StoryCardProps>) {
-  return (
-    <article className="relative z-10 flex h-70 flex-col justify-end overflow-hidden rounded-[30px] p-6 shadow-[0_12px_24px_0_rgba(0,0,0,0.24)] after:absolute after:inset-0 after:-z-10 after:rounded-[30px] after:bg-linear-to-t after:from-black/80">
+  const cardContent = (
+    <>
       <Media
         resource={cardData.image}
         alt={cardData.title}
@@ -107,6 +126,20 @@ function StoryCard({ cardData }: Readonly<StoryCardProps>) {
       />
       <h3 className="typography-subheading font-bold text-white">{cardData.title}</h3>
       <p className="text-accent-foreground">{cardData.description}</p>
-    </article>
+    </>
   )
+
+  const cardClassName =
+    'relative z-10 flex h-70 flex-col justify-end overflow-hidden rounded-[30px] p-6 shadow-[0_12px_24px_0_rgba(0,0,0,0.24)] after:absolute after:inset-0 after:-z-10 after:rounded-[30px] after:bg-linear-to-t after:from-black/80'
+
+  // Se tiver link, envolver o card no CMSLink
+  if (cardData.link?.type) {
+    return (
+      <CMSLink {...cardData.link} appearance="inline" className={cardClassName}>
+        {cardContent}
+      </CMSLink>
+    )
+  }
+
+  return <article className={cardClassName}>{cardContent}</article>
 }
