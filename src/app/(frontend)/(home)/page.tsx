@@ -11,6 +11,7 @@ import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { BannerSection } from '@/components/Sections/Home/BannerSection'
 import { SolutionsSection } from '@/components/Sections/Home/SolutionsSection'
+import { AboutSection } from '@/components/Sections/Home/AboutSection'
 import { StoriesSection } from '@/components/Sections/Home/StoriesSection'
 import { AISection } from '@/components/Sections/Home/AISection'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
@@ -53,13 +54,19 @@ export default async function HomePage() {
         </HeaderThemeSetter>
       )}
 
+      {!!homepage.about && (
+        <HeaderThemeSetter logoMobile="icon-blue" logoDesktop="icon-blue">
+          <AboutSection about={homepage.about} />
+        </HeaderThemeSetter>
+      )}
+
       {!!homepage.stories && (
         <HeaderThemeSetter logoMobile="icon-full-white" logoDesktop="icon-full-white">
           <StoriesSection stories={homepage.stories} />
         </HeaderThemeSetter>
       )}
 
-      <HeaderThemeSetter logoMobile="icon-full-white" logoDesktop="icon-full-white">
+      <HeaderThemeSetter logoMobile="icon-white" logoDesktop="icon-white">
         <AISection />
       </HeaderThemeSetter>
     </article>

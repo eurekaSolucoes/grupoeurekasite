@@ -7,9 +7,15 @@ interface ScrollingTextProps {
   text: string
   tag?: 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   className?: string
+  textClassName?: string
 }
 
-export const ScrollingText = ({ text, tag: Tag = 'p', className }: ScrollingTextProps) => {
+export const ScrollingText = ({
+  text,
+  tag: Tag = 'p',
+  className,
+  textClassName,
+}: ScrollingTextProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
   const [textWidth, setTextWidth] = useState(0)
@@ -67,7 +73,12 @@ export const ScrollingText = ({ text, tag: Tag = 'p', className }: ScrollingText
           }}
           className="inline-block whitespace-nowrap"
         >
-          <Tag className="px-8 text-6xl font-black whitespace-nowrap text-white md:text-8xl xl:text-[200px]">
+          <Tag
+            className={cn(
+              'px-8 text-6xl font-black whitespace-nowrap text-white md:text-8xl xl:text-[200px]',
+              textClassName,
+            )}
+          >
             {text}
           </Tag>
         </motion.div>
