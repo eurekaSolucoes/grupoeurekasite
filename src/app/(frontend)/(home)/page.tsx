@@ -49,19 +49,23 @@ export default async function HomePage() {
       )}
 
       {!!homepage.solutions && (
-        <HeaderThemeSetter logoMobile="icon-white" logoDesktop="full">
+        <HeaderThemeSetter theme="default" logoMobile="icon-white" logoDesktop="full">
           <SolutionsSection solutions={homepage.solutions} />
         </HeaderThemeSetter>
       )}
 
       {!!homepage.about && (
-        <HeaderThemeSetter logoMobile="icon-blue" logoDesktop="icon-blue">
+        <HeaderThemeSetter theme="secondary" logoMobile="icon-blue" logoDesktop="icon-blue">
           <AboutSection about={homepage.about} />
         </HeaderThemeSetter>
       )}
 
       {!!homepage.stories && (
-        <HeaderThemeSetter logoMobile="icon-full-white" logoDesktop="icon-full-white">
+        <HeaderThemeSetter
+          theme="default"
+          logoMobile="icon-full-white"
+          logoDesktop="icon-full-white"
+        >
           <StoriesSection stories={homepage.stories} />
         </HeaderThemeSetter>
       )}
