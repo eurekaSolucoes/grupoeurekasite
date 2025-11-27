@@ -44,7 +44,7 @@ export async function Footer({ className }: FooterProps = {}) {
   const { footerMenu, address, phone } = (await getCachedGlobal('navigation', 1)()) as Navigation
 
   return (
-    <footer className={cn('mt-auto', className)}>
+    <footer className={cn('mt-auto bg-white', className)}>
       <section className="container flex flex-col gap-y-7 pt-12 pb-7 xl:flex-row xl:items-end xl:gap-16">
         {/* Logo + Contact Info */}
         <div className="flex flex-col gap-7 xl:basis-1/4 xl:gap-20">
