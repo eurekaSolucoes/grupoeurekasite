@@ -8,7 +8,7 @@ const PageClient: React.FC = () => {
 
   useEffect(() => {
     changeHeaderTheme({
-      theme: 'dark',
+      theme: 'default',
       logoTheme: null, // Use defaults
     })
   }, [changeHeaderTheme])
