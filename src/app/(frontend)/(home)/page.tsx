@@ -33,7 +33,7 @@ export default async function HomePage() {
   }
 
   return (
-    <article className="pb-24">
+    <article>
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
