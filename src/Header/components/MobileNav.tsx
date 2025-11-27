@@ -96,7 +96,7 @@ export function MobileNav({ menuItems }: Readonly<MobileNavProps>) {
           <SheetTitle>Menu</SheetTitle>
           <SheetDescription>Navegue em nosso site</SheetDescription>
         </SheetHeader>
-        <ScrollArea className="mt-38 h-[calc(100vh-100px)]">
+        <ScrollArea className="mt-38 max-h-[calc(100vh-200px)]">
           <nav className="container pb-18">
             <Accordion
               type="single"
