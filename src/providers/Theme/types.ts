@@ -1,4 +1,4 @@
-export type Theme = 'dark' | 'light'
+export type Theme = 'secondary' | 'default'
 
 export interface ThemeContextType {
   setTheme: (theme: Theme | null) => void
