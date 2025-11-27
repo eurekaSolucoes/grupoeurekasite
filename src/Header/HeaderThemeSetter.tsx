@@ -22,18 +22,10 @@ export function HeaderThemeSetter({
   logoDesktop,
   children,
 }: PropsWithChildren<HeaderThemeSetterProps>) {
-  const { scrollY } = useScroll()
-  const [scrollDirection, setScrollDirection] = useState('down')
-
-  useMotionValueEvent(scrollY, 'change', (current: number) => {
-    const diff = current - (scrollY.getPrevious() ?? 0)
-    setScrollDirection(diff > 0 ? 'down' : 'up')
-  })
   const { changeHeaderTheme } = useHeaderTheme()
 
-  const threshold = scrollDirection === 'down' ? 0.8 : 0.1
   const { ref } = useIntersectionObserver({
-    threshold,
+    threshold: 0.3,
     onChange: handleIntersection,
   })
 
