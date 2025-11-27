@@ -5,7 +5,7 @@ import { type VariantProps, cva } from 'class-variance-authority'
 import * as React from 'react'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-between whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 rounded-full',
+  'inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 rounded-full',
   {
     defaultVariants: {
       size: 'default',
@@ -58,7 +58,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <Comp
       className={cn(buttonVariants({ className, size, variant }), {
-        'group gap-5 pl-7.5 *:ease-in-out *:first:duration-300 hover:*:first:translate-x-4':
+        'group justify-between gap-5 pl-7.5 *:ease-in-out *:first:duration-300 hover:*:first:translate-x-4':
           hasIcon,
       })}
       ref={ref}

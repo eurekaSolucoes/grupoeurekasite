@@ -76,7 +76,7 @@ export function MobileNav({ menuItems }: Readonly<MobileNavProps>) {
         data-open={open}
         variant="ghost"
         size="icon"
-        className="group size-10 flex-col gap-y-1 text-white transition-all hover:cursor-pointer hover:bg-transparent hover:text-white data-[open=true]:gap-0 lg:hidden"
+        className="group size-9 flex-col gap-y-2 text-white transition-all hover:cursor-pointer hover:bg-transparent hover:text-white data-[open=true]:gap-0 lg:hidden"
         onClick={toggleDialog}
       >
         {/* Top bar */}
