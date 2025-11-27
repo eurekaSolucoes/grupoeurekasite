@@ -59,8 +59,8 @@ const CIRCLES_OFFSET_X = -30
 
 /** Configuração de transição padrão */
 const DEFAULT_TRANSITION = {
-  duration: 0.8,
-  ease: 'easeInOut' as const,
+  duration: 0.6,
+  ease: [0.16, 1, 0.3, 1] as const,
 }
 
 // ============================================================================
