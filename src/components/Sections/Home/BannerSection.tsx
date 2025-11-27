@@ -87,7 +87,7 @@ export function BannerSection({ banners = [] }: Readonly<BannerSectionProps>) {
               role="group"
               aria-roledescription="slide"
               aria-label={`Slide ${index + 1} de ${banners.length}: ${banner.title || 'Banner'}`}
-              className="absolute top-0 flex size-full cursor-grab items-end pt-40 lg:pt-20"
+              className="group/slide absolute top-0 flex size-full cursor-grab items-end pt-40 lg:pt-10"
               style={{ opacity: opacities[index] ?? 0 }}
             >
               {/* Background Image */}
@@ -111,36 +111,37 @@ export function BannerSection({ banners = [] }: Readonly<BannerSectionProps>) {
                   {/* Text Content */}
                   <div className="flex flex-col items-center text-white lg:items-start">
                     {banner.subtitle && (
-                      <p className="mb-2 inline-block text-center text-pretty lg:flex lg:gap-x-4 lg:text-left lg:typography-body-large lg:before:mt-5 lg:before:h-0.5 lg:before:w-10 lg:before:rounded-full lg:before:bg-accent">
+                      <p className="mb-2 inline-block text-center text-pretty group-first/slide:animate-in group-first/slide:duration-1500 group-first/slide:ease-out group-first/slide:fade-in group-first/slide:slide-in-from-left lg:flex lg:gap-x-4 lg:text-left lg:typography-body-large lg:before:mt-5 lg:before:h-0.5 lg:before:w-10 lg:before:rounded-full lg:before:bg-accent">
                         {banner.subtitle}
                       </p>
                     )}
 
                     {banner.title && (
-                      <h2 className="text-center typography-heading font-bold text-pretty lg:text-left">
+                      <h2 className="text-center typography-heading font-bold text-pretty group-first/slide:animate-in group-first/slide:delay-200 group-first/slide:duration-1500 group-first/slide:ease-in-out group-first/slide:fade-in group-first/slide:slide-in-from-left lg:text-left">
                         {banner.title}
                       </h2>
                     )}
 
                     {banner.link && (
-                      <CMSLink
-                        {...banner.link}
-                        appearance="default"
-                        size="default"
-                        className="mt-7"
-                        label={banner.link.label || 'Saiba mais'}
-                        aria-label={
-                          banner.link.label
-                            ? `${banner.link.label} sobre ${banner.title || 'este banner'}`
-                            : `Saiba mais sobre ${banner.title || 'este banner'}`
-                        }
-                        hasIcon
-                      />
+                      <div className="mt-7 group-first/slide:animate-in group-first/slide:delay-500 group-first/slide:duration-1500 group-first/slide:ease-out group-first/slide:fade-in group-first/slide:slide-in-from-left">
+                        <CMSLink
+                          {...banner.link}
+                          appearance="default"
+                          size="default"
+                          label={banner.link.label || 'Saiba mais'}
+                          aria-label={
+                            banner.link.label
+                              ? `${banner.link.label} sobre ${banner.title || 'este banner'}`
+                              : `Saiba mais sobre ${banner.title || 'este banner'}`
+                          }
+                          hasIcon
+                        />
+                      </div>
                     )}
                   </div>
 
                   {/* Featured Image */}
-                  <div className="self-end">
+                  <div className="self-end group-first/slide:animate-in group-first/slide:duration-1500 group-first/slide:ease-in-out group-first/slide:slide-in-from-left-5 group-first/slide:fade-in">
                     {featuredImage?.url && (
                       <div className="relative aspect-square size-full md:max-h-[min(50vh,var(--breakpoint-md))] lg:max-h-full">
                         <Image
