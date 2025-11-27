@@ -9,7 +9,7 @@ import {
   useScrollAnimation,
 } from '@/components/animate/ScrollAnimatedWrapper'
 import { ScrollingText } from '@/components/animate/ScrollingText'
-import { motion, useTransform, useSpring } from 'motion/react'
+import { motion } from 'motion/react'
 
 interface AboutSectionProps {
   about: Homepage['about']
@@ -26,16 +26,16 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
       background="bg-linear-to-bl from-brand-dark-blue from-25% to-secondary"
       innerClassName="bg-white"
     >
-      <section className="relative overflow-hidden py-16">
+      <section className="relative overflow-y-clip py-16">
         {/* Decorative SVG Lines */}
         <DecorativeLines />
 
         {/* Main Content */}
         <div className="relative z-10 container">
           {/* First Block: Main Text + Right Images */}
-          <div className="relative mb-16 space-y-7">
+          <div className="relative mb-16 space-y-7 lg:flex lg:gap-x-6 min-[90rem]:mb-0">
             {/* Right Images */}
-            <div className="flex flex-col">
+            <div className="flex flex-col lg:order-last lg:w-110 lg:shrink-0 min-[90rem]:pt-30">
               {/* Right Image 1 (top, square) */}
               {about.rightImages?.[0]?.image && (
                 <motion.div
@@ -53,7 +53,7 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
                       restDelta: 0.001,
                     },
                   }}
-                  viewport={{ amount: 0.8 }}
+                  viewport={{ amount: 0.8, once: true }}
                   className="-mb-15 ml-auto aspect-square w-1/2 min-w-40"
                 >
                   <Media
@@ -76,7 +76,7 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
                     damping: 20,
                     restDelta: 0.001,
                   }}
-                  viewport={{ amount: 0.4 }}
+                  viewport={{ amount: 0.4, once: true }}
                   className="aspect-188/120 min-h-30 w-2/3 min-w-47"
                   style={{ zIndex: 1 }}
                 >
@@ -102,21 +102,22 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
                   restDelta: 0.001,
                 }}
                 viewport={{ amount: 0.3, once: true }}
+                className="lg:w-full"
               >
                 <RichText
                   data={about.mainText}
                   enableGutter={false}
                   enableProse={false}
-                  className="typography-subheading text-secondary [&_strong]:font-bold [&_strong]:text-accent"
+                  className="typography-subheading text-secondary min-[90rem]:text-5xl [&_strong]:font-bold [&_strong]:text-accent"
                 />
               </motion.div>
             )}
           </div>
 
           {/* Second Block: Left Images + Secondary Text */}
-          <div className="relative space-y-7">
+          <div className="relative space-y-7 lg:flex lg:gap-15 min-[90rem]:-mt-30">
             {/* Left Images */}
-            <div className="flex flex-col">
+            <div className="flex flex-col lg:w-100 lg:shrink-0 min-[90rem]:ml-[calc(-50vw+50%-1.25rem)] min-[90rem]:w-152">
               {/* Left Image 1 (top, larger) */}
               {about.leftImages?.[0]?.image && (
                 <motion.div
@@ -130,8 +131,8 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
                     damping: 20,
                     restDelta: 0.001,
                   }}
-                  viewport={{ amount: 0.5 }}
-                  className="-mb-8 aspect-216/152 w-full max-w-2/3"
+                  viewport={{ amount: 0.5, once: true }}
+                  className="-mb-8 aspect-216/152 w-full max-w-2/3 min-[90rem]:-mb-15"
                 >
                   <Media
                     resource={about.leftImages[0].image}
@@ -152,7 +153,7 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
                     damping: 20,
                     restDelta: 0.001,
                   }}
-                  viewport={{ amount: 0.4 }}
+                  viewport={{ amount: 0.4, once: true }}
                   className="ml-auto aspect-172/112 w-full max-w-1/2"
                   style={{ zIndex: 1 }}
                 >
@@ -165,47 +166,49 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
               )}
             </div>
 
-            {/* Secondary Text */}
-            {about.secondaryText && (
-              <motion.div
-                initial={{ x: 10 }}
-                whileInView={{ x: 0 }}
-                transition={{
-                  duration: 0.4,
-                  type: 'spring',
-                  stiffness: 50,
-                  damping: 20,
-                  restDelta: 0.001,
-                }}
-                viewport={{ once: true }}
-              >
-                <RichText
-                  data={about.secondaryText}
-                  enableGutter={false}
-                  enableProse={false}
-                  className="typography-body-large text-foreground [&_strong]:font-bold [&_strong]:text-accent"
-                />
-              </motion.div>
-            )}
+            <div className="min-[90rem]:pt-60">
+              {/* Secondary Text */}
+              {about.secondaryText && (
+                <motion.div
+                  initial={{ x: 10 }}
+                  whileInView={{ x: 0 }}
+                  transition={{
+                    duration: 0.4,
+                    type: 'spring',
+                    stiffness: 50,
+                    damping: 20,
+                    restDelta: 0.001,
+                  }}
+                  viewport={{ once: true }}
+                >
+                  <RichText
+                    data={about.secondaryText}
+                    enableGutter={false}
+                    enableProse={false}
+                    className="typography-body-large text-foreground [&_strong]:font-bold [&_strong]:text-accent"
+                  />
+                </motion.div>
+              )}
 
-            {/* CTA Button */}
-            {about.link?.label && (
-              <motion.div
-                initial={{ y: 40 }}
-                whileInView={{ y: 0 }}
-                transition={{
-                  duration: 0.5,
-                  type: 'spring',
-                  stiffness: 50,
-                  damping: 20,
-                  restDelta: 0.001,
-                }}
-                viewport={{ once: true }}
-                className="mt-8"
-              >
-                <CMSLink {...about.link} appearance="secondary" hasIcon />
-              </motion.div>
-            )}
+              {/* CTA Button */}
+              {about.link?.label && (
+                <motion.div
+                  initial={{ y: 40 }}
+                  whileInView={{ y: 0 }}
+                  transition={{
+                    duration: 0.5,
+                    type: 'spring',
+                    stiffness: 50,
+                    damping: 20,
+                    restDelta: 0.001,
+                  }}
+                  viewport={{ once: true }}
+                  className="mt-8"
+                >
+                  <CMSLink {...about.link} appearance="secondary" hasIcon />
+                </motion.div>
+              )}
+            </div>
           </div>
         </div>
         {/* Animated Phrase */}
@@ -231,7 +234,7 @@ function DecorativeLines() {
         whileInView={{ y: 20 }}
         transition={{ duration: 1, type: 'spring', stiffness: 30, damping: 15 }}
         viewport={{ once: true }}
-        className="pointer-events-none absolute -top-20 left-1/4 z-0 size-90 rounded-full border-[0.75px] border-accent/50"
+        className="pointer-events-none absolute -top-20 right-0 z-0 size-90 translate-x-1/10 rounded-full border-[0.75px] border-accent/50"
       />
 
       {/* Blue circle (left side) */}

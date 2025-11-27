@@ -45,7 +45,7 @@ export function StoriesSection({ stories }: Readonly<StoriesSectionProps>) {
         {/* Header */}
         <motion.header
           style={{ x: headerX }}
-          className="mx-auto sm:max-w-90 lg:sticky lg:top-28 lg:z-50 lg:h-fit"
+          className="mx-auto sm:max-w-90 lg:sticky lg:top-28 lg:z-50 lg:mx-0 lg:h-fit"
         >
           <div className="relative mx-6 flex flex-col pb-2.5 lg:mr-0 lg:pb-3">
             {stories.title && (
@@ -84,7 +84,7 @@ export function StoriesSection({ stories }: Readonly<StoriesSectionProps>) {
 
         {/* Cards */}
         {stories.cards && stories.cards.length > 0 && (
-          <motion.ul style={{ x: cardsX }} className="flex flex-col gap-5">
+          <motion.ul style={{ x: cardsX }} className="flex flex-col gap-5 lg:flex-1">
             {stories.cards.map((card) => (
               <li key={card.id ?? card.title}>
                 <HoverScaleCard arrowClassName="bg-secondary lg:size-13">
