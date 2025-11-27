@@ -10,6 +10,7 @@ import {
 } from '@/components/animate/ScrollAnimatedWrapper'
 import { ScrollingText } from '@/components/animate/ScrollingText'
 import { motion } from 'motion/react'
+import Image from 'next/image'
 
 interface AboutSectionProps {
   about: Homepage['about']
@@ -33,9 +34,9 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
         {/* Main Content */}
         <div className="relative z-10 container">
           {/* First Block: Main Text + Right Images */}
-          <div className="relative mb-16 space-y-7 lg:flex lg:gap-x-6 min-[90rem]:mb-0">
+          <div className="relative mb-16 space-y-7 lg:mb-0 lg:flex lg:gap-x-6">
             {/* Right Images */}
-            <div className="flex flex-col lg:order-last lg:w-110 lg:shrink-0 min-[90rem]:pt-30">
+            <div className="flex flex-col lg:order-last lg:mt-auto lg:w-110 lg:shrink-0 lg:pt-30">
               {/* Right Image 1 (top, square) */}
               {about.rightImages?.[0]?.image && (
                 <motion.div
@@ -102,44 +103,53 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
                   restDelta: 0.001,
                 }}
                 viewport={{ amount: 0.3, once: true }}
-                className="lg:w-full"
+                className="lg:w-full lg:pb-50"
               >
                 <RichText
                   data={about.mainText}
                   enableGutter={false}
                   enableProse={false}
-                  className="typography-subheading text-secondary min-[90rem]:text-5xl [&_strong]:font-bold [&_strong]:text-accent"
+                  className="typography-subheading text-secondary lg:text-5xl [&_strong]:font-bold [&_strong]:text-accent"
                 />
               </motion.div>
             )}
           </div>
 
           {/* Second Block: Left Images + Secondary Text */}
-          <div className="relative space-y-7 lg:flex lg:gap-15 min-[90rem]:-mt-30">
+          <div className="relative space-y-7 lg:-mt-30 lg:flex lg:gap-15">
             {/* Left Images */}
-            <div className="flex flex-col lg:w-100 lg:shrink-0 min-[90rem]:ml-[calc(-50vw+50%-1.25rem)] min-[90rem]:w-152">
+            <div className="flex flex-col lg:-ml-10 lg:w-152 lg:shrink-0">
               {/* Left Image 1 (top, larger) */}
               {about.leftImages?.[0]?.image && (
-                <motion.div
-                  initial={{ y: -10 }}
-                  whileInView={{ y: 0 }}
-                  transition={{
-                    duration: 0.6,
+                <div className="lg:flex lg:gap-14">
+                  <motion.div
+                    initial={{ y: -10 }}
+                    whileInView={{ y: 0 }}
+                    transition={{
+                      duration: 0.6,
 
-                    type: 'spring',
-                    stiffness: 50,
-                    damping: 20,
-                    restDelta: 0.001,
-                  }}
-                  viewport={{ amount: 0.5, once: true }}
-                  className="-mb-8 aspect-216/152 w-full max-w-2/3 min-[90rem]:-mb-15"
-                >
-                  <Media
-                    resource={about.leftImages[0].image}
-                    className="size-full overflow-hidden rounded-[20px] shadow-[6px_6px_12px_0_rgba(0,0,0,0.12)]"
-                    imgClassName="object-cover size-full"
+                      type: 'spring',
+                      stiffness: 50,
+                      damping: 20,
+                      restDelta: 0.001,
+                    }}
+                    viewport={{ amount: 0.5, once: true }}
+                    className="-mb-8 aspect-216/152 w-full max-w-2/3 lg:-mb-15"
+                  >
+                    <Media
+                      resource={about.leftImages[0].image}
+                      className="size-full overflow-hidden rounded-[20px] shadow-[6px_6px_12px_0_rgba(0,0,0,0.12)]"
+                      imgClassName="object-cover size-full"
+                    />
+                  </motion.div>
+                  <Image
+                    src="/assets/about-section-arrow-down-desktop.svg"
+                    width={243}
+                    height={60}
+                    alt=""
+                    className="hidden lg:inline lg:shrink-0"
                   />
-                </motion.div>
+                </div>
               )}
               {/* Left Image 2 (bottom, smaller) */}
               {about.leftImages?.[1]?.image && (
@@ -166,7 +176,7 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
               )}
             </div>
 
-            <div className="min-[90rem]:pt-60">
+            <div className="lg:pt-60">
               {/* Secondary Text */}
               {about.secondaryText && (
                 <motion.div

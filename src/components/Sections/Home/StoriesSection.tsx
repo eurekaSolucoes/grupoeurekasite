@@ -33,6 +33,13 @@ export function StoriesSection({ stories }: Readonly<StoriesSectionProps>) {
     restDelta: 0.001,
   })
 
+  const rawCircleY = useTransform(scrollYProgress, [0, 1], [0, -80])
+  const circleY = useSpring(rawCircleY, {
+    stiffness: 50,
+    damping: 20,
+    restDelta: 0.001,
+  })
+
   if (!stories) return null
 
   return (
@@ -41,15 +48,21 @@ export function StoriesSection({ stories }: Readonly<StoriesSectionProps>) {
       background="bg-white"
       innerClassName="bg-accent"
     >
-      <section className="relative container space-y-7 py-16 lg:flex lg:gap-20 lg:space-y-0 lg:pt-60 lg:pb-35">
+      <section className="relative container space-y-7 py-16 lg:flex lg:gap-20 lg:space-y-0 lg:py-30">
         {/* Header */}
         <motion.header
           style={{ x: headerX }}
-          className="mx-auto sm:max-w-90 lg:sticky lg:top-28 lg:z-50 lg:mx-0 lg:h-fit"
+          className="relative mx-auto sm:max-w-90 lg:sticky lg:top-28 lg:z-50 lg:mx-0 lg:h-fit"
         >
+          {/* Decorative Circle - Desktop Only */}
+          <motion.div
+            style={{ y: circleY }}
+            className="pointer-events-none absolute top-1/2 left-0 z-10 hidden size-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[0.75px] border-white/20 lg:block"
+            aria-hidden="true"
+          />
           <div className="relative mx-6 flex flex-col pb-2.5 lg:mr-0 lg:pb-3">
             {stories.title && (
-              <h2 className="max-w-45 typography-display font-bold text-accent-foreground lg:max-w-none">
+              <h2 className="max-w-45 typography-display font-bold text-accent-foreground lg:mr-16 lg:max-w-none">
                 {stories.title}
               </h2>
             )}
@@ -104,6 +117,12 @@ export function StoriesSection({ stories }: Readonly<StoriesSectionProps>) {
             className="self-start lg:hidden"
           />
         )}
+
+        {/* Bottom Decorative Circle - Desktop Only */}
+        <div
+          className="pointer-events-none absolute bottom-0 left-1/2 hidden size-[320px] -translate-x-1/2 translate-y-[240px] rounded-full border-[0.75px] border-white/20 lg:block"
+          aria-hidden="true"
+        />
       </section>
     </ScrollAnimatedWrapper>
   )
