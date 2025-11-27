@@ -30,7 +30,7 @@ const nextConfig = {
     ],
     // Add quality 100 to support Payload CMS image optimization
     // Next.js 16 changed default from [1..100] to just [75]
-    qualities: [100, 75],
+    qualities: [100, 90, 75],
     // Allow local images with query strings (required for Payload CMS media)
     // Next.js 16 requires explicit permission for local images with query params
     localPatterns: [
@@ -40,6 +40,9 @@ const nextConfig = {
       },
       {
         pathname: '/assets/**',
+      },
+      {
+        pathname: '/mock/**',
       },
     ],
     // Allow localhost IPs only in development with Payload CMS
