@@ -33,13 +33,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html
       className={cn(GeistSans.variable, GeistMono.variable, jost.variable, albertSans.variable)}
-      lang="en"
+      lang="pt-BR"
     >
       <head>
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
-      <body className="bg-linear-to-b from-accent to-primary/10">
+      <body>
         <Providers>
           <HeaderThemeReset />
           <AdminBar
@@ -61,6 +61,5 @@ export const metadata: Metadata = {
   openGraph: mergeOpenGraph(),
   twitter: {
     card: 'summary_large_image',
-    creator: '@payloadcms',
   },
 }

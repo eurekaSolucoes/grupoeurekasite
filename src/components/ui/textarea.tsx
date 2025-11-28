@@ -9,7 +9,7 @@ const Textarea: React.FC<
   return (
     <textarea
       className={cn(
-        'flex min-h-[80px] w-full rounded border border-border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+        'flex min-h-[80px] w-full rounded-lg border border-border bg-input px-5 py-3 ring-offset-background placeholder:text-muted-foreground placeholder:opacity-50 focus:placeholder:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
         className,
       )}
       ref={ref}

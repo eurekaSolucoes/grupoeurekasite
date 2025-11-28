@@ -9,8 +9,9 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Media as MediaType } from '@/payload-types'
+import { Fragment } from 'react'
 
-export interface BreadcrumbItem {
+export interface BreadcrumbItemType {
   label: string
   href?: string
 }
@@ -18,14 +19,14 @@ export interface BreadcrumbItem {
 export interface PageBannerProps {
   title: string
   backgroundImage?: MediaType | string | null
-  breadcrumbs?: BreadcrumbItem[]
+  breadcrumbs?: BreadcrumbItemType[]
 }
 
 export function PageBanner({ title, backgroundImage, breadcrumbs }: Readonly<PageBannerProps>) {
   const imageUrl = typeof backgroundImage === 'string' ? backgroundImage : backgroundImage?.url
 
   return (
-    <section className="relative flex min-h-[50vh] items-center overflow-hidden bg-primary pt-32 pb-16 lg:min-h-[60vh] lg:pt-40">
+    <section className="relative flex h-[362px] items-end overflow-hidden rounded-b-[30px] pb-10 lg:h-[450px] lg:pb-12">
       {/* Background Image */}
       {imageUrl && (
         <div className="absolute inset-0 z-0" aria-hidden="true">
@@ -34,42 +35,47 @@ export function PageBanner({ title, backgroundImage, breadcrumbs }: Readonly<Pag
             alt=""
             fill
             sizes="100vw"
-            className="object-cover"
+            className="rounded-b-[30px] object-cover object-center"
             priority
             quality={90}
           />
-          <div className="absolute inset-0 bg-primary/80" />
         </div>
       )}
 
-      {/* Diagonal Overlay */}
+      {/* Gradient Overlay */}
       <div
-        className="absolute -right-1/4 top-0 z-[1] h-full w-3/4 skew-x-[-15deg] bg-primary"
+        className="absolute inset-0 z-1 rounded-b-[30px]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(1, 15, 59, 0) 35.862%, rgba(1, 15, 59, 0.9) 100%),
+            linear-gradient(250.859deg, rgba(243, 112, 33, 0.45) 7.0175%, rgba(35, 62, 148, 0.45) 38.717%, rgba(35, 62, 148, 0.45) 59.408%, rgba(1, 15, 59, 0.45) 76.983%)
+          `,
+        }}
         aria-hidden="true"
       />
 
       {/* Content */}
-      <div className="relative z-10 container">
+      <div className="relative z-10 container space-y-5.5 px-5 lg:px-8">
         {/* Breadcrumbs */}
         {breadcrumbs && breadcrumbs.length > 0 && (
-          <Breadcrumb className="mb-4">
-            <BreadcrumbList className="text-white/70">
+          <Breadcrumb>
+            <BreadcrumbList className="gap-1 typography-caption! text-white/70">
               {breadcrumbs.map((item, index) => {
                 const isLast = index === breadcrumbs.length - 1
 
                 return (
-                  <BreadcrumbItem key={item.label}>
-                    {!isLast && item.href ? (
-                      <>
+                  <Fragment key={item.label}>
+                    <BreadcrumbItem>
+                      {!isLast && item.href ? (
                         <BreadcrumbLink asChild className="text-white/70 hover:text-white">
                           <Link href={item.href}>{item.label}</Link>
                         </BreadcrumbLink>
-                        <BreadcrumbSeparator className="text-white/50" />
-                      </>
-                    ) : (
-                      <BreadcrumbPage className="text-white">{item.label}</BreadcrumbPage>
-                    )}
-                  </BreadcrumbItem>
+                      ) : (
+                        <BreadcrumbPage className="text-white/70">{item.label}</BreadcrumbPage>
+                      )}
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="text-white/50 last:hidden [&>svg]:h-3 [&>svg]:w-3" />
+                  </Fragment>
                 )
               })}
             </BreadcrumbList>
@@ -77,7 +83,7 @@ export function PageBanner({ title, backgroundImage, breadcrumbs }: Readonly<Pag
         )}
 
         {/* Title */}
-        <h1 className="typography-display font-bold text-white">{title}</h1>
+        <h1 className="typography-heading text-white">{title}</h1>
       </div>
     </section>
   )
