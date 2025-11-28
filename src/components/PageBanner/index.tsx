@@ -55,7 +55,7 @@ export function PageBanner({ title, backgroundImage, breadcrumbs }: Readonly<Pag
       />
 
       {/* Content */}
-      <div className="relative z-10 container space-y-5.5 px-5 lg:px-8">
+      <div className="relative z-10 container space-y-5.5">
         {/* Breadcrumbs */}
         {breadcrumbs && breadcrumbs.length > 0 && (
           <Breadcrumb>
