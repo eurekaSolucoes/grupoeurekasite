@@ -13,7 +13,7 @@ interface PressContactSectionProps {
 
 export function PressContactSection({ title, contacts }: Readonly<PressContactSectionProps>) {
   return (
-    <section className="flex flex-col gap-5">
+    <section className="container flex flex-col gap-5">
       <h2 className="typography-subheading font-bold text-secondary">{title}</h2>
 
       <dl className="flex flex-wrap items-start gap-5 lg:gap-16">

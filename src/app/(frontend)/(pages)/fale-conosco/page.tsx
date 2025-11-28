@@ -1,9 +1,14 @@
 import type { Metadata } from 'next'
+import { icons } from 'lucide-react'
 
-import { PageBanner } from '@/components/PageBanner'
-import { ContactInfoSection } from '@/components/Sections/Contact/ContactInfoSection'
+import { PageBannerSection } from '@/components/Sections/Shared/PageBannerSection'
+import {
+  IconInfoListSection,
+  type InfoItem,
+} from '@/components/Sections/Shared/IconInfoListSection'
 import { ContactFormSection } from '@/components/Sections/Contact/ContactFormSection'
 import { PressContactSection } from '@/components/Sections/Contact/PressContactSection'
+import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
 
 export const metadata: Metadata = {
   title: 'Fale Conosco | Grupo Eureka',
@@ -16,12 +21,7 @@ interface ContactPageData {
     title: string
     backgroundImage: string
   }
-  contactInfo: {
-    address: { label: string; value: string }
-    hours: { label: string; value: string }
-    email: { label: string; value: string }
-    phone: { label: string; value: string }
-  }
+  contactInfo: InfoItem[]
   form: {
     title: string
     subjects: string[]
@@ -40,24 +40,30 @@ const contactData: ContactPageData = {
     title: 'Fale conosco',
     backgroundImage: '/mock/contact-page-banner.png',
   },
-  contactInfo: {
-    address: {
+  contactInfo: [
+    {
+      icon: 'map-pin',
       label: 'Endereço',
       value: 'Av. Brasil 2241, Jardim América,\nSão Paulo/SP',
     },
-    hours: {
+    {
+      icon: 'clock',
       label: 'Horário de atendimento',
       value: 'De segunda a sexta-feira, das 9h às 17h\n(Horário de Brasília).',
     },
-    email: {
+    {
+      icon: 'mail',
       label: 'E-mail',
       value: 'comercial@grupoeureka.com.br',
+      href: 'mailto:comercial@grupoeureka.com.br',
     },
-    phone: {
+    {
+      icon: 'phone',
       label: 'Telefone',
       value: '(11) 5549-1702',
+      href: 'tel:1155491702',
     },
-  },
+  ],
   form: {
     title: 'Preencha o formulário',
     subjects: ['Dúvidas sobre produtos', 'Orçamento', 'Suporte técnico', 'Parcerias', 'Outros'],
@@ -84,44 +90,30 @@ const contactData: ContactPageData = {
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen space-y-10 lg:space-y-20">
-      <PageBanner
+    <main className="min-h-screen">
+      <PageBannerSection
         title={contactData.hero.title}
         backgroundImage={contactData.hero.backgroundImage}
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Fale conosco' }]}
       />
 
-      {/* Informações de Contato */}
-      <section className="container" aria-labelledby="contact-info-heading">
-        <h2 id="contact-info-heading" className="sr-only">
-          Informações de contato
-        </h2>
-        <ContactInfoSection data={contactData.contactInfo} />
-      </section>
+      <SpacerSection />
 
-      {/* Formulário de Contato */}
-      <section className="container px-5 lg:px-8" aria-labelledby="contact-form-heading">
-        <h2 id="contact-form-heading" className="sr-only">
-          Formulário de contato
-        </h2>
-        <ContactFormSection
-          title={contactData.form.title}
-          subjects={contactData.form.subjects}
-          privacyText={contactData.form.privacyText}
-          submitLabel={contactData.form.submitLabel}
-        />
-      </section>
+      <IconInfoListSection items={contactData.contactInfo} />
+      <SpacerSection />
 
-      {/* Assessoria de Comunicação */}
-      <section className="container px-5 lg:px-8" aria-labelledby="press-contact-heading">
-        <h2 id="press-contact-heading" className="sr-only">
-          Assessoria de comunicação
-        </h2>
-        <PressContactSection
-          title={contactData.pressContact.title}
-          contacts={contactData.pressContact.contacts}
-        />
-      </section>
+      <ContactFormSection
+        title={contactData.form.title}
+        subjects={contactData.form.subjects}
+        privacyText={contactData.form.privacyText}
+        submitLabel={contactData.form.submitLabel}
+      />
+      <SpacerSection size="lg" />
+
+      <PressContactSection
+        title={contactData.pressContact.title}
+        contacts={contactData.pressContact.contacts}
+      />
     </main>
   )
 }
