@@ -343,3 +343,77 @@ git commit -m "feat(feature): add new feature description"
 git add src/styles/feature.css
 git commit -m "style(feature): add feature styling"
 ```
+## Convenção de Nomenclatura: Sections (Frontend)
+
+**Regra**: No frontend, todos os componentes de seção devem seguir o padrão `[Nome]Section`.
+
+### Estrutura de Diretórios
+
+```
+src/components/Sections/
+├── Home/           # Seções da homepage
+│   ├── BannerSection.tsx
+│   ├── SolutionsSection.tsx
+│   ├── AboutSection.tsx
+│   ├── StoriesSection.tsx
+│   └── AISection.tsx
+├── Contact/        # Seções da página de contato
+│   ├── ContactFormSection.tsx
+│   ├── ContactInfoSection.tsx
+│   └── PressContactSection.tsx
+├── About/          # Seções da página sobre
+│   ├── IntroSection.tsx
+│   └── VideoSection.tsx
+└── Shared/         # Seções reutilizáveis entre páginas
+    ├── PageBannerSection.tsx
+    ├── SpacerSection.tsx
+    └── AlternatingBlocksSection.tsx
+```
+
+### Padrão de Nomenclatura
+- **Arquivo**: `[Nome]Section.tsx` (PascalCase)
+- **Componente**: `[Nome]Section`
+- **Exemplos**: `PageBannerSection`, `SpacerSection`, `CTASection`, `FAQSection`
+
+### Criando uma Nova Section
+1. Identifique a qual página pertence (Home, Contact, About, ou **Shared** se reutilizável entre páginas)
+2. Crie o arquivo em `src/components/Sections/[Página]/[Nome]Section.tsx`
+3. Exporte o componente com o sufixo `Section`
+4. Importe e use na página correspondente em `src/app/(frontend)/`
+
+### Exemplo - PageBannerSection (Shared)
+
+```tsx
+import { PageBannerSection } from '@/components/Sections/Shared/PageBannerSection'
+
+<PageBannerSection
+  title="Título da Página"
+  backgroundImage={mediaObject}
+  breadcrumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Página Atual' }
+  ]}
+/>
+```
+
+### Exemplo - AlternatingBlocksSection (Shared)
+
+```tsx
+import { AlternatingBlocksSection } from '@/components/Sections/Shared/AlternatingBlocksSection'
+
+<AlternatingBlocksSection
+  title="Eureka?"
+  subtitle="Por que"
+  showArrow={true}
+  items={[
+    {
+      primaryText: 'Texto principal com <strong>destaque</strong>',
+      secondaryText: 'Texto secundário opcional',
+      images: [
+        { src: '/mock/image-1.png', alt: 'Descrição' },
+        { src: '/mock/image-2.png', alt: 'Descrição' }
+      ]
+    }
+  ]}
+/>
+```

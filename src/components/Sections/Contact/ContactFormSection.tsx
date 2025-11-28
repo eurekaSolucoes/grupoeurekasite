@@ -58,7 +58,7 @@ export function ContactFormSection({
   }
 
   return (
-    <section className="flex flex-col gap-5">
+    <section className="container flex flex-col gap-5">
       <h2 className="typography-subheading font-bold text-secondary">{title}</h2>
 
       <Form {...form}>
