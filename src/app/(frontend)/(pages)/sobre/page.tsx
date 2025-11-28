@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 
-import { PageBanner } from '@/components/PageBanner'
+import { PageBannerSection } from '@/components/Sections/Shared/PageBannerSection'
+import { AlternatingBlocksSection } from '@/components/Sections/Shared/AlternatingBlocksSection'
 import { IntroSection } from '@/components/Sections/About/IntroSection'
 import { VideoSection } from '@/components/Sections/About/VideoSection'
+import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
 
 export const metadata: Metadata = {
   title: 'Sobre | Grupo Eureka',
@@ -28,17 +30,17 @@ interface AboutPageData {
   }
   whyEureka: {
     title: string
-  }
-  missionBlocks: Array<{
-    layout: 'text-left' | 'text-right'
-    headline?: string
-    paragraph?: string
-    images?: Array<{
-      src: string
-      alt: string
-      size: 'small' | 'medium' | 'large'
+    subtitle: string
+    showArrow: boolean
+    items: Array<{
+      primaryText?: string
+      secondaryText?: string
+      images?: Array<{
+        src: string
+        alt: string
+      }>
     }>
-  }>
+  }
 }
 
 // Dados mockados completos (preparados para futura migração ao CMS)
@@ -61,45 +63,47 @@ const aboutData: AboutPageData = {
     videoUrl: 'https://www.youtube.com/watch?v=example',
   },
   whyEureka: {
-    title: 'Por que <strong class="font-bold text-[#f37700]">Eureka?</strong>',
+    title: 'Eureka?',
+    subtitle: 'Por que',
+    showArrow: true,
+    items: [
+      {
+        primaryText:
+          'O Grupo Eureka acredita na <strong>educação pública brasileira</strong> e <strong>colabora para transformar</strong> o currículo em prática viva nas salas de aula.',
+        secondaryText:
+          'Atuamos lado a lado com redes públicas de ensino, escolas e professores, traduzindo políticas curriculares em <strong>experiências concretas de aprendizagem</strong>, sempre com o <strong>professor no centro</strong> de cada iniciativa.',
+        images: [
+          { src: '/mock/why-eureka-1.png', alt: 'Equipe Grupo Eureka em reunião' },
+          { src: '/mock/why-eureka-2.png', alt: 'Professores em atividade' },
+        ],
+      },
+      {
+        primaryText:
+          'Personalizamos materiais paradidáticos, tecnologias educacionais, encontros pedagógicos e eventos em que o estudante é o protagonista. Tudo a partir do <strong>contexto local</strong> de cada parceiro.',
+        secondaryText:
+          'O Grupo Eureka constrói parcerias com propósito público, sustentadas por evidências pedagógicas, inovação responsável e compromisso com a equidade educacional.',
+        images: [
+          { src: '/mock/why-eureka-3.png', alt: 'Atividades educacionais em sala' },
+          { src: '/mock/why-eureka-4.png', alt: 'Encontro pedagógico com professores' },
+        ],
+      },
+    ],
   },
-  missionBlocks: [
-    {
-      layout: 'text-right',
-      headline:
-        'O Grupo Eureka acredita na <strong class="font-bold text-[#f37700]">educação pública brasileira</strong> e <strong class="font-bold text-[#f37700]">colabora para transformar</strong> o currículo em prática viva nas salas de aula.',
-      paragraph:
-        'Atuamos lado a lado com redes públicas de ensino, escolas e professores, traduzindo políticas curriculares em <strong class="font-bold text-[#f37700]">experiências concretas de aprendizagem</strong>, sempre com o <strong class="font-bold text-[#f37700]">professor no centro</strong> de cada iniciativa.',
-      images: [
-        { src: '/mock/sede-1.png', alt: 'Sede Grupo Eureka', size: 'large' },
-        { src: '/mock/sede-2.png', alt: 'Equipe Grupo Eureka', size: 'medium' },
-      ],
-    },
-    {
-      layout: 'text-left',
-      headline:
-        'Personalizamos materiais paradidáticos, tecnologias educacionais, encontros pedagógicos e eventos em que o estudante é o protagonista. Tudo a partir do <strong>contexto local</strong> de cada parceiro.',
-      paragraph:
-        'O Grupo Eureka constrói parcerias com propósito público, sustentadas por evidências pedagógicas, inovação responsável e compromisso com a equidade educacional.',
-      images: [
-        { src: '/mock/sede-3.png', alt: 'Atividades educacionais', size: 'medium' },
-        { src: '/mock/sede-4.png', alt: 'Encontro pedagógico', size: 'small' },
-      ],
-    },
-  ],
 }
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen space-y-10 lg:space-y-20">
-      <PageBanner
+    <main className="min-h-screen">
+      <PageBannerSection
         title={aboutData.banner.title}
         backgroundImage={aboutData.banner.backgroundImage}
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Sobre' }]}
       />
+      <SpacerSection />
 
       {/* Seção Intro */}
       <IntroSection headline={aboutData.intro.headline} paragraphs={aboutData.intro.paragraphs} />
+      <SpacerSection />
 
       {/* Seção Vídeo */}
       <VideoSection
@@ -108,10 +112,15 @@ export default function AboutPage() {
         buttonLabel={aboutData.videoSection.buttonLabel}
         videoUrl={aboutData.videoSection.videoUrl}
       />
+      <SpacerSection size="lg" />
 
-      {/* Seção Por que Eureka? - será implementada na Fase 4 */}
-
-      {/* Blocos de Missão - serão implementados na Fase 5 */}
+      {/* Seção Por que Eureka? */}
+      <AlternatingBlocksSection
+        title={aboutData.whyEureka.title}
+        subtitle={aboutData.whyEureka.subtitle}
+        showArrow={aboutData.whyEureka.showArrow}
+        items={aboutData.whyEureka.items}
+      />
     </main>
   )
 }
