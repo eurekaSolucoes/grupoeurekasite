@@ -24,12 +24,12 @@ export function AlternatingBlocksSection({
   showArrow = false,
   items,
 }: Readonly<AlternatingBlocksSectionProps>) {
-  const hasHeader = title || subtitle
+  const hasTitleOrSubtitle = title || subtitle
 
   return (
     <section className="container">
       {/* Header */}
-      {hasHeader && (
+      {hasTitleOrSubtitle && (
         <header className="relative mb-5 flex min-h-24 w-fit flex-col lg:mb-16">
           {subtitle && (
             <p className="font-title pr-32 text-4xl leading-tight text-secondary lg:text-[66px] lg:leading-[68px]">
