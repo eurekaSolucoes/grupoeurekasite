@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -10,6 +12,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Media as MediaType } from '@/payload-types'
 import { Fragment } from 'react'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
 export interface BreadcrumbItemType {
   label: string
@@ -22,11 +25,21 @@ export interface PageBannerSectionProps {
   breadcrumbs?: BreadcrumbItemType[]
 }
 
-export function PageBannerSection({ title, backgroundImage, breadcrumbs }: Readonly<PageBannerSectionProps>) {
+export function PageBannerSection({
+  title,
+  backgroundImage,
+  breadcrumbs,
+}: Readonly<PageBannerSectionProps>) {
   const imageUrl = typeof backgroundImage === 'string' ? backgroundImage : backgroundImage?.url
 
   return (
-    <section className="relative flex h-[362px] items-end overflow-hidden rounded-b-[30px] pb-10 lg:h-[450px] lg:pb-12">
+    <HeaderThemeSetter
+      as="section"
+      logoMobile="full"
+      logoDesktop="full"
+      theme="default"
+      className="relative flex h-[362px] items-end overflow-hidden rounded-b-[30px] pb-10 lg:h-[450px] lg:pb-12"
+    >
       {/* Background Image */}
       {imageUrl && (
         <div className="absolute inset-0 z-0" aria-hidden="true">
@@ -85,6 +98,6 @@ export function PageBannerSection({ title, backgroundImage, breadcrumbs }: Reado
         {/* Title */}
         <h1 className="typography-heading text-white">{title}</h1>
       </div>
-    </section>
+    </HeaderThemeSetter>
   )
 }

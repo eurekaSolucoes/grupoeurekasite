@@ -15,5 +15,10 @@ const sizeClasses: Record<SpacerSize, string> = {
 }
 
 export function SpacerSection({ size = 'md', className }: SpacerSectionProps) {
-  return <div className={cn(sizeClasses[size], className)} aria-hidden="true" />
+  return (
+    <div
+      className={cn(sizeClasses[size], 'last:bg-linear-to-t last:from-input', className)}
+      aria-hidden="true"
+    />
+  )
 }
