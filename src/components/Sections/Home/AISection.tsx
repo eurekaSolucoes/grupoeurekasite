@@ -8,6 +8,7 @@ import {
   useScrollAnimation,
 } from '@/components/animate/ScrollAnimatedWrapper'
 import { motion } from 'motion/react'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
 interface AISectionProps {
   title?: string
@@ -44,7 +45,8 @@ export function AISection({
   const scrollAnimation = useScrollAnimation({ scrollRange: [0, 0.4] })
 
   return (
-    <ScrollAnimatedWrapper scrollAnimation={scrollAnimation} background="bg-accent">
+    <HeaderThemeSetter logoMobile="icon-white" logoDesktop="icon-white">
+      <ScrollAnimatedWrapper scrollAnimation={scrollAnimation} background="bg-accent">
       <section
         aria-labelledby="ai-section-title"
         className="relative z-10 flex min-h-177 w-full items-center justify-center overflow-hidden py-15 lg:min-h-screen"
@@ -127,5 +129,6 @@ export function AISection({
         </div>
       </section>
     </ScrollAnimatedWrapper>
+    </HeaderThemeSetter>
   )
 }

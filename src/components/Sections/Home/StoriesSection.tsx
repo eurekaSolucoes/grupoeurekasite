@@ -10,6 +10,7 @@ import {
 } from '@/components/animate/ScrollAnimatedWrapper'
 import Image from 'next/image'
 import { motion, useSpring, useTransform } from 'motion/react'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
 interface StoriesSectionProps {
   stories: Homepage['stories']
@@ -43,11 +44,16 @@ export function StoriesSection({ stories }: Readonly<StoriesSectionProps>) {
   if (!stories) return null
 
   return (
-    <ScrollAnimatedWrapper
-      scrollAnimation={scrollAnimation}
-      background="bg-white"
-      innerClassName="bg-accent"
+    <HeaderThemeSetter
+      theme="default"
+      logoMobile="icon-full-white"
+      logoDesktop="icon-full-white"
     >
+      <ScrollAnimatedWrapper
+        scrollAnimation={scrollAnimation}
+        background="bg-white"
+        innerClassName="bg-accent"
+      >
       <section className="relative container space-y-7 py-16 lg:flex lg:gap-20 lg:space-y-0 lg:py-30">
         {/* Header */}
         <motion.header
@@ -125,6 +131,7 @@ export function StoriesSection({ stories }: Readonly<StoriesSectionProps>) {
         />
       </section>
     </ScrollAnimatedWrapper>
+    </HeaderThemeSetter>
   )
 }
 

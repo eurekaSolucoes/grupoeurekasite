@@ -11,6 +11,7 @@ import {
 import { ScrollingText } from '@/components/animate/ScrollingText'
 import { motion } from 'motion/react'
 import Image from 'next/image'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
 interface AboutSectionProps {
   about: Homepage['about']
@@ -22,11 +23,16 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
   if (!about) return null
 
   return (
-    <ScrollAnimatedWrapper
-      scrollAnimation={scrollAnimation}
-      background="bg-linear-to-bl from-brand-dark-blue from-25% to-secondary"
-      innerClassName="bg-white"
+    <HeaderThemeSetter
+      theme="secondary"
+      logoMobile="icon-blue"
+      logoDesktop="icon-blue"
     >
+      <ScrollAnimatedWrapper
+        scrollAnimation={scrollAnimation}
+        background="bg-linear-to-bl from-brand-dark-blue from-25% to-secondary"
+        innerClassName="bg-white"
+      >
       <section className="relative overflow-y-clip py-16">
         {/* Decorative SVG Lines */}
         <DecorativeLines />
@@ -232,6 +238,7 @@ export function AboutSection({ about }: Readonly<AboutSectionProps>) {
         )}
       </section>
     </ScrollAnimatedWrapper>
+    </HeaderThemeSetter>
   )
 }
 

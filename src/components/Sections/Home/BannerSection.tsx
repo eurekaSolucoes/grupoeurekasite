@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { CMSLink } from '@/components/Link'
 import { useKeenSlider } from 'keen-slider/react'
 import { Media } from '@/components/Media'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 import 'keen-slider/keen-slider.min.css'
 
 /**
@@ -66,7 +67,10 @@ export function BannerSection({ banners = [] }: Readonly<BannerSectionProps>) {
   if (!banners?.length) return null
 
   return (
-    <section
+    <HeaderThemeSetter
+      as="section"
+      logoMobile="icon-white"
+      logoDesktop="full"
       aria-roledescription="carrossel"
       aria-label="Carrossel de banners"
       aria-live="polite"
@@ -185,6 +189,6 @@ export function BannerSection({ banners = [] }: Readonly<BannerSectionProps>) {
           ))}
         </nav>
       </div>
-    </section>
+    </HeaderThemeSetter>
   )
 }
