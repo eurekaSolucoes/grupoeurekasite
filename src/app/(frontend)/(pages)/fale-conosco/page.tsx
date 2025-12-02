@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
-import { icons } from 'lucide-react'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 
+import { FormBlock } from '@/blocks/Form/Component'
 import { PageBannerSection } from '@/components/Sections/Shared/PageBannerSection'
 import {
   IconInfoListSection,
@@ -9,6 +11,7 @@ import {
 import { ContactFormSection } from '@/components/Sections/Contact/ContactFormSection'
 import { PressContactSection } from '@/components/Sections/Contact/PressContactSection'
 import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
+import { DynamicFormSection } from '@/components/Sections/Shared/DynamicFormSection'
 
 export const metadata: Metadata = {
   title: 'Fale Conosco | Grupo Eureka',
@@ -88,7 +91,15 @@ const contactData: ContactPageData = {
   },
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  // Buscar form do CMS para teste de comparação
+  const payload = await getPayload({ config })
+  const { docs: forms } = await payload.find({
+    collection: 'forms',
+    limit: 1,
+  })
+  const cmsForm = forms[0]
+
   return (
     <main className="min-h-screen">
       <PageBannerSection
@@ -110,10 +121,35 @@ export default function ContactPage() {
       />
       <SpacerSection size="lg" />
 
+      {/* FormBlock do Payload (CMS) */}
+      {cmsForm && (
+        <section className="container">
+          <h2 className="typography-subheading mb-5 font-bold text-secondary">
+            FormBlock do Payload (CMS)
+          </h2>
+          <FormBlock form={cmsForm} enableIntro={false} />
+        </section>
+      )}
+      <SpacerSection size="lg" />
+
+      {cmsForm?.fields && (
+        <DynamicFormSection
+          title="DynamicFormSection (CMS direto)"
+          fields={cmsForm.fields}
+          submitLabel={cmsForm.submitButtonLabel || 'Enviar'}
+          className="container"
+          onSubmit={(data) => {
+            console.log('Dados do formulário dinâmico:', data)
+          }}
+        />
+      )}
+      <SpacerSection size="lg" />
+
       <PressContactSection
         title={contactData.pressContact.title}
         contacts={contactData.pressContact.contacts}
       />
+      <SpacerSection size="lg" />
     </main>
   )
 }
