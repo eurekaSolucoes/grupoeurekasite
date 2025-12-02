@@ -4,7 +4,6 @@ export default function PagesLayout({ children }: Readonly<{ children: React.Rea
   return (
     <>
       {children}
-      <div className="h-15 bg-linear-to-t from-input lg:h-30" />
       <Footer />
     </>
   )

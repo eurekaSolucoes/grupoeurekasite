@@ -59,7 +59,7 @@
 }
 
 @utility progressive-blur {
-  @apply relative before:absolute before:inset-0 before:-z-10 before:rounded-full before:backdrop-blur-3xl;
+  @apply relative before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-white/30 before:backdrop-blur-3xl;
 }
 
 .progressive-blur::before {

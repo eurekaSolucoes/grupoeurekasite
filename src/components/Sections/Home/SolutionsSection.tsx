@@ -10,6 +10,7 @@ import { Media } from '@/components/Media'
 import { ArrowRight } from '@/components/Icons/ArrowRight'
 import { useMediaQuery } from 'usehooks-ts'
 import { ScrollingText } from '@/components/animate/ScrollingText'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
 interface SolutionsSectionProps {
   solutions: Homepage['solutions']
@@ -46,7 +47,12 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
 
   if (!solutions) return null
   return (
-    <motion.section className="relative z-10 min-h-[140vh] overflow-x-hidden pt-[45vh] pb-40 sm:pt-[50vh]">
+    <HeaderThemeSetter
+      as="section"
+      logoMobile="icon-white"
+      logoDesktop="full"
+      className="relative z-10 min-h-[140vh] overflow-x-hidden pt-[45vh] pb-40 sm:pt-[50vh]"
+    >
       <motion.div
         ref={containerRef}
         className="absolute inset-y-0 top-0 left-1/2 w-[180vw] -translate-x-1/2 overflow-hidden overflow-x-hidden rounded-t-full bg-linear-to-tl from-brand-dark-blue from-25% to-secondary lg:rounded-[50%_50%_0_0/100%_100%_0_0]"
@@ -153,7 +159,7 @@ export function SolutionsSection({ solutions }: Readonly<SolutionsSectionProps>)
       {solutions.animatedPhrase && (
         <ScrollingText className="pt-16 opacity-8" text={solutions.animatedPhrase} />
       )}
-    </motion.section>
+    </HeaderThemeSetter>
   )
 }
 

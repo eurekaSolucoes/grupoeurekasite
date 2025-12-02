@@ -14,7 +14,6 @@ import { SolutionsSection } from '@/components/Sections/Home/SolutionsSection'
 import { AboutSection } from '@/components/Sections/Home/AboutSection'
 import { StoriesSection } from '@/components/Sections/Home/StoriesSection'
 import { AISection } from '@/components/Sections/Home/AISection'
-import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
 export default async function HomePage() {
   const { isEnabled: draft } = await draftMode()
@@ -42,37 +41,15 @@ export default async function HomePage() {
 
       {/* TODO: Implement custom Homepage sections rendering */}
       {/* Homepage has custom structure: banner, solutions, about, stories */}
-      {!!homepage.banners && (
-        <HeaderThemeSetter logoMobile="icon-white" logoDesktop="full">
-          <BannerSection banners={homepage.banners} />
-        </HeaderThemeSetter>
-      )}
+      {!!homepage.banners && <BannerSection banners={homepage.banners} />}
 
-      {!!homepage.solutions && (
-        <HeaderThemeSetter theme="default" logoMobile="icon-white" logoDesktop="full">
-          <SolutionsSection solutions={homepage.solutions} />
-        </HeaderThemeSetter>
-      )}
+      {!!homepage.solutions && <SolutionsSection solutions={homepage.solutions} />}
 
-      {!!homepage.about && (
-        <HeaderThemeSetter theme="secondary" logoMobile="icon-blue" logoDesktop="icon-blue">
-          <AboutSection about={homepage.about} />
-        </HeaderThemeSetter>
-      )}
+      {!!homepage.about && <AboutSection about={homepage.about} />}
 
-      {!!homepage.stories && (
-        <HeaderThemeSetter
-          theme="default"
-          logoMobile="icon-full-white"
-          logoDesktop="icon-full-white"
-        >
-          <StoriesSection stories={homepage.stories} />
-        </HeaderThemeSetter>
-      )}
+      {!!homepage.stories && <StoriesSection stories={homepage.stories} />}
 
-      <HeaderThemeSetter logoMobile="icon-white" logoDesktop="icon-white">
-        <AISection />
-      </HeaderThemeSetter>
+      <AISection />
     </article>
   )
 }
