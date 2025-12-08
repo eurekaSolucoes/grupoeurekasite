@@ -5,6 +5,7 @@ import { NavContainer } from './components/NavContainer'
 import { WhatsAppButton } from './components/WhatsAppButton'
 import { MobileNav } from './components/MobileNav'
 import { DesktopNav } from '@/Header/components/DesktopNav'
+import { HeaderTheme } from '@/providers/HeaderTheme'
 
 /**
  * Header Component
@@ -12,11 +13,12 @@ import { DesktopNav } from '@/Header/components/DesktopNav'
  * Componente de header que consome dados do Navigation global do Payload CMS.
  * Renderiza menu de navegação com suporte a dropdowns com imagens e descrições.
  */
+
 export async function Header() {
   const { headerMenu, whatsappLink } = (await getCachedGlobal('navigation', 1)()) as Navigation
 
   return (
-    <header className="pointer-events-auto fixed inset-x-0 top-0 z-60 w-full">
+    <header className="pointer-events-auto fixed inset-x-0 top-0 z-50 w-full">
       <div className="container mt-5 flex h-16 items-center justify-between lg:h-18">
         <Logo className="animate-in duration-700 fade-in slide-in-from-top" />
 

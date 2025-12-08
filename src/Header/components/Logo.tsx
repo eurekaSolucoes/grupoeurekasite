@@ -8,6 +8,8 @@ import { useHeaderTheme } from '@/providers/HeaderTheme'
 interface HeaderLogoProps {
   href?: string
   className?: string
+  defaultMobileVariant?: EurekaLogoVariants
+  defaultDesktopVariant?: EurekaLogoVariants
 }
 
 /**
@@ -18,12 +20,17 @@ interface HeaderLogoProps {
  * Mobile: altura reduzida (64px)
  */
 
-const DEFAULT_MOBILE_VARIANT: EurekaLogoVariants = 'icon-blue'
-const DEFAULT_DESKTOP_VARIANT: EurekaLogoVariants = 'full'
-export function Logo({ href = '/', className }: Readonly<HeaderLogoProps>) {
+const FALLBACK_MOBILE_VARIANT: EurekaLogoVariants = 'icon-blue'
+const FALLBACK_DESKTOP_VARIANT: EurekaLogoVariants = 'full'
+export function Logo({
+  href = '/',
+  className,
+  defaultMobileVariant = FALLBACK_MOBILE_VARIANT,
+  defaultDesktopVariant = FALLBACK_DESKTOP_VARIANT,
+}: Readonly<HeaderLogoProps>) {
   const { headerTheme } = useHeaderTheme()
-  const mobileVariant = headerTheme?.logoTheme?.mobile ?? DEFAULT_MOBILE_VARIANT
-  const desktopVariant = headerTheme?.logoTheme?.desktop ?? DEFAULT_DESKTOP_VARIANT
+  const mobileVariant = headerTheme?.logoTheme?.mobile ?? defaultMobileVariant
+  const desktopVariant = headerTheme?.logoTheme?.desktop ?? defaultDesktopVariant
 
   return (
     <Link href={href} className={cn('flex items-center', className)}>
