@@ -177,6 +177,39 @@ export const Navigation: GlobalConfig = {
           ],
         },
         {
+          name: 'compliance',
+          type: 'group',
+          label: 'Compliance',
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Título',
+              defaultValue: 'Compliance',
+              required: true,
+            },
+            {
+              name: 'links',
+              type: 'array',
+              label: 'Links',
+              fields: [
+                link({
+                  appearances: false,
+                  overrides: {
+                    name: 'link',
+                  },
+                }),
+              ],
+              admin: {
+                initCollapsed: true,
+                components: {
+                  RowLabel: '@/Navigation/RowLabel#FooterLinkRowLabel',
+                },
+              },
+            },
+          ],
+        },
+        {
           name: 'social',
           type: 'group',
           label: 'Socialize',

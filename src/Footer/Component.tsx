@@ -120,6 +120,22 @@ export async function Footer({ className }: FooterProps = {}) {
               )}
             </div>
           )}
+
+          {/* Compliance Column */}
+          {footerMenu?.compliance && (
+            <div className="space-y-1.5 xl:space-y-4">
+              <h3 className="text-xs text-accent xl:text-sm">{footerMenu.compliance.title}</h3>
+              {footerMenu.compliance.links && footerMenu.compliance.links.length > 0 && (
+                <ul className="space-y-3 text-sm leading-none xl:space-y-4 xl:text-xl">
+                  {footerMenu.compliance.links.map((item, idx) => (
+                    <li key={idx}>
+                      <CMSLink {...item.link} className="underline-on-hover" />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Social Links */}
