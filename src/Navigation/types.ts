@@ -1,8 +1,8 @@
-import type { Media, Page, Post } from '@/payload-types'
+import type { Document, Media, Page, Post } from '@/payload-types'
 
 // Tipo que espelha o campo Link (@/fields/link)
 export interface LinkField {
-  type?: 'reference' | 'custom' | null
+  type?: 'reference' | 'custom' | 'document' | null
   label?: string | null
   url?: string | null
   newTab?: boolean | null
@@ -10,6 +10,7 @@ export interface LinkField {
     relationTo: 'pages' | 'posts'
     value: string | Page | Post
   } | null
+  document?: string | Document | null
 }
 
 // Tipo para subitem do dropdown
