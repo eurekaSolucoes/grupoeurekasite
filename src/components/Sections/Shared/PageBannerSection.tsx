@@ -72,7 +72,7 @@ export function PageBannerSection({
         {/* Breadcrumbs */}
         {breadcrumbs && breadcrumbs.length > 0 && (
           <Breadcrumb>
-            <BreadcrumbList className="gap-1 typography-caption! text-white/70">
+            <BreadcrumbList className="text-white/70">
               {breadcrumbs.map((item, index) => {
                 const isLast = index === breadcrumbs.length - 1
 

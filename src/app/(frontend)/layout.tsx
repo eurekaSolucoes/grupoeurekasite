@@ -7,13 +7,13 @@ import { Jost, Albert_Sans } from 'next/font/google'
 
 import { AdminBar } from '@/components/AdminBar'
 import { HeaderThemeReset } from '@/components/HeaderThemeReset'
-import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
+import { Header } from '@/Header/Component'
 
 const jost = Jost({
   subsets: ['latin'],
@@ -41,14 +41,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <HeaderThemeReset />
+          <Header />
+
           <AdminBar
             adminBarProps={{
               preview: isEnabled,
             }}
           />
 
-          <Header />
           {children}
         </Providers>
       </body>

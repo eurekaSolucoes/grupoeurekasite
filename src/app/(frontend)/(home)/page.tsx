@@ -7,13 +7,13 @@ import { draftMode } from 'next/headers'
 import { homeStatic } from '@/endpoints/seed/home-static'
 
 import { generateMeta } from '@/utilities/generateMeta'
-import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { BannerSection } from '@/components/Sections/Home/BannerSection'
 import { SolutionsSection } from '@/components/Sections/Home/SolutionsSection'
 import { AboutSection } from '@/components/Sections/Home/AboutSection'
 import { StoriesSection } from '@/components/Sections/Home/StoriesSection'
 import { AISection } from '@/components/Sections/Home/AISection'
+import { HeaderThemeReset } from '@/components/HeaderThemeReset'
 
 export default async function HomePage() {
   const { isEnabled: draft } = await draftMode()
@@ -33,7 +33,7 @@ export default async function HomePage() {
 
   return (
     <article>
-      <PageClient />
+      <HeaderThemeReset />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
