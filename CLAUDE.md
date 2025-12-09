@@ -198,6 +198,140 @@ Required variables (see `.env.example`):
 
 **Media Storage**: This project uses AWS S3 for media storage via `@payloadcms/storage-s3`. All media uploads are stored in S3, not locally. Ensure S3 credentials are configured before uploading media.
 
+## API Externa - Eureka Digital
+
+A página de obras (`/obras`) consome dados de uma API externa da plataforma Eureka Digital.
+
+### Base URL
+
+```
+https://acesso.eurekadigital.app
+```
+
+### Endpoints
+
+#### 1. Listar Produtos
+
+```
+GET /api/products
+```
+
+**Query Parameters:**
+
+| Parâmetro | Tipo | Default | Descrição |
+|-----------|------|---------|-----------|
+| `query` | string | `''` | Busca por título (case-insensitive) |
+| `offset` | number | `1` | Número da página (1-based) |
+| `limit` | number | `12` | Itens por página |
+| `categories` | string | - | IDs de categorias separados por vírgula |
+| `schoolCycles` | string | - | IDs de ciclos escolares separados por vírgula |
+
+**Resposta:**
+
+```json
+{
+  "list": [...],
+  "totalCount": 45,
+  "totalPages": 4,
+  "currentPage": 1,
+  "limit": 12
+}
+```
+
+#### 2. Opções de Filtro
+
+```
+GET /api/products/options
+```
+
+Retorna categorias, ciclos escolares e produtos disponíveis para filtros.
+
+**Resposta:**
+
+```json
+{
+  "categories": [
+    { "_id": "...", "label": "Matemática", "name": "matematica" }
+  ],
+  "schoolCycles": [
+    { "_id": "...", "label": "Ensino Fundamental", "name": "ensino-fundamental" }
+  ],
+  "products": [...]
+}
+```
+
+### Tipos de Produto
+
+Os tipos de produto são gerenciados pelo sistema de configuração em `src/services/products/config.ts`.
+
+**IDs Reais da API:**
+
+| Tipo | ID | Label | Características |
+|------|-----|-------|-----------------|
+| **Livro** | `643558e19900697552678b44` | Livro | Produto individual |
+| **Coleção** | `64355a169900697552678b45` | Coleção | Possui array `products` com volumes |
+| **Projeto** | `6493a0497ea1f7753234d078` | Projeto | Projetos especiais |
+
+**Uso no código:**
+
+```tsx
+import { getProductTypeConfig, isCollection, isBook, isProject } from '@/services/products'
+
+// Obter configuração completa (badge label, classes CSS)
+const typeConfig = getProductTypeConfig(product)
+const badgeLabel = typeConfig.getBadgeLabel(product)
+const badgeColor = typeConfig.badgeClassName
+
+// Ou usar helpers para verificação específica
+if (isCollection(product)) { ... }
+if (isBook(product)) { ... }
+if (isProject(product)) { ... }
+```
+
+**Adicionando novo tipo de produto:**
+
+1. Adicionar ID em `PRODUCT_TYPE_IDS` em `src/services/products/config.ts`
+2. Adicionar configuração em `configById` com: `key`, `getBadgeLabel`, `badgeClassName`
+3. Opcional: adicionar fallback por regex em `configByLabelPattern`
+
+```tsx
+// Exemplo: adicionando tipo "Kit"
+export const PRODUCT_TYPE_IDS = {
+  ...
+  KIT: 'novo-id-aqui',
+} as const
+
+[PRODUCT_TYPE_IDS.KIT]: {
+  key: 'kit',
+  getBadgeLabel: (p) => `Kit • ${p.products?.length || 0} itens`,
+  badgeClassName: 'bg-warning text-warning-foreground',
+},
+```
+
+### Campos do Produto
+
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| `_id` | string | ID único |
+| `title` | string | Título do produto |
+| `coverURL` | string | URL da imagem de capa |
+| `mockupURL` | string | URL da imagem de mockup (preferencial) |
+| `schoolCycles` | array | Ciclos escolares associados |
+| `categories` | array | Categorias do produto |
+| `productType` | object | `{ _id, label }` - Tipo do produto |
+| `products` | array | Produtos relacionados (para coleções) |
+
+### Implementação Local
+
+Os componentes que consomem esta API estão em:
+- `src/services/products/` - Service completo (requisições, tipos, config)
+- `src/components/Obras/` - Componentes de UI (ProductCard, ProductList, etc.)
+- `src/app/(frontend)/(pages)/obras/` - Página e layout
+
+### Autenticação
+
+Ambos endpoints são **públicos** e não requerem autenticação.
+
 ## Key Patterns
 
 **Configuring the homepage**:
@@ -416,4 +550,94 @@ import { AlternatingBlocksSection } from '@/components/Sections/Shared/Alternati
     }
   ]}
 />
+```
+
+## Convenção de Services
+
+Serviços externos e APIs são organizados por domínio em `src/services/`.
+
+### Estrutura de Tipos
+
+**Tipos globais** (`src/types/`):
+- `api.d.ts` - Interfaces genéricas de API (PaginatedResponse, PaginationParams)
+
+**Tipos por domínio** (`src/services/[dominio]/types/`):
+- `entities.d.ts` - Entidades específicas do domínio
+- `index.ts` - Barrel exports
+
+### Estrutura de Service
+
+```
+src/services/
+└── [dominio]/
+    ├── index.ts                  # Barrel exports públicos
+    ├── types/
+    │   ├── index.ts              # Re-exports de types do domínio
+    │   └── entities.d.ts         # Entidades do domínio
+    ├── get[Recurso].ts           # Requisição GET (params + response dentro)
+    ├── create[Recurso].ts        # Requisição POST (params + response dentro)
+    └── config.ts                 # Configurações do domínio (opcional)
+```
+
+### Convenções de Tipos
+
+1. **Interfaces genéricas** (`src/types/api.d.ts`): Padrões reutilizáveis entre domínios
+2. **Entidades** (`types/entities.d.ts`): Estruturas de dados específicas do domínio
+3. **Params/Response**: Definidos dentro do próprio arquivo da requisição
+   - Extendem interfaces genéricas de `@/types/api` quando aplicável
+   - Usam entidades de `./types` para tipagem de dados
+
+### Criando um Novo Service
+
+1. Criar pasta em `src/services/[nome-dominio]/`
+2. Criar `types/entities.d.ts` com entidades do domínio
+3. Criar `types/index.ts` com barrel exports
+4. Criar `get[Recurso].ts` para cada requisição GET
+5. Criar `index.ts` com barrel exports públicos
+6. (Opcional) Criar `config.ts` para constantes/helpers
+
+### Exemplo de Import
+
+```ts
+// De fora do service
+import { getProducts, Product, GetProductsParams } from '@/services/products'
+
+// Dentro do service (getProducts.ts)
+import type { Product } from './types'
+import type { PaginatedResponse, PaginationParams } from '@/types/api'
+```
+
+### Service Existente: Products
+
+```
+src/services/products/
+├── index.ts              # Barrel exports
+├── types/
+│   ├── index.ts
+│   └── entities.d.ts     # Product, Category, SchoolCycle, ProductType
+├── getProducts.ts        # Busca produtos com filtros
+├── getFilterOptions.ts   # Busca opções de filtro
+└── config.ts             # Configuração de tipos de produto (badges, helpers)
+```
+
+**Uso:**
+
+```tsx
+import {
+  getProducts,
+  getFilterOptions,
+  getProductTypeConfig,
+  isCollection,
+  type Product,
+  type GetProductsParams
+} from '@/services/products'
+
+// Buscar produtos
+const { list, totalPages } = await getProducts({ page: 1, limit: 12 })
+
+// Buscar opções de filtro
+const { categories, schoolCycles } = await getFilterOptions()
+
+// Verificar tipo de produto
+const typeConfig = getProductTypeConfig(product)
 ```

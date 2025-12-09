@@ -27,6 +27,15 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'grupo-eureka-site.s3.us-east-1.amazonaws.com',
       },
+      // External API product images (acesso.eurekadigital.app)
+      {
+        protocol: 'https',
+        hostname: 's3-sa-east-1.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'eurekadigital.s3.sa-east-1.amazonaws.com',
+      },
     ],
     // Add quality 100 to support Payload CMS image optimization
     // Next.js 16 changed default from [1..100] to just [75]

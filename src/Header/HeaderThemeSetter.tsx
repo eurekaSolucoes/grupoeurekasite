@@ -2,7 +2,14 @@
 
 import { useHeaderTheme, HeaderTheme } from '@/providers/HeaderTheme'
 import { EurekaLogoVariants } from '@/components/animate/EurekaLogo'
-import { useEffect, useRef, useState, type ElementType, type ComponentPropsWithoutRef } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ElementType,
+  type ComponentPropsWithoutRef,
+  useMemo,
+} from 'react'
 import type { Theme } from '@/providers/Theme/types'
 import { useScroll, useTransform } from 'motion/react'
 
@@ -43,6 +50,16 @@ export function HeaderThemeSetter<T extends ValidTags = 'div'>({
     target: ref,
     offset: ['start end', 'end start'],
   })
+  const newTheme: HeaderTheme = useMemo(
+    () => ({
+      theme,
+      logoTheme:
+        logoMobile || logoDesktop
+          ? { mobile: logoMobile ?? null, desktop: logoDesktop ?? null }
+          : null,
+    }),
+    [theme, logoMobile, logoDesktop],
+  )
 
   const visibility = useTransform(scrollYProgress, [0, 1], [0, 1])
 
@@ -65,14 +82,6 @@ export function HeaderThemeSetter<T extends ValidTags = 'div'>({
       const downThreshold = 0.45
       const upThreshold = 0.9
 
-      const newTheme: HeaderTheme = {
-        theme,
-        logoTheme:
-          logoMobile || logoDesktop
-            ? { mobile: logoMobile ?? null, desktop: logoDesktop ?? null }
-            : null,
-      }
-
       if (
         (scrollDirection === 'down' && value > downThreshold) ||
         (scrollDirection === 'up' && value > upThreshold)
@@ -82,7 +91,7 @@ export function HeaderThemeSetter<T extends ValidTags = 'div'>({
     })
 
     return () => unsubscribe()
-  }, [visibility, scrollDirection, theme, logoMobile, logoDesktop, changeHeaderTheme])
+  }, [visibility, scrollDirection, newTheme, changeHeaderTheme])
 
   return (
     <Component ref={ref} className={className} {...rest}>

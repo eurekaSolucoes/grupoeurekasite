@@ -71,6 +71,7 @@ export interface Config {
     posts: Post;
     projects: Project;
     media: Media;
+    documents: Document;
     categories: Category;
     users: User;
     redirects: Redirect;
@@ -89,6 +90,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    documents: DocumentsSelect<false> | DocumentsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -172,7 +174,7 @@ export interface Page {
     links?:
       | {
           link: {
-            type?: ('reference' | 'custom') | null;
+            type?: ('reference' | 'custom' | 'document') | null;
             newTab?: boolean | null;
             reference?:
               | ({
@@ -184,6 +186,7 @@ export interface Page {
                   value: string | Post;
                 } | null);
             url?: string | null;
+            document?: (string | null) | Document;
             label: string;
             /**
              * Choose how the link should be rendered.
@@ -407,6 +410,32 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents".
+ */
+export interface Document {
+  id: string;
+  /**
+   * Nome descritivo do documento
+   */
+  title: string;
+  /**
+   * Descrição opcional do documento
+   */
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
@@ -428,7 +457,7 @@ export interface CallToActionBlock {
   links?:
     | {
         link: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'custom' | 'document') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -440,6 +469,7 @@ export interface CallToActionBlock {
                 value: string | Post;
               } | null);
           url?: string | null;
+          document?: (string | null) | Document;
           label: string;
           /**
            * Choose how the link should be rendered.
@@ -478,7 +508,7 @@ export interface ContentBlock {
         } | null;
         enableLink?: boolean | null;
         link?: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'custom' | 'document') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -490,6 +520,7 @@ export interface ContentBlock {
                 value: string | Post;
               } | null);
           url?: string | null;
+          document?: (string | null) | Document;
           label: string;
           /**
            * Choose how the link should be rendered.
@@ -984,6 +1015,10 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
+        relationTo: 'documents';
+        value: string | Document;
+      } | null)
+    | ({
         relationTo: 'categories';
         value: string | Category;
       } | null)
@@ -1070,6 +1105,7 @@ export interface PagesSelect<T extends boolean = true> {
                     newTab?: T;
                     reference?: T;
                     url?: T;
+                    document?: T;
                     label?: T;
                     appearance?: T;
                   };
@@ -1116,6 +1152,7 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              document?: T;
               label?: T;
               appearance?: T;
             };
@@ -1142,6 +1179,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              document?: T;
               label?: T;
               appearance?: T;
             };
@@ -1328,6 +1366,25 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents_select".
+ */
+export interface DocumentsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1651,7 +1708,7 @@ export interface Navigation {
          * Destino do link (página interna ou URL customizada)
          */
         link?: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'custom' | 'document') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -1663,6 +1720,7 @@ export interface Navigation {
                 value: string | Post;
               } | null);
           url?: string | null;
+          document?: (string | null) | Document;
           label: string;
         };
         /**
@@ -1678,7 +1736,7 @@ export interface Navigation {
                * Destino do subitem
                */
               link: {
-                type?: ('reference' | 'custom') | null;
+                type?: ('reference' | 'custom' | 'document') | null;
                 newTab?: boolean | null;
                 reference?:
                   | ({
@@ -1690,6 +1748,7 @@ export interface Navigation {
                       value: string | Post;
                     } | null);
                 url?: string | null;
+                document?: (string | null) | Document;
                 label: string;
               };
               /**
@@ -1712,7 +1771,7 @@ export interface Navigation {
       links?:
         | {
             link: {
-              type?: ('reference' | 'custom') | null;
+              type?: ('reference' | 'custom' | 'document') | null;
               newTab?: boolean | null;
               reference?:
                 | ({
@@ -1724,6 +1783,7 @@ export interface Navigation {
                     value: string | Post;
                   } | null);
               url?: string | null;
+              document?: (string | null) | Document;
               label: string;
             };
             id?: string | null;
@@ -1735,7 +1795,7 @@ export interface Navigation {
       links?:
         | {
             link: {
-              type?: ('reference' | 'custom') | null;
+              type?: ('reference' | 'custom' | 'document') | null;
               newTab?: boolean | null;
               reference?:
                 | ({
@@ -1747,6 +1807,31 @@ export interface Navigation {
                     value: string | Post;
                   } | null);
               url?: string | null;
+              document?: (string | null) | Document;
+              label: string;
+            };
+            id?: string | null;
+          }[]
+        | null;
+    };
+    compliance: {
+      title: string;
+      links?:
+        | {
+            link: {
+              type?: ('reference' | 'custom' | 'document') | null;
+              newTab?: boolean | null;
+              reference?:
+                | ({
+                    relationTo: 'pages';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'posts';
+                    value: string | Post;
+                  } | null);
+              url?: string | null;
+              document?: (string | null) | Document;
               label: string;
             };
             id?: string | null;
@@ -1791,7 +1876,7 @@ export interface Homepage {
         subtitle?: string | null;
         title: string;
         link: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'custom' | 'document') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -1803,6 +1888,7 @@ export interface Homepage {
                 value: string | Post;
               } | null);
           url?: string | null;
+          document?: (string | null) | Document;
           label: string;
         };
         backgroundImage: string | Media;
@@ -1818,7 +1904,7 @@ export interface Homepage {
           image: string | Media;
           title: string;
           link?: {
-            type?: ('reference' | 'custom') | null;
+            type?: ('reference' | 'custom' | 'document') | null;
             newTab?: boolean | null;
             reference?:
               | ({
@@ -1830,6 +1916,7 @@ export interface Homepage {
                   value: string | Post;
                 } | null);
             url?: string | null;
+            document?: (string | null) | Document;
           };
           id?: string | null;
         }[]
@@ -1881,7 +1968,7 @@ export interface Homepage {
         }[]
       | null;
     link: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'custom' | 'document') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -1893,6 +1980,7 @@ export interface Homepage {
             value: string | Post;
           } | null);
       url?: string | null;
+      document?: (string | null) | Document;
       label: string;
     };
     animatedPhrase?: string | null;
@@ -1902,7 +1990,7 @@ export interface Homepage {
     subtitle?: string | null;
     description?: string | null;
     link: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'custom' | 'document') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -1914,6 +2002,7 @@ export interface Homepage {
             value: string | Post;
           } | null);
       url?: string | null;
+      document?: (string | null) | Document;
       label: string;
     };
     cards?:
@@ -1922,7 +2011,7 @@ export interface Homepage {
           title: string;
           description: string;
           link?: {
-            type?: ('reference' | 'custom') | null;
+            type?: ('reference' | 'custom' | 'document') | null;
             newTab?: boolean | null;
             reference?:
               | ({
@@ -1934,6 +2023,7 @@ export interface Homepage {
                   value: string | Post;
                 } | null);
             url?: string | null;
+            document?: (string | null) | Document;
           };
           id?: string | null;
         }[]
@@ -1958,6 +2048,7 @@ export interface NavigationSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              document?: T;
               label?: T;
             };
         label?: T;
@@ -1971,6 +2062,7 @@ export interface NavigationSelect<T extends boolean = true> {
                     newTab?: T;
                     reference?: T;
                     url?: T;
+                    document?: T;
                     label?: T;
                   };
               image?: T;
@@ -1996,6 +2088,7 @@ export interface NavigationSelect<T extends boolean = true> {
                           newTab?: T;
                           reference?: T;
                           url?: T;
+                          document?: T;
                           label?: T;
                         };
                     id?: T;
@@ -2015,6 +2108,27 @@ export interface NavigationSelect<T extends boolean = true> {
                           newTab?: T;
                           reference?: T;
                           url?: T;
+                          document?: T;
+                          label?: T;
+                        };
+                    id?: T;
+                  };
+            };
+        compliance?:
+          | T
+          | {
+              title?: T;
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          document?: T;
                           label?: T;
                         };
                     id?: T;
@@ -2058,6 +2172,7 @@ export interface HomepageSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              document?: T;
               label?: T;
             };
         backgroundImage?: T;
@@ -2081,6 +2196,7 @@ export interface HomepageSelect<T extends boolean = true> {
                     newTab?: T;
                     reference?: T;
                     url?: T;
+                    document?: T;
                   };
               id?: T;
             };
@@ -2111,6 +2227,7 @@ export interface HomepageSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              document?: T;
               label?: T;
             };
         animatedPhrase?: T;
@@ -2128,6 +2245,7 @@ export interface HomepageSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              document?: T;
               label?: T;
             };
         cards?:
@@ -2143,6 +2261,7 @@ export interface HomepageSelect<T extends boolean = true> {
                     newTab?: T;
                     reference?: T;
                     url?: T;
+                    document?: T;
                   };
               id?: T;
             };

@@ -9,6 +9,7 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { Documents } from './collections/Documents'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
@@ -83,7 +84,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Projects, Media, Categories, Users],
+  collections: [Pages, Posts, Projects, Media, Documents, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Navigation, Homepage],
   plugins: [
@@ -92,6 +93,7 @@ export default buildConfig({
     s3Storage({
       collections: {
         media: true,
+        documents: true,
       },
       bucket: process.env.S3_BUCKET || '',
       config: {
