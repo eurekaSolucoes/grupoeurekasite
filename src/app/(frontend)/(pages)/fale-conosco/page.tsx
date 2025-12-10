@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
-import { FormBlock } from '@/blocks/Form/Component'
+import { FormBlock, type FormBlockType } from '@/blocks/Form/Component'
 import { PageBannerBlock } from '@/blocks/PageBannerBlock/Component'
 import {
   IconInfoListBlock,
@@ -11,7 +11,6 @@ import {
 import { ContactFormBlock } from '@/blocks/Contact/ContactFormBlock/Component'
 import { PressContactBlock } from '@/blocks/Contact/PressContactBlock/Component'
 import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
-import { DynamicFormBlock } from '@/blocks/DynamicFormBlock/Component'
 
 export const metadata: Metadata = {
   title: 'Fale Conosco | Grupo Eureka',
@@ -127,23 +126,11 @@ export default async function ContactPage() {
           <h2 className="typography-subheading mb-5 font-bold text-secondary">
             FormBlock do Payload (CMS)
           </h2>
-          <FormBlock form={cmsForm} enableIntro={false} />
+          <FormBlock form={cmsForm as FormBlockType['form']} enableIntro={false} />
         </section>
       )}
       <SpacerBlock size="lg" />
 
-      {cmsForm?.fields && (
-        <DynamicFormBlock
-          title="DynamicFormBlock (CMS direto)"
-          fields={cmsForm.fields}
-          submitLabel={cmsForm.submitButtonLabel || 'Enviar'}
-          className="container"
-          onSubmit={(data) => {
-            console.log('Dados do formulário dinâmico:', data)
-          }}
-        />
-      )}
-      <SpacerBlock size="lg" />
 
       <PressContactBlock
         title={contactData.pressContact.title}
