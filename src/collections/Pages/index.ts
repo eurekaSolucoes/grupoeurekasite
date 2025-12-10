@@ -7,6 +7,19 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+// Novos blocos
+import { SpacerBlock } from '../../blocks/SpacerBlock/config'
+import { AlternatingBlock } from '../../blocks/AlternatingBlock/config'
+import { CardListBlock } from '../../blocks/CardListBlock/config'
+import { IconInfoListBlock } from '../../blocks/IconInfoListBlock/config'
+import { TextImageStackBlock } from '../../blocks/TextImageStackBlock/config'
+import { ImageTextGridBlock } from '../../blocks/ImageTextGridBlock/config'
+import { OverlappingImageBlock } from '../../blocks/OverlappingImageBlock/config'
+import { StatsBlock } from '../../blocks/StatsBlock/config'
+import { SocialCTABlock } from '../../blocks/SocialCTABlock/config'
+import { NumberedCardsBlock } from '../../blocks/NumberedCardsBlock/config'
+import { IntroBlock } from '../../blocks/IntroBlock/config'
+import { VideoBlock } from '../../blocks/VideoBlock/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -72,7 +85,32 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [
+                // Layout
+                SpacerBlock,
+                // Conteúdo
+                Content,
+                CardListBlock,
+                TextImageStackBlock,
+                ImageTextGridBlock,
+                AlternatingBlock,
+                IntroBlock,
+                // CTA
+                CallToAction,
+                StatsBlock,
+                SocialCTABlock,
+                // Mídia
+                MediaBlock,
+                VideoBlock,
+                OverlappingImageBlock,
+                // Informação
+                IconInfoListBlock,
+                NumberedCardsBlock,
+                // Formulários
+                FormBlock,
+                // Archive
+                Archive,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,
