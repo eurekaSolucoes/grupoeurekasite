@@ -25,6 +25,8 @@ interface HeaderThemeSetterOwnProps<T extends ValidTags = 'div'> {
   /** Logo variant for desktop screens */
   logoDesktop?: EurekaLogoVariants
   children: React.ReactNode
+  downThreshold?: number
+  upThreshold?: number
 }
 
 type HeaderThemeSetterProps<T extends ValidTags = 'div'> = HeaderThemeSetterOwnProps<T> &
@@ -37,6 +39,8 @@ export function HeaderThemeSetter<T extends ValidTags = 'div'>({
   logoDesktop,
   children,
   className,
+  downThreshold = 0.45,
+  upThreshold = 0.9,
   ...rest
 }: HeaderThemeSetterProps<T>) {
   const Component = (as || 'div') as ElementType
@@ -79,9 +83,6 @@ export function HeaderThemeSetter<T extends ValidTags = 'div'>({
   // Change theme based on visibility and scroll direction
   useEffect(() => {
     const unsubscribe = visibility.on('change', (value) => {
-      const downThreshold = 0.45
-      const upThreshold = 0.9
-
       if (
         (scrollDirection === 'down' && value > downThreshold) ||
         (scrollDirection === 'up' && value > upThreshold)

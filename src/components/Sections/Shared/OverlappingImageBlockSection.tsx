@@ -43,7 +43,7 @@ export function OverlappingImageBlockSection({
         theme="secondary"
         className="container"
       >
-        <div className="relative mx-auto aspect-video max-h-[250px] translate-y-1/2 overflow-hidden rounded-[20px] shadow-[6px_6px_12px_0_rgba(0,0,0,0.24)] lg:-mb-32 lg:max-h-[500px] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)]">
+        <div className="relative mx-auto -mb-31 aspect-video max-h-[250px] overflow-hidden rounded-[20px] shadow-[6px_6px_12px_0_rgba(0,0,0,0.24)] lg:-mb-62.5 lg:max-h-[500px] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)]">
           <Image
             src={image.src}
             alt={image.alt}
@@ -59,19 +59,19 @@ export function OverlappingImageBlockSection({
         as="div"
         logoMobile="icon-full-white"
         logoDesktop="icon-full-white"
-        className={cn('pt-36 pb-16 lg:pt-44 lg:pb-20', bgVariants[variant])}
+        className={cn('pt-36 pb-16 lg:pt-72 lg:pb-20', bgVariants[variant])}
         theme="default"
       >
         <div className="container flex flex-col space-y-5 lg:space-y-10">
           {/* Título */}
           <h2
-            className="max-w-3xl typography-heading font-bold [&_span]:text-secondary"
+            className="max-w-3xl typography-heading font-bold lg:max-w-4xl [&_span]:text-secondary"
             dangerouslySetInnerHTML={{ __html: title }}
           />
 
           {/* Parágrafos */}
           {paragraphs && paragraphs.length > 0 && (
-            <div className="ml-auto max-w-2xl space-y-5 typography-body-large">
+            <div className="ml-auto max-w-2xl space-y-5 typography-body-large lg:ml-[20%]">
               {paragraphs.map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
