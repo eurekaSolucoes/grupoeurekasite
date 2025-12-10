@@ -1,44 +1,48 @@
-import { type IconName, DynamicIcon } from 'lucide-react/dynamic'
-
+import type { IconInfoListBlock as IconInfoListBlockType } from '@/payload-types'
+import { DynamicIcon } from 'lucide-react/dynamic'
+import type { IconName } from 'lucide-react/dynamic'
 import { cn } from '@/utilities/ui'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
-export interface InfoItem {
-  icon: IconName
-  label: string
-  value: string
-  href?: string
-}
-
-export interface IconInfoListBlockProps {
-  items: InfoItem[]
+type IconInfoListBlockProps = Omit<IconInfoListBlockType, 'id' | 'blockName' | 'blockType'> & {
   className?: string
 }
 
+export type InfoItem = IconInfoListBlockType['items'][number]
+
 export function IconInfoListBlock({ items, className }: Readonly<IconInfoListBlockProps>) {
   return (
-    <dl className={cn('container flex flex-wrap items-center gap-5 lg:gap-16', className)}>
-      {items.map((item) => (
-        <div key={item.label} className="flex flex-col">
-          <dt className="flex items-center gap-3 typography-body font-bold text-secondary">
-            <DynamicIcon
-              name={item.icon}
-              className="size-5 shrink-0 text-accent lg:size-6"
-              strokeWidth={1.67}
-              aria-hidden="true"
-            />
-            {item.label}
-          </dt>
-          <dd className="whitespace-pre-line">
-            {item.href ? (
-              <a href={item.href} className="underline-on-hover">
-                {item.value}
-              </a>
-            ) : (
-              item.value
-            )}
-          </dd>
-        </div>
-      ))}
-    </dl>
+    <HeaderThemeSetter
+      as="section"
+      theme="secondary"
+      logoMobile="icon-blue"
+      logoDesktop="icon-blue"
+      className={cn('container', className)}
+    >
+      <dl className="flex flex-wrap items-center gap-5 lg:gap-16">
+        {items.map((item) => (
+          <div key={item.label} className="flex flex-col">
+            <dt className="flex items-center gap-3 typography-body font-bold text-secondary">
+              <DynamicIcon
+                name={item.icon as IconName}
+                className="size-5 shrink-0 text-accent lg:size-6"
+                strokeWidth={1.67}
+                aria-hidden="true"
+              />
+              {item.label}
+            </dt>
+            <dd className="whitespace-pre-line">
+              {item.href ? (
+                <a href={item.href} className="underline-on-hover">
+                  {item.value}
+                </a>
+              ) : (
+                item.value
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </HeaderThemeSetter>
   )
 }

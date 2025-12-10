@@ -1,21 +1,15 @@
+import type { ImageTextGridBlock as ImageTextGridBlockType } from '@/payload-types'
 import { cn } from '@/utilities/ui'
-// import { Media } from '@/components/Media'
-// import type { Media as MediaType } from '@/payload-types'
 import Image from 'next/image'
+import { getMediaUrlFromField, getMediaAlt } from '@/utilities/getMediaUrl'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
+import RichText from '@/components/RichText'
 
-interface ImageItem {
-  image: string // MediaType | string | number - usando string para dados mockados
-  alt?: string
-  size?: 'sm' | 'md' | 'lg'
-}
-
-export interface ImageTextGridBlockProps {
-  headingText?: string
-  bodyText?: string
-  images: ImageItem[]
-  layout?: 'images-left' | 'images-right'
+type ImageTextGridBlockProps = Omit<ImageTextGridBlockType, 'id' | 'blockName' | 'blockType'> & {
   className?: string
 }
+
+type ImageItem = ImageTextGridBlockType['images'][number]
 
 const imageSizeClasses: Record<'sm' | 'md' | 'lg', string> = {
   sm: 'w-[173px] h-[111px] lg:w-[265px] lg:h-[237px]',
@@ -33,7 +27,13 @@ export function ImageTextGridBlock({
   const isImagesLeft = layout === 'images-left'
 
   return (
-    <section className={cn('container', className)}>
+    <HeaderThemeSetter
+      as="section"
+      theme="secondary"
+      logoMobile="icon-blue"
+      logoDesktop="icon-blue"
+      className={cn('container', className)}
+    >
       <div
         className={cn(
           'flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12 2xl:gap-20',
@@ -43,15 +43,19 @@ export function ImageTextGridBlock({
         {/* Text Content */}
         <div className="flex flex-1 flex-col justify-center space-y-6 lg:space-y-8">
           {headingText && (
-            <h2
+            <RichText
+              data={headingText}
+              enableGutter={false}
+              enableProse={false}
               className="font-heading text-[28px] leading-[1.2] text-secondary lg:text-[40px] [&_strong]:font-bold [&_strong]:text-accent"
-              dangerouslySetInnerHTML={{ __html: headingText }}
             />
           )}
           {bodyText && (
-            <p
+            <RichText
+              data={bodyText}
+              enableGutter={false}
+              enableProse={false}
               className="text-base leading-[1.6] text-foreground lg:text-xl lg:leading-[1.8] [&_strong]:font-bold [&_strong]:text-accent"
-              dangerouslySetInnerHTML={{ __html: bodyText }}
             />
           )}
         </div>
@@ -109,7 +113,7 @@ export function ImageTextGridBlock({
           </div>
         )}
       </div>
-    </section>
+    </HeaderThemeSetter>
   )
 }
 
@@ -119,6 +123,11 @@ interface ImageCardProps {
 }
 
 function ImageCard({ image, className }: Readonly<ImageCardProps>) {
+  const imageUrl = getMediaUrlFromField(image.image)
+  const imageAlt = getMediaAlt(image.image)
+
+  if (!imageUrl) return null
+
   return (
     <div
       className={cn(
@@ -127,24 +136,11 @@ function ImageCard({ image, className }: Readonly<ImageCardProps>) {
       )}
     >
       <Image
-        src={image.image}
-        alt={image.alt || ''}
+        src={imageUrl}
+        alt={imageAlt}
         fill
         className="object-cover"
       />
     </div>
   )
-  /* Comentado para uso futuro com CMS:
-  return (
-    <Media
-      resource={image.image}
-      alt={image.alt || ''}
-      className={cn(
-        'relative overflow-hidden rounded-[20px] shadow-[6px_6px_12px_0_rgba(0,0,0,0.12)] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)]',
-        className,
-      )}
-      imgClassName="object-cover size-full"
-    />
-  )
-  */
 }

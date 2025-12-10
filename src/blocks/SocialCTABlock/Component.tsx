@@ -1,6 +1,6 @@
+import type { SocialCTABlock as SocialCTABlockType, Navigation } from '@/payload-types'
 import { cn } from '@/utilities/ui'
 import { getCachedGlobal } from '@/utilities/getGlobals'
-import type { Navigation } from '@/payload-types'
 import Link from 'next/link'
 import { FacebookIcon } from '@/components/Icons/FacebookIcon'
 import { InstagramIcon } from '@/components/Icons/InstagramIcon'
@@ -11,6 +11,9 @@ import { TwitterIcon } from '@/components/Icons/TwitterIcon'
 import { WhatsAppIcon } from '@/components/Icons/WhatsAppIcon'
 import { TelegramIcon } from '@/components/Icons/TelegramIcon'
 import Image from 'next/image'
+import { getMediaUrlFromField } from '@/utilities/getMediaUrl'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
+import RichText from '@/components/RichText'
 
 const socialIcons = {
   facebook: FacebookIcon,
@@ -34,11 +37,8 @@ const socialLabels = {
   telegram: 'Telegram',
 }
 
-export interface SocialCTABlockProps {
-  text: string
-  backgroundImage: string
+type SocialCTABlockProps = Omit<SocialCTABlockType, 'id' | 'blockName' | 'blockType'> & {
   className?: string
-  type?: 'social' | 'whatsapp'
 }
 
 export async function SocialCTABlock({
@@ -49,24 +49,26 @@ export async function SocialCTABlock({
 }: Readonly<SocialCTABlockProps>) {
   const { footerMenu } = (await getCachedGlobal('navigation', 1)()) as Navigation
   const socialLinks = footerMenu?.social?.links || []
+  const imageUrl = getMediaUrlFromField(backgroundImage)
 
   return (
-    <section
+    <HeaderThemeSetter
+      as="section"
+      theme="default"
+      logoMobile="full"
+      logoDesktop="full"
       className={cn('relative py-16 lg:h-150 lg:py-24', className)}
-      // style={{
-      //   backgroundImage: `url(${backgroundImage})`,
-      //   backgroundSize: 'cover',
-      //   backgroundPosition: 'center',
-      // }}
     >
       {/* Background Image with Gradient Overlay */}
-      <Image
-        src={backgroundImage}
-        alt=""
-        fill
-        sizes="100vw"
-        className="absolute inset-0 -z-20 object-cover"
-      />
+      {imageUrl && (
+        <Image
+          src={imageUrl}
+          alt=""
+          fill
+          sizes="100vw"
+          className="absolute inset-0 -z-20 object-cover"
+        />
+      )}
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -80,10 +82,14 @@ export async function SocialCTABlock({
       <div className="container h-full">
         <div className="flex h-full flex-col justify-center gap-8 lg:gap-12">
           {/* Text with Highlights */}
-          <h2
-            className="max-w-2xl typography-subheading text-balance text-secondary-foreground [&_strong]:font-bold [&_strong]:text-accent"
-            dangerouslySetInnerHTML={{ __html: text }}
-          />
+          {text && (
+            <RichText
+              data={text}
+              enableGutter={false}
+              enableProse={false}
+              className="max-w-2xl typography-subheading text-balance text-secondary-foreground [&_strong]:font-bold [&_strong]:text-accent"
+            />
+          )}
 
           {/* Social Icons */}
           {type === 'social' && socialLinks.length > 0 && (
@@ -123,6 +129,6 @@ export async function SocialCTABlock({
           )}
         </div>
       </div>
-    </section>
+    </HeaderThemeSetter>
   )
 }

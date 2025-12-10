@@ -1,31 +1,15 @@
+import type { NumberedCardsBlock as NumberedCardsBlockType } from '@/payload-types'
 import Image from 'next/image'
 
 import { FirstConnector, MiddleConnector, LastConnector, DesktopConnector } from './connectors'
 import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
+import { getMediaUrlFromField, getMediaAlt } from '@/utilities/getMediaUrl'
+import RichText from '@/components/RichText'
 
-export interface NumberedCard {
-  /** Número do card (1-9) */
-  number: number
-  /** Título do card (opcional) */
-  title?: string
-  /** Descrição do card - suporta HTML (<strong>) */
-  description: string
-  /** Imagem do card */
-  image: {
-    src: string
-    alt: string
-  }
-}
+type NumberedCardsBlockProps = Omit<NumberedCardsBlockType, 'id' | 'blockName' | 'blockType'>
 
-export interface NumberedCardsBlockProps {
-  /** Título da seção (opcional) - renderizado FORA do container */
-  title?: string
-  /** Subtítulo/descrição da seção (obrigatório) - suporta HTML (<strong>) */
-  subtitle: string
-  /** Lista de cards numerados (mínimo 2, máximo 9) */
-  cards: NumberedCard[]
-}
+type NumberedCard = NumberedCardsBlockType['cards'][number]
 
 export function NumberedCardsBlock({
   title,
@@ -47,19 +31,25 @@ export function NumberedCardsBlock({
     >
       {/* Título opcional */}
       {title && (
-        <h2
+        <RichText
+          data={title}
+          enableGutter={false}
+          enableProse={false}
           className="mb-4 typography-subheading text-secondary lg:max-w-200 [&_strong]:text-accent"
-          dangerouslySetInnerHTML={{ __html: title }}
         />
       )}
 
       {/* Container principal: descrição + lista de cards + SVG */}
       <div className="relative">
         {/* Descrição/Subtítulo obrigatório */}
-        <p
-          className="mb-8 flex max-w-80 flex-col justify-center typography-body-large text-foreground lg:mr-10 lg:ml-[20%] lg:h-40 lg:max-w-[715px] [&_strong]:font-bold [&_strong]:text-accent"
-          dangerouslySetInnerHTML={{ __html: subtitle }}
-        />
+        {subtitle && (
+          <RichText
+            data={subtitle}
+            enableGutter={false}
+            enableProse={false}
+            className="mb-8 flex max-w-80 flex-col justify-center typography-body-large text-foreground lg:mr-10 lg:ml-[20%] lg:h-40 lg:max-w-[715px] [&_strong]:font-bold [&_strong]:text-accent"
+          />
+        )}
 
         <ol className="relative z-10 flex flex-col lg:gap-32">
           {cards.map((card) => (
@@ -95,22 +85,28 @@ function NumberedCardItem({ card }: { card: NumberedCard }) {
             {card.title}
           </h3>
         )}
-        <p
-          className="typography-body text-foreground xl:text-balance [&_strong]:font-bold [&_strong]:text-accent"
-          dangerouslySetInnerHTML={{ __html: card.description }}
-        />
+        {card.description && (
+          <RichText
+            data={card.description}
+            enableGutter={false}
+            enableProse={false}
+            className="typography-body text-foreground xl:text-balance [&_strong]:font-bold [&_strong]:text-accent"
+          />
+        )}
       </div>
 
       {/* Imagem */}
-      <div className="relative mt-4 h-45 w-full shrink-0 overflow-hidden rounded-[30px] shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)] lg:mt-0 lg:h-[350px] lg:w-[628px] lg:rounded-[40px]">
-        <Image
-          src={card.image.src}
-          alt={card.image.alt}
-          fill
-          sizes="(max-width: 1024px) 100vw, 628px"
-          className="object-cover"
-        />
-      </div>
+      {getMediaUrlFromField(card.image) && (
+        <div className="relative mt-4 h-45 w-full shrink-0 overflow-hidden rounded-[30px] shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)] lg:mt-0 lg:h-[350px] lg:w-[628px] lg:rounded-[40px]">
+          <Image
+            src={getMediaUrlFromField(card.image)!}
+            alt={getMediaAlt(card.image)}
+            fill
+            sizes="(max-width: 1024px) 100vw, 628px"
+            className="object-cover"
+          />
+        </div>
+      )}
 
       {/* Conectores Mobile - visíveis apenas em mobile, ocultos em lg+ */}
       <FirstConnector className="absolute -top-19 right-0 z-0 hidden h-[calc(100%+40px)] group-first/card:block lg:hidden!" />

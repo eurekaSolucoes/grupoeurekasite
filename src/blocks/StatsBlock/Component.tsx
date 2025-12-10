@@ -1,23 +1,21 @@
 'use client'
 
+import type { StatsBlock as StatsBlockType } from '@/payload-types'
 import { Counter } from '@/components/ui/counter'
 import { cn } from '@/utilities/ui'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
-interface Stat {
-  prefix?: string
-  stat: number
-  suffix?: string
-  label: string
-}
-
-export interface StatsBlockProps {
-  items: Stat[]
+type StatsBlockProps = Omit<StatsBlockType, 'id' | 'blockName' | 'blockType'> & {
   className?: string
 }
 
 export function StatsBlock({ items, className }: Readonly<StatsBlockProps>) {
   return (
-    <section
+    <HeaderThemeSetter
+      as="section"
+      theme="default"
+      logoMobile="full"
+      logoDesktop="full"
       className={cn(
         'relative overflow-hidden bg-[linear-gradient(315deg,var(--brand-dark-blue)_31.39%,var(--secondary)_80.12%)] py-16 lg:h-90 lg:py-20',
         className,
@@ -52,6 +50,6 @@ export function StatsBlock({ items, className }: Readonly<StatsBlockProps>) {
           </li>
         ))}
       </ul>
-    </section>
+    </HeaderThemeSetter>
   )
 }

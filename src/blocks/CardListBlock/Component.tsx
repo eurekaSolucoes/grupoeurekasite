@@ -1,102 +1,89 @@
+import type { CardListBlock as CardListBlockType } from '@/payload-types'
 import { cn } from '@/utilities/ui'
 import { CMSLink } from '@/components/Link'
-// import { Media } from '@/components/Media'
-// import type { Media as MediaType, Page, Post } from '@/payload-types'
-import type { Page, Post } from '@/payload-types'
 import Image from 'next/image'
 import { HoverScaleCard } from '@/components/animate/HoverScaleCard'
+import { getMediaUrlFromField, getMediaAlt } from '@/utilities/getMediaUrl'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
+import RichText from '@/components/RichText'
 
-interface CardLink {
-  type?: 'custom' | 'reference' | null
-  label?: string | null
-  url?: string | null
-  newTab?: boolean | null
-  reference?: {
-    relationTo: 'pages' | 'posts'
-    value: Page | Post | string | number
-  } | null
-}
-
-interface Card {
-  image: string // MediaType | string | number - usando string para dados mockados
-  title?: string
-  description?: string
-  link?: CardLink
-}
-
-export interface CardListBlockProps {
-  title?: string
-  subtitle?: string
-  items: Card[]
-  columns?: 2 | 3
+type CardListBlockProps = Omit<CardListBlockType, 'id' | 'blockName' | 'blockType'> & {
   className?: string
-  subtitleAlign?: 'start' | 'end'
 }
 
-const columnClasses: Record<2 | 3, string> = {
-  2: 'lg:grid-cols-2',
-  3: 'lg:grid-cols-3',
+type CardItem = CardListBlockType['items'][number]
+
+const columnClasses: Record<'2' | '3', string> = {
+  '2': 'lg:grid-cols-2',
+  '3': 'lg:grid-cols-3',
 }
 
 export function CardListBlock({
   title,
   subtitle,
   items,
-  columns = 2,
+  columns = '2',
   className,
   subtitleAlign = 'start',
 }: Readonly<CardListBlockProps>) {
   const hasTitleOrSubtitle = title || subtitle
 
   return (
-    <section className={cn('container', className)}>
+    <HeaderThemeSetter
+      as="section"
+      theme="secondary"
+      logoMobile="icon-blue"
+      logoDesktop="icon-blue"
+      className={cn('container', className)}
+    >
       {/* Header */}
       {hasTitleOrSubtitle && (
         <header className="mb-6 lg:mb-8">
           {title && <h2 className="typography-subheading font-bold text-secondary">{title}</h2>}
           {subtitle && (
-            <p
+            <RichText
+              data={subtitle}
+              enableGutter={false}
+              enableProse={false}
               className={cn('mt-2 lg:text-xl [&_strong]:font-bold [&_strong]:text-accent', {
                 'lg:ml-55': subtitleAlign === 'end',
               })}
-              dangerouslySetInnerHTML={{ __html: subtitle }}
             />
           )}
         </header>
       )}
 
       {/* Cards Grid */}
-      <ul className={cn('grid grid-cols-1 gap-5 lg:gap-6', columnClasses[columns])}>
+      <ul className={cn('grid grid-cols-1 gap-5 lg:gap-6', columnClasses[columns || '2'])}>
         {items.map((card, index) => (
-          <li key={index}>
-            <CardItem card={card} />
+          <li key={card.id || index}>
+            <CardItemComponent card={card} />
           </li>
         ))}
       </ul>
-    </section>
+    </HeaderThemeSetter>
   )
 }
 
-interface CardItemProps {
-  card: Card
+interface CardItemComponentProps {
+  card: CardItem
 }
 
-function CardItem({ card }: Readonly<CardItemProps>) {
+function CardItemComponent({ card }: Readonly<CardItemComponentProps>) {
+  const imageUrl = getMediaUrlFromField(card.image)
+  const imageAlt = getMediaAlt(card.image)
+
   const cardContent = (
     <>
       {/* Background Image */}
-      {/* <Media
-        resource={card.image}
-        alt={card.title || card.description || ''}
-        className="absolute inset-0 -z-20 overflow-hidden rounded-[20px] lg:rounded-[30px]"
-        imgClassName="object-cover size-full"
-      /> */}
-      <Image
-        src={card.image}
-        alt={card.title || card.description || ''}
-        fill
-        className="absolute inset-0 -z-20 rounded-[20px] object-cover lg:rounded-[30px]"
-      />
+      {imageUrl && (
+        <Image
+          src={imageUrl}
+          alt={imageAlt || card.title || card.description || ''}
+          fill
+          className="absolute inset-0 -z-20 rounded-[20px] object-cover lg:rounded-[30px]"
+        />
+      )}
 
       {/* Gradient Overlay */}
       <div

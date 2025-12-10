@@ -10,20 +10,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { Media as MediaType } from '@/payload-types'
+import type { Page, Media } from '@/payload-types'
 import { Fragment } from 'react'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
-export interface BreadcrumbItemType {
-  label: string
-  href?: string
-}
-
-export interface PageBannerBlockProps {
-  title: string
-  backgroundImage?: MediaType | string | null
-  breadcrumbs?: BreadcrumbItemType[]
-}
+type PageBannerBlockProps = Page['hero']
 
 export function PageBannerBlock({
   title,

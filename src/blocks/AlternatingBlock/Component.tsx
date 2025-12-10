@@ -1,22 +1,10 @@
 import Image from 'next/image'
+import type { AlternatingBlock as AlternatingBlockType } from '@/payload-types'
+import { getMediaUrlFromField, getMediaAlt } from '@/utilities/getMediaUrl'
+import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
+import RichText from '@/components/RichText'
 
-interface BlockImage {
-  src: string
-  alt: string
-}
-
-interface Block {
-  images?: BlockImage[]
-  primaryText?: string
-  secondaryText?: string
-}
-
-export interface AlternatingBlockProps {
-  title?: string
-  subtitle?: string
-  showArrow?: boolean
-  items: Block[]
-}
+type AlternatingBlockProps = Omit<AlternatingBlockType, 'id' | 'blockName' | 'blockType'>
 
 export function AlternatingBlock({
   title,
@@ -27,7 +15,13 @@ export function AlternatingBlock({
   const hasTitleOrSubtitle = title || subtitle
 
   return (
-    <section className="container">
+    <HeaderThemeSetter
+      as="section"
+      theme="secondary"
+      logoMobile="icon-blue"
+      logoDesktop="icon-blue"
+      className="container"
+    >
       {/* Header */}
       {hasTitleOrSubtitle && (
         <header className="relative mb-5 flex min-h-24 w-fit flex-col lg:mb-16">
@@ -65,11 +59,11 @@ export function AlternatingBlock({
             {item.images && item.images.length > 0 && (
               <div className="relative flex flex-col lg:w-[500px] lg:shrink-0">
                 {/* First Image (larger) - odd: right, even: left */}
-                {item.images[0] && (
+                {item.images[0] && getMediaUrlFromField(item.images[0].image) && (
                   <div className="aspect-410/290 w-2/3 group-odd/block:ml-auto group-even/block:mr-auto lg:w-[410px]">
                     <Image
-                      src={item.images[0].src}
-                      alt={item.images[0].alt}
+                      src={getMediaUrlFromField(item.images[0].image)!}
+                      alt={getMediaAlt(item.images[0].image)}
                       width={410}
                       height={290}
                       className="size-full rounded-[20px] object-cover shadow-[6px_6px_12px_0_rgba(0,0,0,0.24)] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)]"
@@ -78,11 +72,11 @@ export function AlternatingBlock({
                 )}
 
                 {/* Second Image (smaller, overlapping) - odd: left, even: right */}
-                {item.images[1] && (
+                {item.images[1] && getMediaUrlFromField(item.images[1].image) && (
                   <div className="-mt-8 aspect-331/212 w-1/2 group-odd/block:mr-auto group-even/block:ml-auto lg:-mt-12 lg:w-[331px]">
                     <Image
-                      src={item.images[1].src}
-                      alt={item.images[1].alt}
+                      src={getMediaUrlFromField(item.images[1].image)!}
+                      alt={getMediaAlt(item.images[1].image)}
                       width={331}
                       height={212}
                       className="size-full rounded-[20px] object-cover shadow-[6px_6px_12px_0_rgba(0,0,0,0.12)] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.12)]"
@@ -95,21 +89,25 @@ export function AlternatingBlock({
             {/* Text Content */}
             <div className="flex flex-1 flex-col justify-center space-y-4 lg:space-y-6 lg:pt-10 lg:group-first/card:pt-16">
               {item.primaryText && (
-                <p
+                <RichText
+                  data={item.primaryText}
+                  enableGutter={false}
+                  enableProse={false}
                   className="font-heading text-2xl leading-[1.2] text-secondary lg:text-[2.5rem] [&_strong]:text-accent"
-                  dangerouslySetInnerHTML={{ __html: item.primaryText }}
                 />
               )}
               {item.secondaryText && (
-                <p
+                <RichText
+                  data={item.secondaryText}
+                  enableGutter={false}
+                  enableProse={false}
                   className="typography-body-large leading-[1.8] text-balance [&_strong]:text-accent"
-                  dangerouslySetInnerHTML={{ __html: item.secondaryText }}
                 />
               )}
             </div>
           </article>
         ))}
       </div>
-    </section>
+    </HeaderThemeSetter>
   )
 }
