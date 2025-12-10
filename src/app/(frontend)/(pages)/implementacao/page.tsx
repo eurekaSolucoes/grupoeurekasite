@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { PageBannerSection } from '@/components/Sections/Shared/PageBannerSection'
 import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
 import { OverlappingImageBlockSection } from '@/components/Sections/Shared/OverlappingImageBlockSection'
+import { NumberedCardsSection } from '@/components/Sections/Shared/NumberedCardsSection'
 
 export const metadata: Metadata = {
   title: 'Implementação | Grupo Eureka',
@@ -120,8 +121,7 @@ const implementationData: ImplementationPageData = {
       src: '/mock/implementation-journey-cta.png',
       alt: 'Jornada de aprendizado do Grupo Eureka',
     },
-    title:
-      'Cada jornada é também um aprendizado para o <span>Grupo Eureka</span>.',
+    title: 'Cada jornada é também um aprendizado para o <span>Grupo Eureka</span>.',
     paragraphs: [
       'Crescemos ao escutar professores, alunos e gestores, porque acreditamos que é nesse diálogo que surgem projetos com propósito.',
       'Nosso trabalho acontece em parceria com as redes de ensino, mas cada escola tem sua própria história — e é respeitando essa identidade que construímos caminhos singulares, feitos de escuta, troca e criação coletiva.',
@@ -140,15 +140,14 @@ export default function ImplementacaoPage() {
       />
       <SpacerSection />
 
-      {/* TODO: IntroSection - Texto de introdução com destaque */}
-      {/* implementationData.intro */}
+      {/* Seção de cards numerados com intro */}
+      <NumberedCardsSection
+        title={implementationData.intro.headline}
+        subtitle={implementationData.intro.description}
+        cards={implementationData.processSteps}
+      />
 
-      <SpacerSection size="lg" />
-
-      {/* TODO: ProcessStepsSection - Timeline de 6 passos alternados */}
-      {/* implementationData.processSteps */}
-
-      <SpacerSection size="lg" />
+      {/* <SpacerSection size="lg" /> */}
 
       {/* Overlapping Block Section */}
       <OverlappingImageBlockSection

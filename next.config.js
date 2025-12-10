@@ -25,6 +25,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'picsum.photos',
+      },
+      {
+        protocol: 'https',
         hostname: 'grupo-eureka-site.s3.us-east-1.amazonaws.com',
       },
       // External API product images (acesso.eurekadigital.app)
