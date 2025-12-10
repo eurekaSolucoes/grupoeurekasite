@@ -477,52 +477,78 @@ git commit -m "feat(feature): add new feature description"
 git add src/styles/feature.css
 git commit -m "style(feature): add feature styling"
 ```
-## Convenção de Nomenclatura: Sections (Frontend)
+## Convenção de Nomenclatura: Blocks (Frontend)
 
-**Regra**: No frontend, todos os componentes de seção devem seguir o padrão `[Nome]Section`.
+**Regra**: Todos os componentes de seção/bloco seguem o padrão `[Nome]Block` e ficam em `src/blocks/`.
 
 ### Estrutura de Diretórios
 
 ```
-src/components/Sections/
-├── Home/           # Seções da homepage
-│   ├── BannerSection.tsx
-│   ├── SolutionsSection.tsx
-│   ├── AboutSection.tsx
-│   ├── StoriesSection.tsx
-│   └── AISection.tsx
-├── Contact/        # Seções da página de contato
-│   ├── ContactFormSection.tsx
-│   ├── ContactInfoSection.tsx
-│   └── PressContactSection.tsx
-├── About/          # Seções da página sobre
-│   ├── IntroSection.tsx
-│   └── VideoSection.tsx
-└── Shared/         # Seções reutilizáveis entre páginas
-    ├── PageBannerSection.tsx
-    ├── SpacerSection.tsx
-    └── AlternatingBlocksSection.tsx
+src/blocks/
+├── Home/                          # Blocos específicos da homepage
+│   ├── BannerBlock/Component.tsx
+│   ├── SolutionsBlock/Component.tsx
+│   ├── AboutBlock/Component.tsx
+│   ├── StoriesBlock/Component.tsx
+│   └── AIBlock/Component.tsx
+├── About/                         # Blocos específicos da página Sobre
+│   ├── IntroBlock/Component.tsx
+│   └── VideoBlock/Component.tsx
+├── Contact/                       # Blocos específicos da página Contato
+│   ├── ContactFormBlock/Component.tsx
+│   └── PressContactBlock/Component.tsx
+├── SpacerBlock/Component.tsx      # Blocos compartilhados (raiz)
+├── PageBannerBlock/Component.tsx
+├── AlternatingBlock/Component.tsx
+├── CardListBlock/Component.tsx
+├── IconInfoListBlock/Component.tsx
+├── TextImageStackBlock/Component.tsx
+├── ImageTextGridBlock/Component.tsx
+├── OverlappingImageBlock/Component.tsx
+├── StatsBlock/Component.tsx
+├── SocialCTABlock/Component.tsx
+├── DynamicFormBlock/Component.tsx
+├── NumberedCardsBlock/
+│   ├── Component.tsx
+│   └── connectors/
+└── [blocos do Payload CMS...]     # ArchiveBlock, Banner, CallToAction, etc.
 ```
 
 ### Padrão de Nomenclatura
-- **Arquivo**: `[Nome]Section.tsx` (PascalCase)
-- **Componente**: `[Nome]Section`
-- **Exemplos**: `PageBannerSection`, `SpacerSection`, `CTASection`, `FAQSection`
+- **Diretório**: `[Nome]Block/`
+- **Componente**: `Component.tsx`
+- **Export**: `export function [Nome]Block`
+- **Props**: `interface [Nome]BlockProps`
 
-### Criando uma Nova Section
-1. Identifique a qual página pertence (Home, Contact, About, ou **Shared** se reutilizável entre páginas)
-2. Crie o arquivo em `src/components/Sections/[Página]/[Nome]Section.tsx`
-3. Exporte o componente com o sufixo `Section`
-4. Importe e use na página correspondente em `src/app/(frontend)/`
+### Tipos de Blocos
 
-### Exemplo - PageBannerSection (Shared)
+1. **Blocos específicos de página** (`blocks/Home/`, `blocks/About/`, `blocks/Contact/`)
+   - Usados apenas em uma página específica
+   - Não são registrados no layout builder
+
+2. **Blocos compartilhados** (`blocks/` raiz)
+   - Reutilizáveis entre múltiplas páginas
+   - Podem ser registrados no layout builder futuramente
+
+3. **Blocos do Payload CMS** (`blocks/Content/`, `blocks/Form/`, etc.)
+   - Já registrados no layout builder
+   - Possuem `config.ts` com schema Payload
+
+### Criando um Novo Block
+
+1. Identifique o escopo (página específica ou compartilhado)
+2. Crie o diretório em `src/blocks/[Página]/[Nome]Block/` ou `src/blocks/[Nome]Block/`
+3. Crie `Component.tsx` com export nomeado
+4. Importe e use na página correspondente
+
+### Exemplo - PageBannerBlock (Compartilhado)
 
 ```tsx
-import { PageBannerSection } from '@/components/Sections/Shared/PageBannerSection'
+import { PageBannerBlock } from '@/blocks/PageBannerBlock/Component'
 
-<PageBannerSection
+<PageBannerBlock
   title="Título da Página"
-  backgroundImage={mediaObject}
+  backgroundImage="/path/to/image.jpg"
   breadcrumbs={[
     { label: 'Home', href: '/' },
     { label: 'Página Atual' }
@@ -530,12 +556,12 @@ import { PageBannerSection } from '@/components/Sections/Shared/PageBannerSectio
 />
 ```
 
-### Exemplo - AlternatingBlocksSection (Shared)
+### Exemplo - AlternatingBlock (Compartilhado)
 
 ```tsx
-import { AlternatingBlocksSection } from '@/components/Sections/Shared/AlternatingBlocksSection'
+import { AlternatingBlock } from '@/blocks/AlternatingBlock/Component'
 
-<AlternatingBlocksSection
+<AlternatingBlock
   title="Eureka?"
   subtitle="Por que"
   showArrow={true}
@@ -550,6 +576,14 @@ import { AlternatingBlocksSection } from '@/components/Sections/Shared/Alternati
     }
   ]}
 />
+```
+
+### Exemplo - BannerBlock (Home)
+
+```tsx
+import { BannerBlock } from '@/blocks/Home/BannerBlock/Component'
+
+<BannerBlock banners={homepage.banners} />
 ```
 
 ## Convenção de Services

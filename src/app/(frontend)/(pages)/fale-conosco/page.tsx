@@ -3,15 +3,15 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 
 import { FormBlock } from '@/blocks/Form/Component'
-import { PageBannerSection } from '@/components/Sections/Shared/PageBannerSection'
+import { PageBannerBlock } from '@/blocks/PageBannerBlock/Component'
 import {
-  IconInfoListSection,
+  IconInfoListBlock,
   type InfoItem,
-} from '@/components/Sections/Shared/IconInfoListSection'
-import { ContactFormSection } from '@/components/Sections/Contact/ContactFormSection'
-import { PressContactSection } from '@/components/Sections/Contact/PressContactSection'
-import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
-import { DynamicFormSection } from '@/components/Sections/Shared/DynamicFormSection'
+} from '@/blocks/IconInfoListBlock/Component'
+import { ContactFormBlock } from '@/blocks/Contact/ContactFormBlock/Component'
+import { PressContactBlock } from '@/blocks/Contact/PressContactBlock/Component'
+import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
+import { DynamicFormBlock } from '@/blocks/DynamicFormBlock/Component'
 
 export const metadata: Metadata = {
   title: 'Fale Conosco | Grupo Eureka',
@@ -102,24 +102,24 @@ export default async function ContactPage() {
 
   return (
     <main className="min-h-screen">
-      <PageBannerSection
+      <PageBannerBlock
         title={contactData.hero.title}
         backgroundImage={contactData.hero.backgroundImage}
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Fale conosco' }]}
       />
 
-      <SpacerSection />
+      <SpacerBlock />
 
-      <IconInfoListSection items={contactData.contactInfo} />
-      <SpacerSection />
+      <IconInfoListBlock items={contactData.contactInfo} />
+      <SpacerBlock />
 
-      <ContactFormSection
+      <ContactFormBlock
         title={contactData.form.title}
         subjects={contactData.form.subjects}
         privacyText={contactData.form.privacyText}
         submitLabel={contactData.form.submitLabel}
       />
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
 
       {/* FormBlock do Payload (CMS) */}
       {cmsForm && (
@@ -130,11 +130,11 @@ export default async function ContactPage() {
           <FormBlock form={cmsForm} enableIntro={false} />
         </section>
       )}
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
 
       {cmsForm?.fields && (
-        <DynamicFormSection
-          title="DynamicFormSection (CMS direto)"
+        <DynamicFormBlock
+          title="DynamicFormBlock (CMS direto)"
           fields={cmsForm.fields}
           submitLabel={cmsForm.submitButtonLabel || 'Enviar'}
           className="container"
@@ -143,13 +143,13 @@ export default async function ContactPage() {
           }}
         />
       )}
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
 
-      <PressContactSection
+      <PressContactBlock
         title={contactData.pressContact.title}
         contacts={contactData.pressContact.contacts}
       />
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
     </main>
   )
 }

@@ -8,11 +8,11 @@ import { homeStatic } from '@/endpoints/seed/home-static'
 
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { BannerSection } from '@/components/Sections/Home/BannerSection'
-import { SolutionsSection } from '@/components/Sections/Home/SolutionsSection'
-import { AboutSection } from '@/components/Sections/Home/AboutSection'
-import { StoriesSection } from '@/components/Sections/Home/StoriesSection'
-import { AISection } from '@/components/Sections/Home/AISection'
+import { BannerBlock } from '@/blocks/Home/BannerBlock/Component'
+import { SolutionsBlock } from '@/blocks/Home/SolutionsBlock/Component'
+import { AboutBlock } from '@/blocks/Home/AboutBlock/Component'
+import { StoriesBlock } from '@/blocks/Home/StoriesBlock/Component'
+import { AIBlock } from '@/blocks/Home/AIBlock/Component'
 import { HeaderThemeReset } from '@/components/HeaderThemeReset'
 
 export default async function HomePage() {
@@ -41,15 +41,15 @@ export default async function HomePage() {
 
       {/* TODO: Implement custom Homepage sections rendering */}
       {/* Homepage has custom structure: banner, solutions, about, stories */}
-      {!!homepage.banners && <BannerSection banners={homepage.banners} />}
+      {!!homepage.banners && <BannerBlock banners={homepage.banners} />}
 
-      {!!homepage.solutions && <SolutionsSection solutions={homepage.solutions} />}
+      {!!homepage.solutions && <SolutionsBlock solutions={homepage.solutions} />}
 
-      {!!homepage.about && <AboutSection about={homepage.about} />}
+      {!!homepage.about && <AboutBlock about={homepage.about} />}
 
-      {!!homepage.stories && <StoriesSection stories={homepage.stories} />}
+      {!!homepage.stories && <StoriesBlock stories={homepage.stories} />}
 
-      <AISection />
+      <AIBlock />
     </article>
   )
 }

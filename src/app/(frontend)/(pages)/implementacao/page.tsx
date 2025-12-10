@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 
-import { PageBannerSection } from '@/components/Sections/Shared/PageBannerSection'
-import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
-import { OverlappingImageBlockSection } from '@/components/Sections/Shared/OverlappingImageBlockSection'
-import { NumberedCardsSection } from '@/components/Sections/Shared/NumberedCardsSection'
+import { PageBannerBlock } from '@/blocks/PageBannerBlock/Component'
+import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
+import { OverlappingImageBlock } from '@/blocks/OverlappingImageBlock/Component'
+import { NumberedCardsBlock } from '@/blocks/NumberedCardsBlock/Component'
 
 export const metadata: Metadata = {
   title: 'Implementação | Grupo Eureka',
@@ -133,24 +133,24 @@ export default function ImplementacaoPage() {
   return (
     <main className="min-h-screen">
       {/* Banner */}
-      <PageBannerSection
+      <PageBannerBlock
         title={implementationData.banner.title}
         backgroundImage={implementationData.banner.backgroundImage}
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Implementação' }]}
       />
-      <SpacerSection />
+      <SpacerBlock />
 
       {/* Seção de cards numerados com intro */}
-      <NumberedCardsSection
+      <NumberedCardsBlock
         title={implementationData.intro.headline}
         subtitle={implementationData.intro.description}
         cards={implementationData.processSteps}
       />
 
-      {/* <SpacerSection size="lg" /> */}
+      {/* <SpacerBlock size="lg" /> */}
 
-      {/* Overlapping Block Section */}
-      <OverlappingImageBlockSection
+      {/* Overlapping Block */}
+      <OverlappingImageBlock
         image={implementationData.overlappingBlock.image}
         title={implementationData.overlappingBlock.title}
         paragraphs={implementationData.overlappingBlock.paragraphs}

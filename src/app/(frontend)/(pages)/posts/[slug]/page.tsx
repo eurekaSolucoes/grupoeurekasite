@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
-import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
+import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
@@ -74,7 +74,7 @@ export default async function Post({ params: paramsPromise }: Args) {
           )}
         </div>
       </div>
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
     </article>
   )
 }

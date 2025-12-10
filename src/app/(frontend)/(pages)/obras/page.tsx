@@ -3,7 +3,7 @@ import type { SearchParams } from 'nuqs/server'
 
 import { searchParamsCache } from './searchParams'
 
-import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
+import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
 import { ProductList } from '@/components/Obras/ProductList'
 import { ProductListSkeleton } from '@/components/Obras/ProductListSkeleton'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
@@ -63,7 +63,7 @@ export default async function ObrasPage({ searchParams }: Readonly<ObrasPageProp
           </Suspense>
         </div>
       </main>
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
     </div>
   )
 }

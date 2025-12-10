@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
-import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
+import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
 import configPromise from '@payload-config'
 import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
 import { draftMode } from 'next/headers'
@@ -102,7 +102,7 @@ export default async function Page({ params: paramsPromise }: Args) {
           </div>
         </HeaderThemeSetter>
       ))} */}
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
     </article>
   )
 }

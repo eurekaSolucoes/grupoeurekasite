@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
-import { PageBannerSection } from '@/components/Sections/Shared/PageBannerSection'
-import { AlternatingBlocksSection } from '@/components/Sections/Shared/AlternatingBlocksSection'
-import { IntroSection } from '@/components/Sections/About/IntroSection'
-import { VideoSection } from '@/components/Sections/About/VideoSection'
-import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
+import { PageBannerBlock } from '@/blocks/PageBannerBlock/Component'
+import { AlternatingBlock } from '@/blocks/AlternatingBlock/Component'
+import { IntroBlock } from '@/blocks/About/IntroBlock/Component'
+import { VideoBlock } from '@/blocks/About/VideoBlock/Component'
+import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
 
 export const metadata: Metadata = {
   title: 'Sobre | Grupo Eureka',
@@ -96,41 +96,41 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen">
       <HeaderThemeSetter logoMobile="icon-white" logoDesktop="full">
-        <PageBannerSection
+        <PageBannerBlock
           title={aboutData.banner.title}
           backgroundImage={aboutData.banner.backgroundImage}
           breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Sobre' }]}
         />
       </HeaderThemeSetter>
-      <SpacerSection />
+      <SpacerBlock />
 
       {/* Seção Intro */}
       <HeaderThemeSetter theme="secondary" logoMobile="icon-blue" logoDesktop="icon-blue">
-        <IntroSection headline={aboutData.intro.headline} paragraphs={aboutData.intro.paragraphs} />
+        <IntroBlock headline={aboutData.intro.headline} paragraphs={aboutData.intro.paragraphs} />
       </HeaderThemeSetter>
-      <SpacerSection />
+      <SpacerBlock />
 
       {/* Seção Vídeo */}
       <HeaderThemeSetter theme="secondary" logoMobile="icon-blue" logoDesktop="icon-blue">
-        <VideoSection
+        <VideoBlock
           backgroundImage={aboutData.videoSection.backgroundImage}
           headline={aboutData.videoSection.headline}
           buttonLabel={aboutData.videoSection.buttonLabel}
           videoUrl={aboutData.videoSection.videoUrl}
         />
       </HeaderThemeSetter>
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
 
       {/* Seção Por que Eureka? */}
       <HeaderThemeSetter theme="secondary" logoMobile="icon-blue" logoDesktop="icon-blue">
-        <AlternatingBlocksSection
+        <AlternatingBlock
           title={aboutData.whyEureka.title}
           subtitle={aboutData.whyEureka.subtitle}
           showArrow={aboutData.whyEureka.showArrow}
           items={aboutData.whyEureka.items}
         />
       </HeaderThemeSetter>
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
     </main>
   )
 }

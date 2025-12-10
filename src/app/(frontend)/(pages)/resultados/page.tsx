@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 
-import { PageBannerSection } from '@/components/Sections/Shared/PageBannerSection'
-import { TextImageStackSection } from '@/components/Sections/Shared/TextImageStackSection'
-import { StatsSection } from '@/components/Sections/Shared/StatsSection'
-import { CardListSection } from '@/components/Sections/Shared/CardListSection'
-import { SocialCTASection } from '@/components/Sections/Shared/SocialCTASection'
-import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
+import { PageBannerBlock } from '@/blocks/PageBannerBlock/Component'
+import { TextImageStackBlock } from '@/blocks/TextImageStackBlock/Component'
+import { StatsBlock } from '@/blocks/StatsBlock/Component'
+import { CardListBlock } from '@/blocks/CardListBlock/Component'
+import { SocialCTABlock } from '@/blocks/SocialCTABlock/Component'
+import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
 
 export const metadata: Metadata = {
   title: 'Resultados | Grupo Eureka',
@@ -120,46 +120,46 @@ export default function ResultadosPage() {
   return (
     <main className="min-h-screen">
       {/* Banner */}
-      <PageBannerSection
+      <PageBannerBlock
         title={resultsData.banner.title}
         backgroundImage={resultsData.banner.backgroundImage}
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Resultados' }]}
       />
-      <SpacerSection />
+      <SpacerBlock />
 
       {/* About Section - Text and images stack */}
-      <TextImageStackSection
+      <TextImageStackBlock
         headingText={resultsData.aboutSection.headingText}
         mainImage={resultsData.aboutSection.mainImage}
         bodyText={resultsData.aboutSection.bodyText}
         overlappingImages={resultsData.aboutSection.overlappingImages}
       />
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
 
-      {/* Stats Section */}
-      <StatsSection items={resultsData.stats} />
-      <SpacerSection size="lg" />
+      {/* Stats Block */}
+      <StatsBlock items={resultsData.stats} />
+      <SpacerBlock size="lg" />
 
       {/* Projects Cards */}
-      <CardListSection
+      <CardListBlock
         items={resultsData.projectsSection.cards}
         title={resultsData.projectsSection.title}
         subtitle={resultsData.projectsSection.introText}
         columns={2}
       />
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
 
       {/* Media Section */}
-      <CardListSection
+      <CardListBlock
         title={resultsData.mediaSection.title}
         subtitle={resultsData.mediaSection.subtitle}
         items={resultsData.mediaSection.cards}
         columns={3}
       />
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
 
-      {/* Social CTA Section */}
-      <SocialCTASection
+      {/* Social CTA Block */}
+      <SocialCTABlock
         text={resultsData.socialCTA.text}
         backgroundImage={resultsData.socialCTA.backgroundImage}
       />

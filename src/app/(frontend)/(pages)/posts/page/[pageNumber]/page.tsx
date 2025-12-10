@@ -3,7 +3,7 @@ import type { Metadata } from 'next/types'
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
-import { SpacerSection } from '@/components/Sections/Shared/SpacerSection'
+import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
@@ -59,7 +59,7 @@ export default async function Page({ params: paramsPromise }: Args) {
           <Pagination page={posts.page} totalPages={posts.totalPages} />
         )}
       </div>
-      <SpacerSection size="lg" />
+      <SpacerBlock size="lg" />
     </div>
   )
 }
