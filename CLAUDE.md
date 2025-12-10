@@ -507,7 +507,6 @@ src/blocks/
 ├── OverlappingImageBlock/Component.tsx
 ├── StatsBlock/Component.tsx
 ├── SocialCTABlock/Component.tsx
-├── DynamicFormBlock/Component.tsx
 ├── NumberedCardsBlock/
 │   ├── Component.tsx
 │   └── connectors/
