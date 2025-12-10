@@ -1,25 +1,12 @@
 import React from 'react'
 
 import type { Page } from '@/payload-types'
-
-import { HighImpactHero } from '@/heros/HighImpact'
-import { LowImpactHero } from '@/heros/LowImpact'
-import { MediumImpactHero } from '@/heros/MediumImpact'
-
-const heroes = {
-  highImpact: HighImpactHero,
-  lowImpact: LowImpactHero,
-  mediumImpact: MediumImpactHero,
-}
+import { PageBannerBlock } from '@/blocks/PageBannerBlock/Component'
 
 export const RenderHero: React.FC<Page['hero']> = (props) => {
-  const { type } = props || {}
+  const { title, backgroundImage, breadcrumbs } = props || {}
 
-  if (!type || type === 'none') return null
+  if (!title) return null
 
-  const HeroToRender = heroes[type]
-
-  if (!HeroToRender) return null
-
-  return <HeroToRender {...props} />
+  return <PageBannerBlock title={title} backgroundImage={backgroundImage} breadcrumbs={breadcrumbs} />
 }
