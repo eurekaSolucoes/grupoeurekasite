@@ -1,10 +1,9 @@
 'use client'
 
-import Image from 'next/image'
 import { cn } from '@/utilities/ui'
+import { Media } from '@/components/Media'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 import type { OverlappingImageBlock as OverlappingImageBlockType } from '@/payload-types'
-import { getMediaUrlFromField, getMediaAlt } from '@/utilities/getMediaUrl'
 import RichText from '@/components/RichText'
 
 type OverlappingImageBlockProps = Omit<OverlappingImageBlockType, 'id' | 'blockName' | 'blockType'> & {
@@ -24,8 +23,6 @@ export function OverlappingImageBlock({
   variant = 'primary',
   className,
 }: Readonly<OverlappingImageBlockProps>) {
-  const imageUrl = getMediaUrlFromField(image)
-  const imageAlt = getMediaAlt(image)
   const variantClass = bgVariants[variant || 'primary']
 
   return (
@@ -39,13 +36,12 @@ export function OverlappingImageBlock({
         className="container"
       >
         <div className="relative mx-auto -mb-31 aspect-video max-h-[250px] overflow-hidden rounded-[20px] shadow-[6px_6px_12px_0_rgba(0,0,0,0.24)] lg:-mb-62.5 lg:max-h-[500px] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)]">
-          {imageUrl && (
-            <Image
-              src={imageUrl}
-              alt={imageAlt}
+          {image && (
+            <Media
+              resource={image}
               fill
-              sizes="(max-width: 1024px) 100vw, 1280px"
-              className="object-cover"
+              size="(max-width: 1024px) 100vw, 1280px"
+              imgClassName="object-cover"
             />
           )}
         </div>

@@ -1,7 +1,6 @@
 import type { TextImageStackBlock as TextImageStackBlockType } from '@/payload-types'
-import Image from 'next/image'
 import { cn } from '@/utilities/ui'
-import { getMediaUrlFromField, getMediaAlt } from '@/utilities/getMediaUrl'
+import { Media } from '@/components/Media'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 import RichText from '@/components/RichText'
 
@@ -36,9 +35,9 @@ export function TextImageStackBlock({
         )}
 
         {/* Main Image */}
-        {mainImage && getMediaUrlFromField(mainImage) && (
+        {mainImage && (
           <div className="relative aspect-320/165 min-h-[165px] w-full overflow-hidden rounded-[20px] shadow-[12px_12px_24px_0_rgba(0,0,0,0.12)] lg:aspect-520/335">
-            <Image src={getMediaUrlFromField(mainImage)!} alt={getMediaAlt(mainImage)} fill className="object-cover" />
+            <Media resource={mainImage} fill imgClassName="object-cover" />
           </div>
         )}
       </header>
@@ -57,26 +56,16 @@ export function TextImageStackBlock({
         {overlappingImages && overlappingImages.length >= 2 && (
           <div className="flex flex-col lg:order-first lg:-mt-20 lg:grow xl:-mt-50">
             {/* First Image (larger) */}
-            {getMediaUrlFromField(overlappingImages[0].image) && (
+            {overlappingImages[0]?.image && (
               <div className="relative ml-auto aspect-215/152 min-h-[152px] w-2/3 min-w-[215px] overflow-hidden rounded-[20px] shadow-[6px_6px_12px_0_rgba(0,0,0,0.24)] lg:aspect-330/270">
-                <Image
-                  src={getMediaUrlFromField(overlappingImages[0].image)!}
-                  alt={getMediaAlt(overlappingImages[0].image)}
-                  fill
-                  className="object-cover"
-                />
+                <Media resource={overlappingImages[0].image} fill imgClassName="object-cover" />
               </div>
             )}
 
             {/* Second Image (smaller, overlapping) */}
-            {getMediaUrlFromField(overlappingImages[1].image) && (
+            {overlappingImages[1]?.image && (
               <div className="relative -mt-14 aspect-173/111 min-h-[111px] w-1/2 min-w-[173px] overflow-hidden rounded-[20px] shadow-[6px_6px_12px_0_rgba(0,0,0,0.12)] lg:aspect-265/240">
-                <Image
-                  src={getMediaUrlFromField(overlappingImages[1].image)!}
-                  alt={getMediaAlt(overlappingImages[1].image)}
-                  fill
-                  className="object-cover"
-                />
+                <Media resource={overlappingImages[1].image} fill imgClassName="object-cover" />
               </div>
             )}
           </div>

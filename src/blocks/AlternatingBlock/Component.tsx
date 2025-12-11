@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import type { AlternatingBlock as AlternatingBlockType } from '@/payload-types'
-import { getMediaUrlFromField, getMediaAlt } from '@/utilities/getMediaUrl'
+import { Media } from '@/components/Media'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 import RichText from '@/components/RichText'
 
@@ -59,27 +59,23 @@ export function AlternatingBlock({
             {item.images && item.images.length > 0 && (
               <div className="relative flex flex-col lg:w-[500px] lg:shrink-0">
                 {/* First Image (larger) - odd: right, even: left */}
-                {item.images[0] && getMediaUrlFromField(item.images[0].image) && (
-                  <div className="aspect-410/290 w-2/3 group-odd/block:ml-auto group-even/block:mr-auto lg:w-[410px]">
-                    <Image
-                      src={getMediaUrlFromField(item.images[0].image)!}
-                      alt={getMediaAlt(item.images[0].image)}
-                      width={410}
-                      height={290}
-                      className="size-full rounded-[20px] object-cover shadow-[6px_6px_12px_0_rgba(0,0,0,0.24)] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)]"
+                {item.images[0]?.image && (
+                  <div className="relative aspect-410/290 w-2/3 group-odd/block:ml-auto group-even/block:mr-auto lg:w-[410px]">
+                    <Media
+                      resource={item.images[0].image}
+                      fill
+                      imgClassName="size-full rounded-[20px] object-cover shadow-[6px_6px_12px_0_rgba(0,0,0,0.24)] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)]"
                     />
                   </div>
                 )}
 
                 {/* Second Image (smaller, overlapping) - odd: left, even: right */}
-                {item.images[1] && getMediaUrlFromField(item.images[1].image) && (
-                  <div className="-mt-8 aspect-331/212 w-1/2 group-odd/block:mr-auto group-even/block:ml-auto lg:-mt-12 lg:w-[331px]">
-                    <Image
-                      src={getMediaUrlFromField(item.images[1].image)!}
-                      alt={getMediaAlt(item.images[1].image)}
-                      width={331}
-                      height={212}
-                      className="size-full rounded-[20px] object-cover shadow-[6px_6px_12px_0_rgba(0,0,0,0.12)] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.12)]"
+                {item.images[1]?.image && (
+                  <div className="relative -mt-8 aspect-331/212 w-1/2 group-odd/block:mr-auto group-even/block:ml-auto lg:-mt-12 lg:w-[331px]">
+                    <Media
+                      resource={item.images[1].image}
+                      fill
+                      imgClassName="size-full rounded-[20px] object-cover shadow-[6px_6px_12px_0_rgba(0,0,0,0.12)] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.12)]"
                     />
                   </div>
                 )}

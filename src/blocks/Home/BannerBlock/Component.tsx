@@ -1,7 +1,6 @@
 'use client'
 import { Homepage, Media as MediaType } from '@/payload-types'
-import { useState, useRef, useCallback, useMemo } from 'react'
-import Image from 'next/image'
+import { useState, useCallback, useMemo } from 'react'
 import { CMSLink } from '@/components/Link'
 import { useKeenSlider } from 'keen-slider/react'
 import { Media } from '@/components/Media'
@@ -96,15 +95,13 @@ export function BannerBlock({ banners = [] }: Readonly<BannerBlockProps>) {
             >
               {/* Background Image */}
               <div className="absolute inset-0 z-0" aria-hidden="true">
-                {backgroundImage?.url && (
-                  <Image
-                    src={backgroundImage.url}
-                    alt={backgroundImage.alt || ''}
+                {backgroundImage && (
+                  <Media
+                    resource={backgroundImage}
                     fill
-                    sizes="100vw"
-                    className="object-cover"
+                    size="100vw"
                     priority={index === 0}
-                    quality={90}
+                    imgClassName="object-cover"
                   />
                 )}
                 <div className="absolute inset-0 bg-black/60" />
@@ -146,16 +143,14 @@ export function BannerBlock({ banners = [] }: Readonly<BannerBlockProps>) {
 
                   {/* Featured Image */}
                   <div className="self-end group-first/slide:animate-in group-first/slide:duration-1500 group-first/slide:ease-in-out group-first/slide:slide-in-from-left-5 group-first/slide:fade-in">
-                    {featuredImage?.url && (
+                    {featuredImage && (
                       <div className="relative aspect-square size-full md:max-h-[min(50vh,var(--breakpoint-md))] lg:max-h-full">
-                        <Image
-                          src={featuredImage.url}
-                          alt={featuredImage.alt || banner.title || ''}
+                        <Media
+                          resource={featuredImage}
                           fill
-                          sizes="100vw, (min-width: 1024px) 50vw"
-                          className="object-contain drop-shadow-2xl"
+                          size="100vw, (min-width: 1024px) 50vw"
                           priority={index === 0}
-                          quality={90}
+                          imgClassName="object-contain drop-shadow-2xl"
                         />
                       </div>
                     )}

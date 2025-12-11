@@ -1,7 +1,6 @@
 import type { ImageTextGridBlock as ImageTextGridBlockType } from '@/payload-types'
 import { cn } from '@/utilities/ui'
-import Image from 'next/image'
-import { getMediaUrlFromField, getMediaAlt } from '@/utilities/getMediaUrl'
+import { Media } from '@/components/Media'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 import RichText from '@/components/RichText'
 
@@ -123,10 +122,7 @@ interface ImageCardProps {
 }
 
 function ImageCard({ image, className }: Readonly<ImageCardProps>) {
-  const imageUrl = getMediaUrlFromField(image.image)
-  const imageAlt = getMediaAlt(image.image)
-
-  if (!imageUrl) return null
+  if (!image.image) return null
 
   return (
     <div
@@ -135,12 +131,7 @@ function ImageCard({ image, className }: Readonly<ImageCardProps>) {
         className,
       )}
     >
-      <Image
-        src={imageUrl}
-        alt={imageAlt}
-        fill
-        className="object-cover"
-      />
+      <Media resource={image.image} fill imgClassName="object-cover" />
     </div>
   )
 }

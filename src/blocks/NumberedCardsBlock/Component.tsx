@@ -1,10 +1,9 @@
 import type { NumberedCardsBlock as NumberedCardsBlockType } from '@/payload-types'
-import Image from 'next/image'
 
 import { FirstConnector, MiddleConnector, LastConnector, DesktopConnector } from './connectors'
 import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
-import { getMediaUrlFromField, getMediaAlt } from '@/utilities/getMediaUrl'
+import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 
 type NumberedCardsBlockProps = Omit<NumberedCardsBlockType, 'id' | 'blockName' | 'blockType'>
@@ -96,14 +95,13 @@ function NumberedCardItem({ card }: { card: NumberedCard }) {
       </div>
 
       {/* Imagem */}
-      {getMediaUrlFromField(card.image) && (
+      {card.image && (
         <div className="relative mt-4 h-45 w-full shrink-0 overflow-hidden rounded-[30px] shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)] lg:mt-0 lg:h-[350px] lg:w-[628px] lg:rounded-[40px]">
-          <Image
-            src={getMediaUrlFromField(card.image)!}
-            alt={getMediaAlt(card.image)}
+          <Media
+            resource={card.image}
             fill
-            sizes="(max-width: 1024px) 100vw, 628px"
-            className="object-cover"
+            size="(max-width: 1024px) 100vw, 628px"
+            imgClassName="object-cover"
           />
         </div>
       )}

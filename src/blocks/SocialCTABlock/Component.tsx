@@ -10,8 +10,7 @@ import { TikTokIcon } from '@/components/Icons/TikTokIcon'
 import { TwitterIcon } from '@/components/Icons/TwitterIcon'
 import { WhatsAppIcon } from '@/components/Icons/WhatsAppIcon'
 import { TelegramIcon } from '@/components/Icons/TelegramIcon'
-import Image from 'next/image'
-import { getMediaUrlFromField } from '@/utilities/getMediaUrl'
+import { Media } from '@/components/Media'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 import RichText from '@/components/RichText'
 
@@ -49,7 +48,6 @@ export async function SocialCTABlock({
 }: Readonly<SocialCTABlockProps>) {
   const { footerMenu } = (await getCachedGlobal('navigation', 1)()) as Navigation
   const socialLinks = footerMenu?.social?.links || []
-  const imageUrl = getMediaUrlFromField(backgroundImage)
 
   return (
     <HeaderThemeSetter
@@ -60,13 +58,12 @@ export async function SocialCTABlock({
       className={cn('relative py-16 lg:h-150 lg:py-24', className)}
     >
       {/* Background Image with Gradient Overlay */}
-      {imageUrl && (
-        <Image
-          src={imageUrl}
-          alt=""
+      {backgroundImage && (
+        <Media
+          resource={backgroundImage}
           fill
-          sizes="100vw"
-          className="absolute inset-0 -z-20 object-cover"
+          size="100vw"
+          imgClassName="absolute inset-0 -z-20 object-cover"
         />
       )}
       <div
