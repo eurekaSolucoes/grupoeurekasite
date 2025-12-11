@@ -10,7 +10,7 @@ type IconInfoListBlockProps = Omit<IconInfoListBlockType, 'id' | 'blockName' | '
 
 export type InfoItem = IconInfoListBlockType['items'][number]
 
-export function IconInfoListBlock({ items, className }: Readonly<IconInfoListBlockProps>) {
+export function IconInfoListBlock({ title, items, className }: Readonly<IconInfoListBlockProps>) {
   return (
     <HeaderThemeSetter
       as="section"
@@ -19,6 +19,9 @@ export function IconInfoListBlock({ items, className }: Readonly<IconInfoListBlo
       logoDesktop="icon-blue"
       className={cn('container', className)}
     >
+      {title && (
+        <h2 className="mb-5 typography-subheading font-bold text-secondary">{title}</h2>
+      )}
       <dl className="flex flex-wrap items-center gap-5 lg:gap-16">
         {items.map((item) => (
           <div key={item.label} className="flex flex-col">

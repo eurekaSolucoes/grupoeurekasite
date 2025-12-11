@@ -10,7 +10,7 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 // Novos blocos
 import { SpacerBlock } from '../../blocks/SpacerBlock/config'
 import { AlternatingBlock } from '../../blocks/AlternatingBlock/config'
-import { CardListBlock } from '../../blocks/CardListBlock/config'
+import { CardGridBlock } from '../../blocks/CardGridBlock/config'
 import { IconInfoListBlock } from '../../blocks/IconInfoListBlock/config'
 import { TextImageStackBlock } from '../../blocks/TextImageStackBlock/config'
 import { ImageTextGridBlock } from '../../blocks/ImageTextGridBlock/config'
@@ -90,7 +90,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 SpacerBlock,
                 // Conteúdo
                 Content,
-                CardListBlock,
+                CardGridBlock,
                 TextImageStackBlock,
                 ImageTextGridBlock,
                 AlternatingBlock,

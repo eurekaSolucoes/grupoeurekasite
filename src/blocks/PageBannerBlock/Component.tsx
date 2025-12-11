@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import {
   Breadcrumb,
@@ -10,7 +9,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import type { Page, Media } from '@/payload-types'
+import { Media } from '@/components/Media'
+import type { Page } from '@/payload-types'
 import { Fragment } from 'react'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 
@@ -21,8 +21,6 @@ export function PageBannerBlock({
   backgroundImage,
   breadcrumbs,
 }: Readonly<PageBannerBlockProps>) {
-  const imageUrl = typeof backgroundImage === 'string' ? backgroundImage : backgroundImage?.url
-
   return (
     <HeaderThemeSetter
       as="section"
@@ -32,16 +30,14 @@ export function PageBannerBlock({
       className="relative flex h-[362px] items-end overflow-hidden rounded-b-[30px] pb-10 lg:h-[450px] lg:pb-12"
     >
       {/* Background Image */}
-      {imageUrl && (
+      {backgroundImage && (
         <div className="absolute inset-0 z-0" aria-hidden="true">
-          <Image
-            src={imageUrl}
-            alt=""
+          <Media
+            resource={backgroundImage}
             fill
-            sizes="100vw"
-            className="rounded-b-[30px] object-cover object-center"
             priority
-            quality={90}
+            size="100vw"
+            imgClassName="rounded-b-[30px] object-cover object-center"
           />
         </div>
       )}

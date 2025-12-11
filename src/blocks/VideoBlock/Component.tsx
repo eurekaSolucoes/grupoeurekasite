@@ -1,8 +1,7 @@
-import Image from 'next/image'
 import { Play } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { VideoBlock as VideoBlockType } from '@/payload-types'
-import { getMediaUrlFromField } from '@/utilities/getMediaUrl'
+import { Media } from '@/components/Media'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 import RichText from '@/components/RichText'
 
@@ -14,8 +13,6 @@ export function VideoBlock({
   buttonLabel,
   videoUrl,
 }: Readonly<VideoBlockProps>) {
-  const imageUrl = getMediaUrlFromField(backgroundImage)
-
   return (
     <HeaderThemeSetter
       as="section"
@@ -26,8 +23,8 @@ export function VideoBlock({
     >
       <div className="relative h-120 overflow-hidden rounded-[40px] shadow-[12px_12px_24px_0px_rgba(0,0,0,0.24)] before:absolute before:inset-0 before:bg-linear-to-t before:from-[#010F3B]/80 lg:h-145">
         {/* Background Image */}
-        {imageUrl && (
-          <Image src={imageUrl} alt="" fill className="relative -z-10 object-cover" />
+        {backgroundImage && (
+          <Media resource={backgroundImage} fill imgClassName="relative -z-10 object-cover" />
         )}
 
         {/* Content */}

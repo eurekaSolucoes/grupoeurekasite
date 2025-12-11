@@ -9,6 +9,14 @@ export const IconInfoListBlock: Block = {
   },
   fields: [
     {
+      name: 'title',
+      type: 'text',
+      label: 'Título',
+      admin: {
+        description: 'Título opcional exibido acima da lista',
+      },
+    },
+    {
       name: 'items',
       type: 'array',
       label: 'Itens',

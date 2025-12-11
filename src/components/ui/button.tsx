@@ -58,7 +58,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <Comp
       className={cn(buttonVariants({ className, size, variant }), {
-        'group justify-between gap-5 pl-7.5 *:ease-in-out *:first:duration-300 hover:*:first:translate-x-4':
+        'group cursor-pointer justify-between gap-5 pl-7.5 *:ease-in-out *:first:duration-300 hover:*:first:translate-x-4':
           hasIcon,
       })}
       ref={ref}
