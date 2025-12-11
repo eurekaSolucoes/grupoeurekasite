@@ -500,7 +500,7 @@ src/blocks/
 ├── SpacerBlock/Component.tsx      # Blocos compartilhados (raiz)
 ├── PageBannerBlock/Component.tsx
 ├── AlternatingBlock/Component.tsx
-├── CardListBlock/Component.tsx
+├── CardGridBlock/Component.tsx
 ├── IconInfoListBlock/Component.tsx
 ├── TextImageStackBlock/Component.tsx
 ├── ImageTextGridBlock/Component.tsx

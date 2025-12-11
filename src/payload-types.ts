@@ -174,7 +174,7 @@ export interface Page {
   layout: (
     | SpacerBlock
     | ContentBlock
-    | CardListBlock
+    | CardGridBlock
     | TextImageStackBlock
     | ImageTextGridBlock
     | AlternatingBlock
@@ -488,9 +488,9 @@ export interface Document {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CardListBlock".
+ * via the `definition` "CardGridBlock".
  */
-export interface CardListBlock {
+export interface CardGridBlock {
   title?: string | null;
   subtitle?: {
     root: {
@@ -516,7 +516,7 @@ export interface CardListBlock {
     /**
      * Link ao clicar no card
      */
-    link: {
+    link?: {
       type?: ('reference' | 'custom' | 'document') | null;
       newTab?: boolean | null;
       reference?:
@@ -530,13 +530,12 @@ export interface CardListBlock {
           } | null);
       url?: string | null;
       document?: (string | null) | Document;
-      label: string;
     };
     id?: string | null;
   }[];
   id?: string | null;
   blockName?: string | null;
-  blockType: 'cardListBlock';
+  blockType: 'cardGridBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -920,6 +919,10 @@ export interface OverlappingImageBlock {
  * via the `definition` "IconInfoListBlock".
  */
 export interface IconInfoListBlock {
+  /**
+   * Título opcional exibido acima da lista
+   */
+  title?: string | null;
   items: {
     /**
      * Nome do ícone Lucide (ex: map-pin, phone, mail). Ver: lucide.dev/icons
@@ -1567,7 +1570,7 @@ export interface PagesSelect<T extends boolean = true> {
     | {
         spacerBlock?: T | SpacerBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
-        cardListBlock?: T | CardListBlockSelect<T>;
+        cardGridBlock?: T | CardGridBlockSelect<T>;
         textImageStackBlock?: T | TextImageStackBlockSelect<T>;
         imageTextGridBlock?: T | ImageTextGridBlockSelect<T>;
         alternatingBlock?: T | AlternatingBlockSelect<T>;
@@ -1635,9 +1638,9 @@ export interface ContentBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CardListBlock_select".
+ * via the `definition` "CardGridBlock_select".
  */
-export interface CardListBlockSelect<T extends boolean = true> {
+export interface CardGridBlockSelect<T extends boolean = true> {
   title?: T;
   subtitle?: T;
   subtitleAlign?: T;
@@ -1656,7 +1659,6 @@ export interface CardListBlockSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               document?: T;
-              label?: T;
             };
         id?: T;
       };
@@ -1823,6 +1825,7 @@ export interface OverlappingImageBlockSelect<T extends boolean = true> {
  * via the `definition` "IconInfoListBlock_select".
  */
 export interface IconInfoListBlockSelect<T extends boolean = true> {
+  title?: T;
   items?:
     | T
     | {
