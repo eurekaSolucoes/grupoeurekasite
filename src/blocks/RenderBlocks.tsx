@@ -10,7 +10,7 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 // Novos blocos
 import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
 import { AlternatingBlock } from '@/blocks/AlternatingBlock/Component'
-import { CardListBlock } from '@/blocks/CardListBlock/Component'
+import { CardGridBlock } from '@/blocks/CardGridBlock/Component'
 import { IconInfoListBlock } from '@/blocks/IconInfoListBlock/Component'
 import { TextImageStackBlock } from '@/blocks/TextImageStackBlock/Component'
 import { ImageTextGridBlock } from '@/blocks/ImageTextGridBlock/Component'
@@ -31,7 +31,7 @@ const blockComponents = {
   // Novos
   spacerBlock: SpacerBlock,
   alternatingBlock: AlternatingBlock,
-  cardListBlock: CardListBlock,
+  cardGridBlock: CardGridBlock,
   iconInfoListBlock: IconInfoListBlock,
   textImageStackBlock: TextImageStackBlock,
   imageTextGridBlock: ImageTextGridBlock,
