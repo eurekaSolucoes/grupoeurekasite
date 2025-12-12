@@ -5,6 +5,19 @@ export const hero: Field = {
   type: 'group',
   fields: [
     {
+      name: 'bgTheme',
+      type: 'select',
+      label: 'Fundo do Header',
+      defaultValue: '',
+      options: [
+        { label: 'Nenhum (hero com imagem)', value: '' },
+        { label: 'Azul', value: 'blue' },
+      ],
+      admin: {
+        description: 'Escolha o fundo do topo da página.',
+      },
+    },
+    {
       name: 'title',
       type: 'text',
       label: 'Título',
