@@ -2,6 +2,7 @@ import type { SocialCTABlock as SocialCTABlockType, Navigation } from '@/payload
 import { cn } from '@/utilities/ui'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { FacebookIcon } from '@/components/Icons/FacebookIcon'
 import { InstagramIcon } from '@/components/Icons/InstagramIcon'
 import { LinkedInIcon } from '@/components/Icons/LinkedInIcon'
@@ -46,7 +47,7 @@ export async function SocialCTABlock({
   className,
   type = 'social',
 }: Readonly<SocialCTABlockProps>) {
-  const { footerMenu } = (await getCachedGlobal('navigation', 1)()) as Navigation
+  const { footerMenu, whatsappLink } = (await getCachedGlobal('navigation', 1)()) as Navigation
   const socialLinks = footerMenu?.social?.links || []
 
   return (
@@ -118,11 +119,22 @@ export async function SocialCTABlock({
             </ul>
           )}
 
-          {/* WhatsApp CTA - TODO: Implementar */}
-          {type === 'whatsapp' && (
-            <div className="flex items-center gap-4">
-              {/* TODO: Adicionar botão de WhatsApp com link configurável */}
-            </div>
+          {/* WhatsApp CTA */}
+          {type === 'whatsapp' && whatsappLink && (
+            <Button
+              asChild
+              hasIcon
+              className="h-17.5 w-fit min-w-80 [&>div]:lg:size-12"
+              icon={
+                <div className="grid size-10 place-items-center rounded-full bg-whatsapp-green duration-300 group-hover:bg-white lg:size-12">
+                  <WhatsAppIcon className="size-5 text-white duration-300 group-hover:text-whatsapp-green" />
+                </div>
+              }
+            >
+              <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                <span>Entre em contato</span>
+              </Link>
+            </Button>
           )}
         </div>
       </div>
