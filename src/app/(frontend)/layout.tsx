@@ -6,14 +6,12 @@ import { GeistSans } from 'geist/font/sans'
 import { Jost, Albert_Sans } from 'next/font/google'
 
 import { AdminBar } from '@/components/AdminBar'
-import { HeaderThemeReset } from '@/components/HeaderThemeReset'
 import { Providers } from '@/providers'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
-import { Header } from '@/Header/Component'
 
 const jost = Jost({
   subsets: ['latin'],
@@ -41,8 +39,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <Header />
-
           <AdminBar
             adminBarProps={{
               preview: isEnabled,
