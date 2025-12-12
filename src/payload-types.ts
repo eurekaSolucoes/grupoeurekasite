@@ -155,6 +155,10 @@ export interface Page {
   id: string;
   title: string;
   hero: {
+    /**
+     * Escolha o fundo do topo da página.
+     */
+    bgTheme?: ('' | 'blue') | null;
     title: string;
     backgroundImage?: (string | null) | Media;
     /**
@@ -178,7 +182,9 @@ export interface Page {
     | TextImageStackBlock
     | ImageTextGridBlock
     | AlternatingBlock
-    | IntroBlock
+    | SplitContentBlock
+    | AccordionListBlock
+    | ImageBlock
     | CallToActionBlock
     | StatsBlock
     | SocialCTABlock
@@ -693,9 +699,9 @@ export interface AlternatingBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "IntroBlock".
+ * via the `definition` "SplitContentBlock".
  */
-export interface IntroBlock {
+export interface SplitContentBlock {
   headline: {
     root: {
       type: string;
@@ -711,6 +717,8 @@ export interface IntroBlock {
     };
     [k: string]: unknown;
   };
+  headlineSize?: ('large' | 'medium') | null;
+  headlineWidth?: ('narrow' | 'wide') | null;
   content: {
     root: {
       type: string;
@@ -726,9 +734,56 @@ export interface IntroBlock {
     };
     [k: string]: unknown;
   };
+  contentSize?: ('large' | 'medium') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'introBlock';
+  blockType: 'splitContentBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AccordionListBlock".
+ */
+export interface AccordionListBlock {
+  items: {
+    /**
+     * Nome do ícone Lucide (ex: Monitor, Users, BookOpen, ClipboardCheck, Sparkles, Database). Veja: lucide.dev/icons
+     */
+    iconName?: string | null;
+    title: string;
+    /**
+     * Conteúdo exibido quando o item é expandido
+     */
+    content?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'accordionListBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageBlock".
+ */
+export interface ImageBlock {
+  image: string | Media;
+  imageRounded?: ('default' | 'small' | 'none') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1555,6 +1610,7 @@ export interface PagesSelect<T extends boolean = true> {
   hero?:
     | T
     | {
+        bgTheme?: T;
         title?: T;
         backgroundImage?: T;
         breadcrumbs?:
@@ -1574,7 +1630,9 @@ export interface PagesSelect<T extends boolean = true> {
         textImageStackBlock?: T | TextImageStackBlockSelect<T>;
         imageTextGridBlock?: T | ImageTextGridBlockSelect<T>;
         alternatingBlock?: T | AlternatingBlockSelect<T>;
-        introBlock?: T | IntroBlockSelect<T>;
+        splitContentBlock?: T | SplitContentBlockSelect<T>;
+        accordionListBlock?: T | AccordionListBlockSelect<T>;
+        imageBlock?: T | ImageBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         statsBlock?: T | StatsBlockSelect<T>;
         socialCTABlock?: T | SocialCTABlockSelect<T>;
@@ -1726,11 +1784,40 @@ export interface AlternatingBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "IntroBlock_select".
+ * via the `definition` "SplitContentBlock_select".
  */
-export interface IntroBlockSelect<T extends boolean = true> {
+export interface SplitContentBlockSelect<T extends boolean = true> {
   headline?: T;
+  headlineSize?: T;
+  headlineWidth?: T;
   content?: T;
+  contentSize?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AccordionListBlock_select".
+ */
+export interface AccordionListBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        iconName?: T;
+        title?: T;
+        content?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageBlock_select".
+ */
+export interface ImageBlockSelect<T extends boolean = true> {
+  image?: T;
+  imageRounded?: T;
   id?: T;
   blockName?: T;
 }
