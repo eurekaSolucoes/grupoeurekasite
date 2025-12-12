@@ -37,7 +37,12 @@ export default async function ObrasPage({ searchParams }: Readonly<ObrasPageProp
   return (
     <div>
       <main className="container">
-        <HeaderThemeSetter theme="secondary" logoMobile="icon-blue" logoDesktop="icon-blue">
+        <HeaderThemeSetter
+          downThreshold={0.6}
+          theme="secondary"
+          logoMobile="icon-blue"
+          logoDesktop="icon-blue"
+        >
           <section className="space-y-2 pb-5">
             <Breadcrumb>
               <BreadcrumbList>
