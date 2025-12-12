@@ -18,7 +18,9 @@ import { OverlappingImageBlock } from '@/blocks/OverlappingImageBlock/Component'
 import { StatsBlock } from '@/blocks/StatsBlock/Component'
 import { SocialCTABlock } from '@/blocks/SocialCTABlock/Component'
 import { NumberedCardsBlock } from '@/blocks/NumberedCardsBlock/Component'
-import { IntroBlock } from '@/blocks/IntroBlock/Component'
+import { SplitContentBlock } from '@/blocks/SplitContentBlock/Component'
+import { AccordionListBlock } from '@/blocks/AccordionListBlock/Component'
+import { ImageBlock } from '@/blocks/ImageBlock/Component'
 import { VideoBlock } from '@/blocks/VideoBlock/Component'
 
 const blockComponents = {
@@ -39,7 +41,9 @@ const blockComponents = {
   statsBlock: StatsBlock,
   socialCTABlock: SocialCTABlock,
   numberedCardsBlock: NumberedCardsBlock,
-  introBlock: IntroBlock,
+  splitContentBlock: SplitContentBlock,
+  accordionListBlock: AccordionListBlock,
+  imageBlock: ImageBlock,
   videoBlock: VideoBlock,
 }
 
