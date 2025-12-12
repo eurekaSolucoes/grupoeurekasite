@@ -48,89 +48,90 @@ export function StoriesBlock({ stories }: Readonly<StoriesBlockProps>) {
       theme="default"
       logoMobile="icon-full-white"
       logoDesktop="icon-full-white"
+      downThreshold={0.275}
     >
       <ScrollAnimatedWrapper
         scrollAnimation={scrollAnimation}
         background="bg-white"
         innerClassName="bg-accent"
       >
-      <section className="relative container space-y-7 py-16 lg:flex lg:gap-20 lg:space-y-0 lg:py-30">
-        {/* Header */}
-        <motion.header
-          style={{ x: headerX }}
-          className="relative mx-auto sm:max-w-90 lg:sticky lg:top-28 lg:z-50 lg:mx-0 lg:h-fit"
-        >
-          {/* Decorative Circle - Desktop Only */}
-          <motion.div
-            style={{ y: circleY }}
-            className="pointer-events-none absolute top-1/2 left-0 z-10 hidden size-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[0.75px] border-white/20 lg:block"
-            aria-hidden="true"
-          />
-          <div className="relative mx-6 flex flex-col pb-2.5 lg:mr-0 lg:pb-3">
-            {stories.title && (
-              <h2 className="max-w-45 typography-display font-bold text-accent-foreground lg:mr-16 lg:max-w-none">
-                {stories.title}
-              </h2>
-            )}
-            <Image
-              src="/assets/stories-section-mobile-arrow.svg"
-              alt=""
-              width={84}
-              height={79}
-              className="absolute right-2 bottom-2 lg:right-0 lg:bottom-0 lg:z-30 lg:translate-x-[calc(100%-0.5rem)] lg:translate-y-full lg:-scale-x-100 lg:-rotate-90"
+        <section className="relative container space-y-7 py-16 lg:flex lg:gap-20 lg:space-y-0 lg:py-30">
+          {/* Header */}
+          <motion.header
+            style={{ x: headerX }}
+            className="relative mx-auto sm:max-w-90 lg:sticky lg:top-28 lg:z-50 lg:mx-0 lg:h-fit"
+          >
+            {/* Decorative Circle - Desktop Only */}
+            <motion.div
+              style={{ y: circleY }}
+              className="pointer-events-none absolute top-1/2 left-0 z-10 hidden size-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[0.75px] border-white/20 lg:block"
+              aria-hidden="true"
             />
-            {stories.subtitle && (
-              <p className="ml-auto pr-13 font-heading text-[2rem]/none text-secondary lg:pr-0 lg:typography-heading">
-                {stories.subtitle}
+            <div className="relative mx-6 flex flex-col pb-2.5 lg:mr-0 lg:pb-3">
+              {stories.title && (
+                <h2 className="max-w-45 typography-display font-bold text-accent-foreground lg:mr-16 lg:max-w-none">
+                  {stories.title}
+                </h2>
+              )}
+              <Image
+                src="/assets/stories-section-mobile-arrow.svg"
+                alt=""
+                width={84}
+                height={79}
+                className="absolute right-2 bottom-2 lg:right-0 lg:bottom-0 lg:z-30 lg:translate-x-[calc(100%-0.5rem)] lg:translate-y-full lg:-scale-x-100 lg:-rotate-90"
+              />
+              {stories.subtitle && (
+                <p className="ml-auto pr-13 font-heading text-[2rem]/none text-secondary lg:pr-0 lg:typography-heading">
+                  {stories.subtitle}
+                </p>
+              )}
+            </div>
+            {stories.description && (
+              <p className="typography-body-large text-balance text-accent-foreground">
+                {stories.description}
               </p>
             )}
-          </div>
-          {stories.description && (
-            <p className="typography-body-large text-balance text-accent-foreground">
-              {stories.description}
-            </p>
+            {/* CTA Button */}
+            {stories.link?.label && (
+              <CMSLink
+                {...stories.link}
+                appearance="secondary"
+                hasIcon
+                className="hidden self-start lg:mt-7 lg:inline-flex"
+              />
+            )}
+          </motion.header>
+
+          {/* Cards */}
+          {stories.cards && stories.cards.length > 0 && (
+            <motion.ul style={{ x: cardsX }} className="flex flex-col gap-5 lg:flex-1">
+              {stories.cards.map((card) => (
+                <li key={card.id ?? card.title}>
+                  <HoverScaleCard arrowClassName="bg-secondary lg:size-13">
+                    <StoryCard cardData={card} />
+                  </HoverScaleCard>
+                </li>
+              ))}
+            </motion.ul>
           )}
+
           {/* CTA Button */}
           {stories.link?.label && (
             <CMSLink
               {...stories.link}
               appearance="secondary"
               hasIcon
-              className="hidden self-start lg:mt-7 lg:inline-flex"
+              className="self-start lg:hidden"
             />
           )}
-        </motion.header>
 
-        {/* Cards */}
-        {stories.cards && stories.cards.length > 0 && (
-          <motion.ul style={{ x: cardsX }} className="flex flex-col gap-5 lg:flex-1">
-            {stories.cards.map((card) => (
-              <li key={card.id ?? card.title}>
-                <HoverScaleCard arrowClassName="bg-secondary lg:size-13">
-                  <StoryCard cardData={card} />
-                </HoverScaleCard>
-              </li>
-            ))}
-          </motion.ul>
-        )}
-
-        {/* CTA Button */}
-        {stories.link?.label && (
-          <CMSLink
-            {...stories.link}
-            appearance="secondary"
-            hasIcon
-            className="self-start lg:hidden"
+          {/* Bottom Decorative Circle - Desktop Only */}
+          <div
+            className="pointer-events-none absolute bottom-0 left-1/2 hidden size-[320px] -translate-x-1/2 translate-y-[240px] rounded-full border-[0.75px] border-white/20 lg:block"
+            aria-hidden="true"
           />
-        )}
-
-        {/* Bottom Decorative Circle - Desktop Only */}
-        <div
-          className="pointer-events-none absolute bottom-0 left-1/2 hidden size-[320px] -translate-x-1/2 translate-y-[240px] rounded-full border-[0.75px] border-white/20 lg:block"
-          aria-hidden="true"
-        />
-      </section>
-    </ScrollAnimatedWrapper>
+        </section>
+      </ScrollAnimatedWrapper>
     </HeaderThemeSetter>
   )
 }
