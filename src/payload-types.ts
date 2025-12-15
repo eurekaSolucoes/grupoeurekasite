@@ -497,23 +497,6 @@ export interface Document {
  * via the `definition` "CardGridBlock".
  */
 export interface CardGridBlock {
-  title?: string | null;
-  subtitle?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  subtitleAlign?: ('start' | 'end') | null;
   columns?: ('2' | '3') | null;
   items: {
     image: string | Media;
@@ -746,9 +729,9 @@ export interface SplitContentBlock {
 export interface AccordionListBlock {
   items: {
     /**
-     * Nome do ícone Lucide (ex: Monitor, Users, BookOpen, ClipboardCheck, Sparkles, Database). Veja: lucide.dev/icons
+     * Selecione um ícone da biblioteca Lucide
      */
-    iconName?: string | null;
+    iconName: string;
     title: string;
     /**
      * Conteúdo exibido quando o item é expandido
@@ -980,7 +963,7 @@ export interface IconInfoListBlock {
   title?: string | null;
   items: {
     /**
-     * Nome do ícone Lucide (ex: map-pin, phone, mail). Ver: lucide.dev/icons
+     * Selecione um ícone da biblioteca Lucide
      */
     icon: string;
     label: string;
@@ -1699,9 +1682,6 @@ export interface ContentBlockSelect<T extends boolean = true> {
  * via the `definition` "CardGridBlock_select".
  */
 export interface CardGridBlockSelect<T extends boolean = true> {
-  title?: T;
-  subtitle?: T;
-  subtitleAlign?: T;
   columns?: T;
   items?:
     | T

@@ -4,7 +4,6 @@ import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import { HoverScaleCard } from '@/components/animate/HoverScaleCard'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
-import RichText from '@/components/RichText'
 
 type CardGridBlockProps = Omit<CardGridBlockType, 'id' | 'blockName' | 'blockType'> & {
   className?: string
@@ -18,15 +17,10 @@ const columnClasses: Record<'2' | '3', string> = {
 }
 
 export function CardGridBlock({
-  title,
-  subtitle,
   items,
   columns = '2',
   className,
-  subtitleAlign = 'start',
 }: Readonly<CardGridBlockProps>) {
-  const hasTitleOrSubtitle = title || subtitle
-
   return (
     <HeaderThemeSetter
       as="section"
@@ -35,23 +29,6 @@ export function CardGridBlock({
       logoDesktop="icon-blue"
       className={cn('container', className)}
     >
-      {/* Header */}
-      {hasTitleOrSubtitle && (
-        <header className="mb-6 lg:mb-8">
-          {title && <h2 className="typography-subheading font-bold text-secondary">{title}</h2>}
-          {subtitle && (
-            <RichText
-              data={subtitle}
-              enableGutter={false}
-              enableProse={false}
-              className={cn('mt-2 lg:text-xl [&_strong]:font-bold [&_strong]:text-accent', {
-                'lg:ml-55': subtitleAlign === 'end',
-              })}
-            />
-          )}
-        </header>
-      )}
-
       {/* Cards Grid */}
       <ul className={cn('grid grid-cols-1 gap-5 lg:gap-6', columnClasses[columns || '2'])}>
         {items.map((card, index) => (
