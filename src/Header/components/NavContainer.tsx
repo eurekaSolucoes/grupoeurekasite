@@ -1,12 +1,13 @@
 'use client'
 import { cn } from '@/utilities/ui'
 import type { ReactNode } from 'react'
-import { HeaderTheme, useHeaderTheme } from '@/providers/HeaderTheme'
+import { useHeaderTheme } from '@/providers/HeaderTheme'
 import { Theme } from '@/providers/Theme/types'
 
 interface NavContainerProps {
   children: ReactNode
   className?: string
+  theme?: Theme
 }
 
 const headerThemeMap: Record<Theme, string> = {
@@ -20,10 +21,12 @@ const headerThemeMap: Record<Theme, string> = {
  * Container da navegação do header (desktop/mobile + botões de ação).
  * Estilo: fundo vermelho, arredondado, espaçamento interno.
  */
-export function NavContainer({ children, className }: Readonly<NavContainerProps>) {
+export function NavContainer({ children, className, theme }: Readonly<NavContainerProps>) {
   const { headerTheme } = useHeaderTheme()
 
-  const bgColor = headerThemeMap[headerTheme?.theme ?? 'default']
+  // Usa prop se passada, senão usa context, senão default
+  const effectiveTheme = theme ?? headerTheme?.theme ?? 'default'
+  const bgColor = headerThemeMap[effectiveTheme]
 
   return (
     <div

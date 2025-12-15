@@ -18,7 +18,9 @@ import { OverlappingImageBlock } from '../../blocks/OverlappingImageBlock/config
 import { StatsBlock } from '../../blocks/StatsBlock/config'
 import { SocialCTABlock } from '../../blocks/SocialCTABlock/config'
 import { NumberedCardsBlock } from '../../blocks/NumberedCardsBlock/config'
-import { IntroBlock } from '../../blocks/IntroBlock/config'
+import { SplitContentBlock } from '../../blocks/SplitContentBlock/config'
+import { AccordionListBlock } from '../../blocks/AccordionListBlock/config'
+import { ImageBlock } from '../../blocks/ImageBlock/config'
 import { VideoBlock } from '../../blocks/VideoBlock/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
@@ -94,7 +96,9 @@ export const Pages: CollectionConfig<'pages'> = {
                 TextImageStackBlock,
                 ImageTextGridBlock,
                 AlternatingBlock,
-                IntroBlock,
+                SplitContentBlock,
+                AccordionListBlock,
+                ImageBlock,
                 // CTA
                 CallToAction,
                 StatsBlock,

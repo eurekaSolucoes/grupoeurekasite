@@ -5,5 +5,5 @@
   "semi": false,
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindFunctions": ["cn"],
-  "tailwindConfig": "./src/app/(frontend)/globals.css"
+  "tailwindConfig": "./src/styles/global.css"
 }

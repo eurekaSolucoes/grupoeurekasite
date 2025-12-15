@@ -1,7 +1,6 @@
 import type { Block } from 'payload'
 
 import { link } from '@/fields/link'
-import { defaultLexical } from '@/fields/defaultLexical'
 
 export const CardGridBlock: Block = {
   slug: 'cardGridBlock',
@@ -11,27 +10,6 @@ export const CardGridBlock: Block = {
     plural: 'Grids de Cards',
   },
   fields: [
-    {
-      name: 'title',
-      type: 'text',
-      label: 'Título',
-    },
-    {
-      name: 'subtitle',
-      type: 'richText',
-      editor: defaultLexical,
-      label: 'Subtítulo',
-    },
-    {
-      name: 'subtitleAlign',
-      type: 'select',
-      label: 'Alinhamento do Subtítulo',
-      defaultValue: 'start',
-      options: [
-        { label: 'Início', value: 'start' },
-        { label: 'Fim (com margem)', value: 'end' },
-      ],
-    },
     {
       name: 'columns',
       type: 'select',
