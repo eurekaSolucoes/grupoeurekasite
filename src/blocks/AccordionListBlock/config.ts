@@ -1,6 +1,7 @@
 import type { Block } from 'payload'
 
 import { defaultLexical } from '@/fields/defaultLexical'
+import { iconPickerField } from '@/fields/iconPicker'
 
 export const AccordionListBlock: Block = {
   slug: 'accordionListBlock',
@@ -17,15 +18,11 @@ export const AccordionListBlock: Block = {
       required: true,
       minRows: 1,
       fields: [
-        {
+        iconPickerField({
           name: 'iconName',
-          type: 'text',
-          label: 'Ícone (Lucide)',
-          admin: {
-            description:
-              'Nome do ícone Lucide (ex: Monitor, Users, BookOpen, ClipboardCheck, Sparkles, Database). Veja: lucide.dev/icons',
-          },
-        },
+          label: 'Ícone',
+          required: true,
+        }),
         {
           name: 'title',
           type: 'text',

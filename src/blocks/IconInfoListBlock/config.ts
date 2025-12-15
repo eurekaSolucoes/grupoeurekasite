@@ -1,5 +1,7 @@
 import type { Block } from 'payload'
 
+import { iconPickerField } from '@/fields/iconPicker'
+
 export const IconInfoListBlock: Block = {
   slug: 'iconInfoListBlock',
   interfaceName: 'IconInfoListBlock',
@@ -26,15 +28,11 @@ export const IconInfoListBlock: Block = {
         initCollapsed: true,
       },
       fields: [
-        {
+        iconPickerField({
           name: 'icon',
-          type: 'text',
-          label: 'Nome do Ícone (Lucide)',
+          label: 'Ícone',
           required: true,
-          admin: {
-            description: 'Nome do ícone Lucide (ex: map-pin, phone, mail). Ver: lucide.dev/icons',
-          },
-        },
+        }),
         {
           name: 'label',
           type: 'text',
