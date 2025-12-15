@@ -1,0 +1,14 @@
+/* src/styles/payloadStyles.css */
+
+/* Define the Tailwind layers in the correct order */
+@layer theme, base, components, utilities;
+
+/* Import the Tailwind theme styles */
+@import 'tailwindcss/theme.css' layer(theme);
+
+/* Import Tailwind utilities */
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@utility table {
+  display: block !important;
+}

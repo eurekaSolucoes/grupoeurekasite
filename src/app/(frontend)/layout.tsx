@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 
 import { cn } from '@/utilities/ui'
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
+
 import { Jost, Albert_Sans } from 'next/font/google'
 
 import { AdminBar } from '@/components/AdminBar'
@@ -10,7 +9,7 @@ import { Providers } from '@/providers'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
-import './globals.css'
+import '@/styles/global.css';
 import { getServerSideURL } from '@/utilities/getURL'
 
 const jost = Jost({
@@ -30,7 +29,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html
-      className={cn(GeistSans.variable, GeistMono.variable, jost.variable, albertSans.variable)}
+      className={cn( jost.variable, albertSans.variable)}
       lang="pt-BR"
     >
       <head>

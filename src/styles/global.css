@@ -1,13 +1,6 @@
 @import 'tailwindcss';
-/*
-  ---break---
-*/
-@import 'tw-animate-css';
-/*
-  ---break---
-*/
 
-@config '../../../tailwind.config.mjs';
+@import 'tw-animate-css';
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -127,7 +120,7 @@
 }
 
 .loader-spinner::before {
-  content: "";
+  content: '';
   box-sizing: border-box;
   position: absolute;
   inset: 0;
@@ -190,6 +183,9 @@
   --text-body-desktop: var(--font-size-body-desktop);
   --text-caption-mobile: var(--font-size-caption-mobile);
   --text-caption-desktop: var(--font-size-caption-desktop);
+
+  --font-sans: var(--font-albert-sans);
+  --font-heading: var(--font-jost);
 }
 
 /*
