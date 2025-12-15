@@ -27,7 +27,6 @@ export async function Header({ bgTheme }: HeaderProps = {}) {
 
   // Se tem bgTheme, usa as configs correspondentes
   const config = bgTheme ? bgThemeConfig[bgTheme] : null
-  console.log(config)
 
   return (
     <>
