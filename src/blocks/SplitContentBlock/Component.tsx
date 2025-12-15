@@ -6,14 +6,14 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 type SplitContentBlockProps = Omit<SplitContentBlockType, 'id' | 'blockName' | 'blockType'>
 
-const headlineVariants = cva('[&_strong]:text-accent', {
+const headlineVariants = cva('[&_strong]:text-accent **:text-secondary', {
   variants: {
     size: {
-      large: 'font-heading text-secondary text-subheading-mobile leading-tight lg:text-[2.5rem]',
-      medium: 'typography-subheading text-secondary',
+      large: 'font-heading  text-subheading-mobile leading-tight lg:text-[2.5rem]',
+      medium: 'typography-subheading',
     },
     width: {
-      narrow: 'lg:max-w-[580px]',
+      narrow: 'lg:max-w-145',
       wide: 'lg:max-w-2/3',
     },
   },
@@ -23,20 +23,17 @@ const headlineVariants = cva('[&_strong]:text-accent', {
   },
 })
 
-const contentVariants = cva(
-  'space-y-5 [&_strong]:text-accent [&_strong]:font-bold text-secondary',
-  {
-    variants: {
-      size: {
-        large: 'typography-body-large',
-        medium: 'typography-body',
-      },
-    },
-    defaultVariants: {
-      size: 'large',
+const contentVariants = cva('space-y-5 [&_strong]:text-accent [&_strong]:font-bold', {
+  variants: {
+    size: {
+      large: 'typography-body-large',
+      medium: 'typography-body',
     },
   },
-)
+  defaultVariants: {
+    size: 'large',
+  },
+})
 
 export interface SplitContentVariants {
   headlineSize?: VariantProps<typeof headlineVariants>['size']
@@ -76,7 +73,7 @@ export function SplitContentBlock({
 
         {/* Coluna Direita - Content */}
         {content && (
-          <div className="flex-1 lg:ml-auto">
+          <div className="flex-1 lg:ml-[15vw] lg:max-w-5xl">
             <RichText
               data={content}
               enableGutter={false}
