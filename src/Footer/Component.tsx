@@ -90,80 +90,72 @@ export async function Footer({ className }: FooterProps = {}) {
         {/* Navigation Columns */}
         <div className="grid grid-cols-2 gap-5 xl:basis-1/2 xl:grid-flow-col xl:grid-cols-none xl:gap-16">
           {/* Solutions Column */}
-          {footerMenu?.solutions && (
+          {footerMenu?.solutions?.links && footerMenu.solutions.links.length > 0 && (
             <div className="space-y-1.5 xl:space-y-4">
               <h3 className="text-xs text-accent xl:text-sm">{footerMenu.solutions.title}</h3>
-              {footerMenu.solutions.links && footerMenu.solutions.links.length > 0 && (
-                <ul className="space-y-3 text-sm leading-none xl:space-y-4 xl:text-xl">
-                  {footerMenu.solutions.links.map((item, idx) => (
-                    <li key={idx}>
-                      <CMSLink {...item.link} className="underline-on-hover" />
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <ul className="space-y-3 text-sm leading-none xl:space-y-4 xl:text-xl">
+                {footerMenu.solutions.links.map((item, idx) => (
+                  <li key={idx}>
+                    <CMSLink {...item.link} className="underline-on-hover" />
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 
           {/* Access Column */}
-          {footerMenu?.access && (
+          {footerMenu?.access?.links && footerMenu.access.links.length > 0 && (
             <div className="space-y-1.5 xl:space-y-4">
               <h3 className="text-xs text-accent xl:text-sm">{footerMenu.access.title}</h3>
-              {footerMenu.access.links && footerMenu.access.links.length > 0 && (
-                <ul className="space-y-3 text-sm leading-none xl:space-y-4 xl:text-xl">
-                  {footerMenu.access.links.map((item, idx) => (
-                    <li key={idx}>
-                      <CMSLink {...item.link} className="underline-on-hover" />
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <ul className="space-y-3 text-sm leading-none xl:space-y-4 xl:text-xl">
+                {footerMenu.access.links.map((item, idx) => (
+                  <li key={idx}>
+                    <CMSLink {...item.link} className="underline-on-hover" />
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 
           {/* Compliance Column */}
-          {footerMenu?.compliance && (
+          {footerMenu?.compliance?.links && footerMenu.compliance.links.length > 0 && (
             <div className="space-y-1.5 xl:space-y-4">
               <h3 className="text-xs text-accent xl:text-sm">{footerMenu.compliance.title}</h3>
-              {footerMenu.compliance.links && footerMenu.compliance.links.length > 0 && (
-                <ul className="space-y-3 text-sm leading-none xl:space-y-4 xl:text-xl">
-                  {footerMenu.compliance.links.map((item, idx) => (
-                    <li key={idx}>
-                      <CMSLink {...item.link} className="underline-on-hover" />
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <ul className="space-y-3 text-sm leading-none xl:space-y-4 xl:text-xl">
+                {footerMenu.compliance.links.map((item, idx) => (
+                  <li key={idx}>
+                    <CMSLink {...item.link} className="underline-on-hover" />
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
         </div>
 
         {/* Social Links */}
-        {footerMenu?.social && (
+        {footerMenu?.social?.links && footerMenu.social.links.length > 0 && (
           <div className="xl:flex-1">
             <h3 className="mb-3 text-xs text-accent xl:text-sm">{footerMenu.social.title}</h3>
-            {footerMenu.social.links && footerMenu.social.links.length > 0 && (
-              <ul className="flex items-center gap-4 xl:flex-col xl:items-start">
-                {footerMenu.social.links.map((social, idx) => {
-                  const Icon = socialIcons[social.icon as keyof typeof socialIcons]
+            <ul className="flex items-center gap-4 xl:flex-col xl:items-start">
+              {footerMenu.social.links.map((social, idx) => {
+                const Icon = socialIcons[social.icon as keyof typeof socialIcons]
 
-                  if (!Icon) return null
+                if (!Icon) return null
 
-                  return (
-                    <li key={idx}>
-                      <Link
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={social.label || social.icon}
-                      >
-                        <Icon className="size-5 text-foreground transition-colors hover:text-accent" />
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
+                return (
+                  <li key={idx}>
+                    <Link
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={social.label || social.icon}
+                    >
+                      <Icon className="size-5 text-foreground transition-colors hover:text-accent" />
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
           </div>
         )}
       </section>
