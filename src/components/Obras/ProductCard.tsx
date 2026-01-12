@@ -1,33 +1,24 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Product } from '@/services/products'
-import { getProductTypeConfig } from '@/services/products'
-import { cn } from '@/lib/utils'
+import { getProductTypeConfig, getProductImageUrl, getSchoolCyclesLabel } from '@/services/products'
+import { Badge } from '@/components/ui/badge'
 
 interface ProductCardProps {
   product: Product
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  // Obtém configuração do tipo de produto (por ID ou fallback por label)
   const typeConfig = getProductTypeConfig(product)
-  const badgeLabel = typeConfig.getBadgeLabel(product)
-  const badgeColor = typeConfig.badgeClassName
-
-  // Pega o primeiro ciclo escolar para exibir
-  const schoolCycleLabel = product.schoolCycles?.map((sc) => sc.label).join(', ') || ''
-
-  // URL da imagem (mockup ou cover)
-  const imageUrl = product.mockupURL || product.coverURL
+  const imageUrl = getProductImageUrl(product)
+  const schoolCycles = getSchoolCyclesLabel(product)
 
   return (
     <Link href={`/obras/${product._id}`} className="group block" title={product.title}>
       <article>
-        {/* Container com gradiente */}
         <div className="relative h-[253px] w-full rounded-b-[20px] bg-linear-to-t from-input">
-          {/* Imagem do produto */}
           {imageUrl && (
-            <div className="flex size-full max-h-full max-w-full items-center justify-center overflow-hidden">
+            <div className="flex size-full items-center justify-center overflow-hidden">
               <Image
                 src={imageUrl}
                 alt={product.title}
@@ -37,27 +28,21 @@ export function ProductCard({ product }: ProductCardProps) {
               />
             </div>
           )}
-          {/* Badge do tipo */}
-          <span
-            className={cn(
-              'absolute bottom-0 left-3 inline-flex h-6 translate-y-1/2 items-center rounded-full px-3 py-1.5 font-bold',
-              badgeColor,
-            )}
+          <Badge
+            variant={typeConfig.badgeVariant}
+            size="sm"
+            className="absolute bottom-0 left-3 translate-y-1/2 font-bold"
           >
-            {badgeLabel}
-          </span>
+            {typeConfig.getBadgeLabel(product)}
+          </Badge>
         </div>
 
-        {/* Informações do produto */}
-        <footer className="mt-6 space-y-2 px-3">
-          {/* Título */}
+        <div className="mt-6 space-y-2 px-3">
           <h3 className="text-xl font-bold text-balance text-foreground">{product.title}</h3>
-
-          {/* Ciclo escolar */}
-          {schoolCycleLabel && (
-            <p className="text-body text-muted-foreground">{schoolCycleLabel}</p>
+          {schoolCycles && (
+            <p className="typography-body text-muted-foreground">{schoolCycles}</p>
           )}
-        </footer>
+        </div>
       </article>
     </Link>
   )

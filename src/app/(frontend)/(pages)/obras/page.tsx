@@ -6,6 +6,7 @@ import { searchParamsCache } from './searchParams'
 import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
 import { ProductList } from '@/components/Obras/ProductList'
 import { ProductListSkeleton } from '@/components/Obras/ProductListSkeleton'
+import { Header } from '@/Header/Component'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 import {
   Breadcrumb,
@@ -35,7 +36,8 @@ export default async function ObrasPage({ searchParams }: Readonly<ObrasPageProp
   const suspenseKey = `${query}-${categories.join(',')}-${schoolCycles.join(',')}-${page}`
 
   return (
-    <div>
+    <>
+      <Header bgTheme="blue" />
       <main className="container">
         <HeaderThemeSetter
           downThreshold={0.6}
@@ -69,6 +71,6 @@ export default async function ObrasPage({ searchParams }: Readonly<ObrasPageProp
         </div>
       </main>
       <SpacerBlock size="lg" />
-    </div>
+    </>
   )
 }
