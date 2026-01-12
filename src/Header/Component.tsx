@@ -7,12 +7,17 @@ import { MobileNav } from './components/MobileNav'
 import { DesktopNav } from '@/Header/components/DesktopNav'
 import { HeaderBackground } from './components/HeaderBackground'
 import { bgThemeConfig, type BgTheme } from './bgThemeConfig'
+import type { EurekaLogoVariants } from '@/components/animate/EurekaLogo'
 
 // Re-export para compatibilidade com layouts existentes
 export { type BgTheme }
 
 interface HeaderProps {
   bgTheme?: BgTheme
+  /** Override logo variant for mobile (takes priority over bgTheme config) */
+  defaultMobileVariant?: EurekaLogoVariants
+  /** Override logo variant for desktop (takes priority over bgTheme config) */
+  defaultDesktopVariant?: EurekaLogoVariants
 }
 
 /**
@@ -22,11 +27,19 @@ interface HeaderProps {
  * Renderiza menu de navegação com suporte a dropdowns com imagens e descrições.
  */
 
-export async function Header({ bgTheme }: HeaderProps = {}) {
+export async function Header({
+  bgTheme,
+  defaultMobileVariant,
+  defaultDesktopVariant,
+}: HeaderProps = {}) {
   const { headerMenu, whatsappLink } = (await getCachedGlobal('navigation', 1)()) as Navigation
 
   // Se tem bgTheme, usa as configs correspondentes
   const config = bgTheme ? bgThemeConfig[bgTheme] : null
+
+  // Props diretos têm prioridade sobre bgTheme config
+  const mobileVariant = defaultMobileVariant ?? config?.logoMobile
+  const desktopVariant = defaultDesktopVariant ?? config?.logoDesktop
 
   return (
     <>
@@ -34,8 +47,8 @@ export async function Header({ bgTheme }: HeaderProps = {}) {
         <div className="container mt-5 flex h-16 items-center justify-between lg:mt-12 lg:h-18">
           <Logo
             className="animate-in duration-700 fade-in slide-in-from-top"
-            defaultMobileVariant={config?.logoMobile}
-            defaultDesktopVariant={config?.logoDesktop}
+            defaultMobileVariant={mobileVariant}
+            defaultDesktopVariant={desktopVariant}
           />
 
           <NavContainer

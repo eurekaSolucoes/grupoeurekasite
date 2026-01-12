@@ -47,6 +47,7 @@ export function HeaderThemeSetter<T extends ValidTags = 'div'>({
   const { changeHeaderTheme } = useHeaderTheme()
   const ref = useRef<HTMLElement>(null)
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down')
+  const [hasScrolled, setHasScrolled] = useState(false)
 
   const { scrollY } = useScroll()
 
@@ -67,12 +68,15 @@ export function HeaderThemeSetter<T extends ValidTags = 'div'>({
 
   const visibility = useTransform(scrollYProgress, [0, 1], [0, 1])
 
-  // Track scroll direction
+  // Track scroll direction and mark when user has actually scrolled
   useEffect(() => {
     const unsubscribe = scrollY.on('change', (current) => {
       const previous = scrollY.getPrevious()
       if (previous !== undefined) {
         const diff = current - previous
+        if (Math.abs(diff) > 0) {
+          setHasScrolled(true)
+        }
         setScrollDirection(diff > 0 ? 'down' : 'up')
       }
     })
@@ -80,9 +84,11 @@ export function HeaderThemeSetter<T extends ValidTags = 'div'>({
     return () => unsubscribe()
   }, [scrollY])
 
-  // Change theme based on visibility and scroll direction
+  // Change theme based on visibility and scroll direction (only after user has scrolled)
   useEffect(() => {
     const unsubscribe = visibility.on('change', (value) => {
+      if (!hasScrolled) return
+
       if (
         (scrollDirection === 'down' && value > downThreshold) ||
         (scrollDirection === 'up' && value > upThreshold)
@@ -92,7 +98,7 @@ export function HeaderThemeSetter<T extends ValidTags = 'div'>({
     })
 
     return () => unsubscribe()
-  }, [visibility, scrollDirection, newTheme, changeHeaderTheme])
+  }, [visibility, scrollDirection, newTheme, changeHeaderTheme, hasScrolled, downThreshold, upThreshold])
 
   return (
     <Component ref={ref} className={className} {...rest}>
