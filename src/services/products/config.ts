@@ -8,28 +8,29 @@ export const PRODUCT_TYPE_IDS = {
 } as const
 
 export type ProductTypeKey = 'book' | 'collection' | 'project' | 'unknown'
+export type BadgeVariant = 'accent' | 'blue' | 'default' | 'secondary' | 'destructive' | 'outline'
 
 export interface ProductTypeConfig {
   key: ProductTypeKey
   getBadgeLabel: (product: Product) => string
-  badgeClassName: string
+  badgeVariant: BadgeVariant
 }
 
 const configById: Record<string, ProductTypeConfig> = {
   [PRODUCT_TYPE_IDS.BOOK]: {
     key: 'book',
     getBadgeLabel: () => 'Livro',
-    badgeClassName: 'bg-accent text-accent-foreground',
+    badgeVariant: 'accent',
   },
   [PRODUCT_TYPE_IDS.COLLECTION]: {
     key: 'collection',
     getBadgeLabel: (product) => `Coleção • ${product.products?.length || 0} volumes`,
-    badgeClassName: 'bg-secondary text-secondary-foreground',
+    badgeVariant: 'blue',
   },
   [PRODUCT_TYPE_IDS.PROJECT]: {
     key: 'project',
     getBadgeLabel: () => 'Projeto',
-    badgeClassName: 'bg-primary text-primary-foreground',
+    badgeVariant: 'default',
   },
 }
 
@@ -50,33 +51,40 @@ const configByLabelPattern: Array<{ pattern: RegExp; config: ProductTypeConfig }
 ]
 
 const defaultConfig: ProductTypeConfig = {
-  key: 'unknown',
-  getBadgeLabel: (product) => product.productType?.label || 'Produto',
-  badgeClassName: 'bg-muted text-muted-foreground',
+  key: 'book',
+  getBadgeLabel: () => 'Livro',
+  badgeVariant: 'accent',
 }
 
 /**
  * Obtém a configuração de um tipo de produto
- * Prioridade: ID > Label Pattern > Default
+ * Prioridade: ID (string ou objeto) > Label Pattern > Default (livro)
  */
 export function getProductTypeConfig(product: Product): ProductTypeConfig {
   const productType = product.productType
 
-  // 1. Por ID (prioritário - mais estável)
-  if (productType?._id && configById[productType._id]) {
-    return configById[productType._id]
+  // 1. productType é string (ID direto) - caso dos volumes de coleções
+  if (typeof productType === 'string' && configById[productType]) {
+    return configById[productType]
   }
 
-  // 2. Por label pattern (fallback)
-  if (productType?.label) {
-    for (const { pattern, config } of configByLabelPattern) {
-      if (pattern.test(productType.label)) {
-        return config
+  // 2. productType é objeto com _id (null check explícito pois typeof null === 'object')
+  if (productType && typeof productType === 'object' && productType !== null) {
+    if (productType._id && configById[productType._id]) {
+      return configById[productType._id]
+    }
+
+    // 3. Por label pattern (fallback para objetos sem ID conhecido)
+    if (productType.label) {
+      for (const { pattern, config } of configByLabelPattern) {
+        if (pattern.test(productType.label)) {
+          return config
+        }
       }
     }
   }
 
-  // 3. Default
+  // 4. Default: assume livro (cor laranja consistente)
   return defaultConfig
 }
 
