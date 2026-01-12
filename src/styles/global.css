@@ -248,3 +248,41 @@
   --font-size-caption-mobile: 0.6875rem; /* 11px - Small Text Mobile */
   --font-size-caption-desktop: 0.8125rem; /* 13px - Small Text Desktop */
 }
+
+/* Product Detail Tabs - Cantos convexos externos na aba ativa */
+.product-detail-tab {
+  position: relative;
+}
+
+/* Estado base - cantos invisíveis */
+.product-detail-tab::before,
+.product-detail-tab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.product-detail-tab::before {
+  left: 0;
+  transform: translateX(-100%);
+  border-bottom-right-radius: 18px;
+  box-shadow: 8px 8px 0 0 var(--input);
+}
+
+.product-detail-tab::after {
+  right: 0;
+  transform: translateX(100%);
+  border-bottom-left-radius: 18px;
+  box-shadow: -8px 8px 0 0 var(--input);
+}
+
+/* Estado ativo - cantos visíveis */
+.product-detail-tab[data-state='active']::before,
+.product-detail-tab[data-state='active']::after {
+  opacity: 1;
+}
