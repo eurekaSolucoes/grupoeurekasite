@@ -1,0 +1,5 @@
+export { SpecificationsTab } from './SpecificationsTab'
+export { JustificationTab } from './JustificationTab'
+export { PricesTab } from './PricesTab'
+export { AccompaniesTab } from './AccompaniesTab'
+export { CollectionTab } from './CollectionTab'
