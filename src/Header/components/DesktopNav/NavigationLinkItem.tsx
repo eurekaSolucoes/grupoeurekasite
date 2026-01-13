@@ -10,7 +10,7 @@ export function NavigationLinkItem({ item }: Readonly<NavigationLinkItemProps>) 
   return (
     <NavigationMenuLink
       asChild
-      className="justify-center rounded-full px-6 text-lg font-medium text-white hover:bg-transparent hover:text-foreground focus:bg-transparent focus:text-white"
+      className="justify-center rounded-full px-6 text-lg font-medium text-white hover:bg-transparent hover:text-foreground focus-visible:bg-transparent focus-visible:text-foreground"
     >
       <CMSLink {...item.link} />
     </NavigationMenuLink>

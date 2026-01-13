@@ -20,7 +20,7 @@ export function NavigationDropdownItem({ item }: Readonly<NavigationDropdownItem
   if (!isDropdown) return null
   return (
     <Fragment>
-      <NavigationMenuTrigger className="rounded-full bg-transparent! px-6 text-lg font-medium text-white duration-300 hover:bg-transparent hover:text-foreground focus:bg-transparent focus:text-foreground data-[state=open]:bg-background! data-[state=open]:text-foreground! data-[state=open]:[transition:color_300ms,background-color_300ms_300ms]">
+      <NavigationMenuTrigger className="rounded-full bg-transparent! px-6 text-lg font-medium text-white duration-300 hover:bg-transparent hover:text-foreground focus-visible:bg-transparent focus-visible:text-foreground data-[state=open]:bg-background! data-[state=open]:text-foreground! data-[state=open]:[transition:color_300ms,background-color_300ms_300ms]">
         {item.label}
       </NavigationMenuTrigger>
       <NavigationMenuContent className="w-110! rounded-[25px] p-0!">
