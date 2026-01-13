@@ -1,10 +1,11 @@
 'use client'
 import { Homepage, Media as MediaType } from '@/payload-types'
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useRef } from 'react'
 import { CMSLink } from '@/components/Link'
 import { useKeenSlider } from 'keen-slider/react'
 import { Media } from '@/components/Media'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
+import { cn } from '@/utilities/ui'
 import 'keen-slider/keen-slider.min.css'
 
 /**
@@ -23,18 +24,57 @@ export function BannerBlock({ banners = [] }: Readonly<BannerBlockProps>) {
   const initialOpacities = useMemo(() => getInitialOpacities(banners?.length ?? 0), [banners])
   const [opacities, setOpacities] = useState<number[]>(initialOpacities)
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [slideDirection, setSlideDirection] = useState<'next' | 'prev' | null>(null)
+  const currentSlideRef = useRef(0)
 
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     slides: banners!.length,
     loop: true,
     slideChanged(s) {
-      setCurrentSlide(s.track.details.rel)
+      const prev = currentSlideRef.current
+      const next = s.track.details.rel
+      const totalSlides = banners!.length
+
+      // Detectar direção considerando loop
+      let direction: 'next' | 'prev' = 'next'
+      if (prev === 0 && next === totalSlides - 1) {
+        direction = 'prev' // Loop backwards (primeiro → último)
+      } else if (prev === totalSlides - 1 && next === 0) {
+        direction = 'next' // Loop forwards (último → primeiro)
+      } else {
+        direction = next > prev ? 'next' : 'prev'
+      }
+
+      setSlideDirection(direction)
+      setCurrentSlide(next)
+      currentSlideRef.current = next
     },
     detailsChanged(s) {
       const new_opacities = s.track.details.slides.map((slide) => slide.portion)
       setOpacities(new_opacities)
     },
   })
+
+  // Helper para classes de animação da featured image
+  const getFeaturedImageClasses = (index: number) => {
+    const isActive = index === currentSlide
+    const isFirst = index === 0
+
+    return cn(
+      'self-end',
+      // Animação de entrada no primeiro render (apenas primeiro slide)
+      isFirst &&
+        !slideDirection &&
+        'group-first/slide:animate-in group-first/slide:duration-1500 group-first/slide:ease-in-out group-first/slide:slide-in-from-left-5 group-first/slide:fade-in',
+      // Animação de transição ao trocar slides (sem fade - opacidade controlada pelo keen-slider)
+      isActive &&
+        slideDirection === 'next' &&
+        'animate-in duration-1000 ease-out slide-in-from-right-20',
+      isActive &&
+        slideDirection === 'prev' &&
+        'animate-in duration-1000 ease-out slide-in-from-left-20',
+    )
+  }
 
   // Keyboard navigation
   const handleKeyDown = useCallback(
@@ -142,7 +182,7 @@ export function BannerBlock({ banners = [] }: Readonly<BannerBlockProps>) {
                   </div>
 
                   {/* Featured Image */}
-                  <div className="self-end group-first/slide:animate-in group-first/slide:duration-1500 group-first/slide:ease-in-out group-first/slide:slide-in-from-left-5 group-first/slide:fade-in">
+                  <div className={getFeaturedImageClasses(index)}>
                     {featuredImage && (
                       <div className="relative aspect-square size-full md:max-h-[min(50vh,var(--breakpoint-md))] lg:max-h-full">
                         <Media
@@ -150,7 +190,8 @@ export function BannerBlock({ banners = [] }: Readonly<BannerBlockProps>) {
                           fill
                           size="100vw, (min-width: 1024px) 50vw"
                           priority={index === 0}
-                          imgClassName="object-contain drop-shadow-2xl"
+                          imgClassName="object-contain object-bottom drop-shadow-2xl"
+                          disableBlur
                         />
                       </div>
                     )}
