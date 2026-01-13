@@ -7,6 +7,7 @@ import {
   NavigationMenuContent,
   NavigationMenuLink,
 } from '@/components/ui/navigation-menu'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import type { Media as MediaType } from '@/payload-types'
 import { Fragment } from 'react/jsx-runtime'
 interface NavigationDropdownItemProps {
@@ -22,18 +23,20 @@ export function NavigationDropdownItem({ item }: Readonly<NavigationDropdownItem
       <NavigationMenuTrigger className="rounded-full bg-transparent! px-6 text-lg font-medium text-white duration-300 hover:bg-transparent hover:text-foreground focus:bg-transparent focus:text-foreground data-[state=open]:bg-background! data-[state=open]:text-foreground! data-[state=open]:[transition:color_300ms,background-color_300ms_300ms]">
         {item.label}
       </NavigationMenuTrigger>
-      <NavigationMenuContent className="w-110! rounded-[25px] p-8!">
-        <ul className="flex w-full flex-col gap-8">
-          {item.subitems.map((subitem, innerIndex) => (
-            <ListItem
-              key={subitem.link?.label || innerIndex}
-              title={subitem.link?.label || ''}
-              href={subitem.link || null}
-              image={subitem.image}
-              description={subitem.description}
-            />
-          ))}
-        </ul>
+      <NavigationMenuContent className="w-110! rounded-[25px] p-0!">
+        <ScrollArea className="max-h-[calc(100vh-150px)] [&>[data-radix-scroll-area-viewport]]:max-h-[inherit]">
+          <ul className="flex w-full flex-col gap-8 p-8">
+            {item.subitems.map((subitem, innerIndex) => (
+              <ListItem
+                key={subitem.link?.label || innerIndex}
+                title={subitem.link?.label || ''}
+                href={subitem.link || null}
+                image={subitem.image}
+                description={subitem.description}
+              />
+            ))}
+          </ul>
+        </ScrollArea>
       </NavigationMenuContent>
     </Fragment>
   )

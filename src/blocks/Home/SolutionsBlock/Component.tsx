@@ -108,7 +108,7 @@ export function SolutionsBlock({ solutions }: Readonly<SolutionsBlockProps>) {
           </motion.header>
         )}
         {solutions.cards && solutions.cards.length > 0 && (
-          <ul className="grid w-full grid-cols-1 gap-5 pt-7 sm:max-w-4/5 lg:grid-cols-3 lg:gap-6">
+          <ul className="flex w-full flex-col gap-5 pt-7 sm:max-w-4/5 lg:flex-row lg:justify-center lg:gap-6">
             {solutions.cards.map((card, index) => {
               const isEven = index % 2 === 0
               const rotateDirection = isEven ? -1 : 1
@@ -116,6 +116,7 @@ export function SolutionsBlock({ solutions }: Readonly<SolutionsBlockProps>) {
               return (
                 <motion.li
                   key={card.title}
+                  className="lg:flex-1 lg:max-w-102"
                   initial={{ transform: `rotate(${rotate}deg)` }}
                   whileInView={{ transform: 'rotate(0deg)' }}
                   transition={{ duration: 0.5, delay: isDesktop ? 0 : index * 0.1 }}
@@ -171,7 +172,7 @@ interface SolutionCardProps {
 
 function SolutionCard({ cardData }: Readonly<SolutionCardProps>) {
   return (
-    <div className="group relative flex h-50 items-end rounded-2xl p-6 shadow-[0_12px_24px_0_rgba(0,0,0,0.24)] after:absolute after:inset-0 after:-z-10 after:rounded-2xl after:bg-linear-to-t after:from-black/50 after:to-40% lg:aspect-square lg:size-full lg:max-h-102 lg:p-10 lg:transition-transform lg:duration-300 lg:hover:scale-110">
+    <div className="group relative flex h-50 items-end rounded-2xl p-6 shadow-[0_12px_24px_0_rgba(0,0,0,0.24)] after:absolute after:inset-0 after:-z-10 after:rounded-2xl after:bg-gradient-to-b after:from-transparent after:from-[59%] after:to-black/70 lg:h-102 lg:w-full lg:p-10 lg:transition-transform lg:duration-300 lg:hover:scale-110">
       <Media
         resource={cardData.image}
         alt={cardData.title}

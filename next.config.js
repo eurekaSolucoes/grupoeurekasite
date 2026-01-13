@@ -49,7 +49,7 @@ const nextConfig = {
     localPatterns: [
       {
         pathname: '/api/media/file/**',
-        search: '',
+        // Permite qualquer query string (usado para cache busting com timestamp)
       },
       {
         pathname: '/assets/**',

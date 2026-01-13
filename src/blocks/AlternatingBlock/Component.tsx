@@ -37,7 +37,7 @@ export function AlternatingBlock({
           )}
           {showArrow && (
             <Image
-              src="/mock/why-eureka-arrow.svg"
+              src="/assets/alternating-block-arrow.svg"
               width={57}
               height={191}
               alt=""
