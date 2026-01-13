@@ -1,3 +1,5 @@
+'use client'
+
 import type { NumberedCardsBlock as NumberedCardsBlockType } from '@/payload-types'
 
 import { FirstConnector, MiddleConnector, LastConnector, DesktopConnector } from './connectors'
@@ -5,6 +7,7 @@ import { SpacerBlock } from '@/blocks/SpacerBlock/Component'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
+import { FadeIn } from '@/components/animate/FadeIn'
 
 type NumberedCardsBlockProps = Omit<NumberedCardsBlockType, 'id' | 'blockName' | 'blockType'>
 
@@ -30,29 +33,33 @@ export function NumberedCardsBlock({
     >
       {/* Título opcional */}
       {title && (
-        <RichText
-          data={title}
-          enableGutter={false}
-          enableProse={false}
-          className="mb-4 typography-subheading text-secondary lg:max-w-200 [&_strong]:text-accent"
-        />
+        <FadeIn variant="fadeUp" viewportAmount={0.4}>
+          <RichText
+            data={title}
+            enableGutter={false}
+            enableProse={false}
+            className="mb-4 typography-subheading text-secondary lg:max-w-200 [&_strong]:text-accent"
+          />
+        </FadeIn>
       )}
 
       {/* Container principal: descrição + lista de cards + SVG */}
       <div className="relative">
         {/* Descrição/Subtítulo obrigatório */}
         {subtitle && (
-          <RichText
-            data={subtitle}
-            enableGutter={false}
-            enableProse={false}
-            className="mb-8 flex max-w-80 flex-col justify-center typography-body-large text-foreground lg:mr-10 lg:ml-[20%] lg:h-40 lg:max-w-[715px] [&_strong]:font-bold [&_strong]:text-accent"
-          />
+          <FadeIn variant="fadeUp" delay={0.1} viewportAmount={0.4}>
+            <RichText
+              data={subtitle}
+              enableGutter={false}
+              enableProse={false}
+              className="mb-8 flex max-w-80 flex-col justify-center typography-body-large text-foreground lg:mr-10 lg:ml-[20%] lg:h-40 lg:max-w-[715px] [&_strong]:font-bold [&_strong]:text-accent"
+            />
+          </FadeIn>
         )}
 
         <ol className="relative z-10 flex flex-col lg:gap-32">
-          {cards.map((card) => (
-            <NumberedCardItem key={card.number} card={card} />
+          {cards.map((card, index) => (
+            <NumberedCardItem key={card.number} card={card} index={index} />
           ))}
         </ol>
 
@@ -66,19 +73,27 @@ export function NumberedCardsBlock({
 }
 
 /** Componente do card individual */
-function NumberedCardItem({ card }: { card: NumberedCard }) {
+function NumberedCardItem({ card, index }: { card: NumberedCard; index: number }) {
+  const isEven = index % 2 === 1
+
   return (
     <li className="group/card relative z-10 mt-15 pt-22 pr-6 first:pt-19 lg:mt-0 lg:flex lg:items-center lg:gap-10 lg:pt-0 lg:pr-0 lg:first:pt-0 odd:lg:flex-row even:lg:flex-row-reverse">
       {/* Número grande - Mobile: absoluto; Desktop: absoluto atrás do texto */}
-      <span
-        className="pointer-events-none absolute top-0 left-0 bg-linear-to-b from-secondary to-secondary/20 bg-clip-text font-heading text-[180px] leading-34 font-bold text-transparent opacity-55 select-none lg:top-1/2 lg:-translate-y-1/2 lg:text-[450px] lg:leading-none lg:opacity-10 group-odd/card:lg:left-0 group-even/card:lg:right-0 group-even/card:lg:left-auto"
-        style={{ WebkitTextFillColor: 'transparent' }}
-      >
-        {card.number}
-      </span>
+      <FadeIn variant="fade" viewportAmount={0.2}>
+        <span
+          className="pointer-events-none absolute top-0 left-0 bg-linear-to-b from-secondary to-secondary/20 bg-clip-text font-heading text-[180px] leading-34 font-bold text-transparent opacity-55 select-none lg:top-1/2 lg:-translate-y-1/2 lg:text-[450px] lg:leading-none lg:opacity-10 group-odd/card:lg:left-0 group-even/card:lg:right-0 group-even/card:lg:left-auto"
+          style={{ WebkitTextFillColor: 'transparent' }}
+        >
+          {card.number}
+        </span>
+      </FadeIn>
 
       {/* Conteúdo: título + descrição */}
-      <div className="relative z-10 flex flex-1 flex-col gap-3 lg:gap-4 xl:px-[90px]">
+      <FadeIn
+        variant="fadeUp"
+        viewportAmount={0.3}
+        className="relative z-10 flex flex-1 flex-col gap-3 lg:gap-4 xl:px-[90px]"
+      >
         {card.title && (
           <h3 className="w-full font-heading text-2xl leading-tight font-bold text-secondary lg:text-[2rem]">
             {card.title}
@@ -92,18 +107,23 @@ function NumberedCardItem({ card }: { card: NumberedCard }) {
             className="typography-body text-foreground xl:text-balance [&_strong]:font-bold [&_strong]:text-accent"
           />
         )}
-      </div>
+      </FadeIn>
 
       {/* Imagem */}
       {card.image && (
-        <div className="relative mt-4 h-45 w-full shrink-0 overflow-hidden rounded-[30px] shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)] lg:mt-0 lg:h-[350px] lg:w-[628px] lg:rounded-[40px]">
+        <FadeIn
+          variant={isEven ? 'fadeRight' : 'fadeLeft'}
+          delay={0.1}
+          viewportAmount={0.2}
+          className="relative mt-4 h-45 w-full shrink-0 overflow-hidden rounded-[30px] shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)] lg:mt-0 lg:h-[350px] lg:w-[628px] lg:rounded-[40px]"
+        >
           <Media
             resource={card.image}
             fill
             size="(max-width: 1024px) 100vw, 628px"
             imgClassName="object-cover"
           />
-        </div>
+        </FadeIn>
       )}
 
       {/* Conectores Mobile - visíveis apenas em mobile, ocultos em lg+ */}
