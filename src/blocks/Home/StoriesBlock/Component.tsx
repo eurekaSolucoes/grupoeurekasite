@@ -97,7 +97,7 @@ export function StoriesBlock({ stories }: Readonly<StoriesBlockProps>) {
                 {...stories.link}
                 appearance="secondary"
                 hasIcon
-                className="hidden self-start lg:mt-7 lg:inline-flex"
+                className="hidden self-start lg:relative lg:z-20 lg:mt-7 lg:inline-flex"
               />
             )}
           </motion.header>
