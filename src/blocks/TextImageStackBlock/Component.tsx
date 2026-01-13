@@ -3,6 +3,7 @@ import { cn } from '@/utilities/ui'
 import { Media } from '@/components/Media'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 import RichText from '@/components/RichText'
+import { FadeIn } from '@/components/animate/FadeIn'
 
 type TextImageStackBlockProps = Omit<TextImageStackBlockType, 'id' | 'blockName' | 'blockType'> & {
   className?: string
@@ -26,15 +27,17 @@ export function TextImageStackBlock({
       {/* Heading Text */}
       <header className="flex flex-col gap-y-10 lg:flex-row lg:gap-14">
         {headingText && (
-          <RichText
-            data={headingText}
-            enableGutter={false}
-            enableProse={false}
-            className="pb-20 typography-heading text-secondary lg:max-w-177 lg:typography-subheading xl:pb-50 [&_strong]:font-bold [&_strong]:text-accent"
-          />
+          <FadeIn variant="fadeRight" className="w-full" viewportAmount={0.4}>
+            <RichText
+              data={headingText}
+              enableGutter={false}
+              enableProse={false}
+              className="w-full pb-20 typography-heading text-secondary lg:max-w-177 lg:typography-subheading xl:pb-50 [&_strong]:font-bold [&_strong]:text-accent"
+            />
+          </FadeIn>
         )}
 
-        {/* Main Image */}
+        {/* Main Image - sem FadeIn para manter layout original */}
         {mainImage && (
           <div className="relative aspect-320/165 min-h-[165px] w-full overflow-hidden rounded-[20px] shadow-[12px_12px_24px_0_rgba(0,0,0,0.12)] lg:aspect-520/335">
             <Media resource={mainImage} fill imgClassName="object-cover" />
@@ -44,12 +47,14 @@ export function TextImageStackBlock({
       <div className="flex flex-col gap-y-10 lg:flex-row lg:gap-14 xl:gap-25">
         {/* Body Text */}
         {bodyText && (
-          <RichText
-            data={bodyText}
-            enableGutter={false}
-            enableProse={false}
-            className="text-foreground lg:max-w-165 lg:text-xl [&_strong]:font-bold [&_strong]:text-accent"
-          />
+          <FadeIn variant="fadeUp" delay={0.2} viewportAmount={0.4}>
+            <RichText
+              data={bodyText}
+              enableGutter={false}
+              enableProse={false}
+              className="text-foreground lg:max-w-165 lg:text-xl [&_strong]:font-bold [&_strong]:text-accent"
+            />
+          </FadeIn>
         )}
 
         {/* Overlapping Images */}

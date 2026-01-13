@@ -4,6 +4,7 @@ import type { StatsBlock as StatsBlockType } from '@/payload-types'
 import { Counter } from '@/components/ui/counter'
 import { cn } from '@/utilities/ui'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
+import { FadeIn } from '@/components/animate/FadeIn'
 
 type StatsBlockProps = Omit<StatsBlockType, 'id' | 'blockName' | 'blockType'> & {
   className?: string
@@ -23,19 +24,22 @@ export function StatsBlock({ items, className }: Readonly<StatsBlockProps>) {
     >
       {/* Decorative Circles */}
       <div
-        className="absolute -bottom-45 -left-45 size-94 rounded-full border-2 border-dashed border-black/20 lg:-bottom-62 lg:-left-62 lg:size-125"
+        className="absolute -bottom-45 -left-45 size-94 rounded-full border-2 border-black/20 lg:-bottom-62 lg:-left-62 lg:size-125"
         aria-hidden="true"
       />
       <div
-        className="absolute -top-45 -right-45 size-94 rounded-full border-2 border-dashed border-black/20 lg:-top-62 lg:-right-62 lg:size-125"
+        className="absolute -top-45 -right-45 size-94 rounded-full border-2 border-black/20 lg:-top-62 lg:-right-62 lg:size-125"
         aria-hidden="true"
       />
 
       {/* Stats Container */}
       <ul className="relative z-10 container flex h-full flex-col gap-9 lg:flex-row lg:items-center lg:justify-between">
         {items.map((item, index) => (
-          <li
+          <FadeIn
             key={index}
+            variant="fadeLeft"
+            delay={index * 0.1}
+            viewportAmount={0.3}
             className="flex items-center gap-5 before:h-16 before:w-0.5 before:shrink-0 before:bg-accent before:lg:h-24"
           >
             {/* Stat Content */}
@@ -47,7 +51,7 @@ export function StatsBlock({ items, className }: Readonly<StatsBlockProps>) {
               </p>
               <p className="typography-body text-secondary-foreground">{item.label}</p>
             </div>
-          </li>
+          </FadeIn>
         ))}
       </ul>
     </HeaderThemeSetter>

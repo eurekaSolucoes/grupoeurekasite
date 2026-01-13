@@ -1,8 +1,11 @@
+'use client'
+
 import Image from 'next/image'
 import type { AlternatingBlock as AlternatingBlockType } from '@/payload-types'
 import { Media } from '@/components/Media'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
 import RichText from '@/components/RichText'
+import { FadeIn } from '@/components/animate/FadeIn'
 
 type AlternatingBlockProps = Omit<AlternatingBlockType, 'id' | 'blockName' | 'blockType'>
 
@@ -24,7 +27,7 @@ export function AlternatingBlock({
     >
       {/* Header */}
       {hasTitleOrSubtitle && (
-        <header className="relative mb-5 flex min-h-24 w-fit flex-col lg:mb-16">
+        <FadeIn variant="fadeUp" className="relative mb-5 flex min-h-24 w-fit flex-col lg:mb-16">
           {subtitle && (
             <p className="font-title pr-32 text-4xl leading-tight text-secondary lg:text-[66px] lg:leading-[68px]">
               {subtitle}
@@ -45,7 +48,7 @@ export function AlternatingBlock({
               aria-hidden="true"
             />
           )}
-        </header>
+        </FadeIn>
       )}
 
       {/* Blocks */}
@@ -60,24 +63,33 @@ export function AlternatingBlock({
               <div className="relative flex flex-col lg:w-[500px] lg:shrink-0">
                 {/* First Image (larger) - odd: right, even: left */}
                 {item.images[0]?.image && (
-                  <div className="relative aspect-410/290 w-2/3 group-odd/block:ml-auto group-even/block:mr-auto lg:w-[410px]">
+                  <FadeIn
+                    variant="fadeUp"
+                    viewportAmount={0.2}
+                    className="relative aspect-410/290 w-2/3 group-odd/block:ml-auto group-even/block:mr-auto lg:w-[410px]"
+                  >
                     <Media
                       resource={item.images[0].image}
                       fill
                       imgClassName="size-full rounded-[20px] object-cover shadow-[6px_6px_12px_0_rgba(0,0,0,0.24)] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)]"
                     />
-                  </div>
+                  </FadeIn>
                 )}
 
                 {/* Second Image (smaller, overlapping) - odd: left, even: right */}
                 {item.images[1]?.image && (
-                  <div className="relative -mt-8 aspect-331/212 w-1/2 group-odd/block:mr-auto group-even/block:ml-auto lg:-mt-12 lg:w-[331px]">
+                  <FadeIn
+                    variant="fadeUp"
+                    delay={0.1}
+                    viewportAmount={0.2}
+                    className="relative -mt-8 aspect-331/212 w-1/2 group-odd/block:mr-auto group-even/block:ml-auto lg:-mt-12 lg:w-[331px]"
+                  >
                     <Media
                       resource={item.images[1].image}
                       fill
                       imgClassName="size-full rounded-[20px] object-cover shadow-[6px_6px_12px_0_rgba(0,0,0,0.12)] lg:rounded-[40px] lg:shadow-[12px_12px_24px_0_rgba(0,0,0,0.12)]"
                     />
-                  </div>
+                  </FadeIn>
                 )}
               </div>
             )}
@@ -85,20 +97,24 @@ export function AlternatingBlock({
             {/* Text Content */}
             <div className="flex flex-1 flex-col justify-center space-y-4 lg:space-y-6 lg:pt-10 lg:group-first/card:pt-16">
               {item.primaryText && (
-                <RichText
-                  data={item.primaryText}
-                  enableGutter={false}
-                  enableProse={false}
-                  className="font-heading text-2xl leading-[1.2] text-secondary lg:text-[2.5rem] [&_strong]:text-accent"
-                />
+                <FadeIn variant="fadeUp" viewportAmount={0.4}>
+                  <RichText
+                    data={item.primaryText}
+                    enableGutter={false}
+                    enableProse={false}
+                    className="font-heading text-2xl leading-[1.2] text-secondary lg:text-[2.5rem] [&_strong]:text-accent"
+                  />
+                </FadeIn>
               )}
               {item.secondaryText && (
-                <RichText
-                  data={item.secondaryText}
-                  enableGutter={false}
-                  enableProse={false}
-                  className="typography-body-large leading-[1.8] text-balance [&_strong]:text-accent"
-                />
+                <FadeIn variant="fadeUp" delay={0.1} viewportAmount={0.4}>
+                  <RichText
+                    data={item.secondaryText}
+                    enableGutter={false}
+                    enableProse={false}
+                    className="typography-body-large leading-[1.8] text-balance [&_strong]:text-accent"
+                  />
+                </FadeIn>
               )}
             </div>
           </article>

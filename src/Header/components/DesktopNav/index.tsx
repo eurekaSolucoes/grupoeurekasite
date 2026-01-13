@@ -62,7 +62,12 @@ export function DesktopNav({ menuItems }: Readonly<DesktopNavProps>) {
   }, [])
 
   return (
-    <NavigationMenu viewport={false} className="hidden lg:block" onMouseLeave={handleMouseLeave}>
+    <NavigationMenu
+      viewport={false}
+      className="hidden lg:block"
+      onMouseLeave={handleMouseLeave}
+      onBlur={handleMouseLeave}
+    >
       <NavigationMenuList className="lg:gap-2.5">
         {menuItems.map((item, index) => {
           const isHovered = isItemHovered(index)
@@ -84,6 +89,8 @@ export function DesktopNav({ menuItems }: Readonly<DesktopNavProps>) {
               <NavigationMenuItem
                 className="h-12 *:relative *:z-20 *:h-full"
                 onMouseEnter={handleMouseEnter.bind(null, index)}
+                onFocus={handleMouseEnter.bind(null, index)}
+                onBlur={handleMouseLeave}
                 key={key}
               >
                 {Component}

@@ -1,9 +1,12 @@
+'use client'
+
 import type { CardGridBlock as CardGridBlockType } from '@/payload-types'
 import { cn } from '@/utilities/ui'
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import { HoverScaleCard } from '@/components/animate/HoverScaleCard'
 import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
+import { FadeIn } from '@/components/animate/FadeIn'
 
 type CardGridBlockProps = Omit<CardGridBlockType, 'id' | 'blockName' | 'blockType'> & {
   className?: string
@@ -32,9 +35,9 @@ export function CardGridBlock({
       {/* Cards Grid */}
       <ul className={cn('grid grid-cols-1 gap-5 lg:gap-6', columnClasses[columns || '2'])}>
         {items.map((card, index) => (
-          <li key={card.id || index}>
+          <FadeIn key={card.id || index} variant="fadeUp" delay={index * 0.08} viewportAmount={0.2}>
             <CardItemComponent card={card} />
-          </li>
+          </FadeIn>
         ))}
       </ul>
     </HeaderThemeSetter>
