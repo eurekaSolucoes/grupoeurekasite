@@ -445,20 +445,13 @@ docs: update environment variables in CLAUDE.md
    - Implement scroll direction detection
    - Add conditional header animation
    - Add animated decorative circles
-
-   🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-   Co-Authored-By: Claude <noreply@anthropic.com>
    EOF
    )"
    ```
 
-5. **Always include attribution** in commits:
-   ```
-   🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-   Co-Authored-By: Claude <noreply@anthropic.com>
-   ```
+5. **Do NOT include attribution or co-author** in commits:
+   - Never add `Co-Authored-By: Claude` or similar
+   - Never add `🤖 Generated with Claude Code` or similar footers
 
 ### Example Workflow
 
