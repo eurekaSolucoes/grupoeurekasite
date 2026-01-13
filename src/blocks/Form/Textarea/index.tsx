@@ -1,7 +1,6 @@
 import type { TextField } from '@payloadcms/plugin-form-builder/types'
 import type { FieldErrorsImpl, FieldValues, UseFormRegister } from 'react-hook-form'
 
-import { Label } from '@/components/ui/label'
 import { Textarea as TextAreaComponent } from '@/components/ui/textarea'
 import React from 'react'
 
@@ -14,26 +13,17 @@ export const Textarea: React.FC<
     register: UseFormRegister<FieldValues>
     rows?: number
   }
-> = ({ name, defaultValue, errors, label, register, required, rows = 3, width }) => {
+> = ({ name, defaultValue, errors, label, register, required, rows = 4, width }) => {
   return (
     <Width width={width}>
-      <Label htmlFor={name}>
-        {label}
-
-        {required && (
-          <span className="required">
-            * <span className="sr-only">(required)</span>
-          </span>
-        )}
-      </Label>
-
       <TextAreaComponent
         defaultValue={defaultValue}
         id={name}
         rows={rows}
+        placeholder={label}
+        className="min-h-[107px] w-full rounded-xl border-0 px-5 py-4 placeholder:text-foreground placeholder:opacity-50"
         {...register(name, { required: required })}
       />
-
       {errors[name] && <Error name={name} />}
     </Width>
   )

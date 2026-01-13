@@ -106,6 +106,14 @@ Defined in `src/access/`:
 - `authenticated`: Only logged-in users can access
 - `authenticatedOrPublished`: Public can read published content, users can access drafts
 
+### Reusable Fields
+
+Custom field configurations in `src/fields/`:
+- **`link`** (`@/fields/link`): Reusable link field supporting internal page/post references or custom URLs with optional appearance styles
+- **`linkGroup`**: Array of links with optional group configuration
+- **`dropdown`**: Dropdown field configuration for selects
+- **`defaultLexical`**: Base Lexical editor configuration with common features (bold, italic, underline, links to pages/posts)
+
 ### Plugins
 
 Configured in `src/plugins/index.ts`:
@@ -182,11 +190,152 @@ Required variables (see `.env.example`):
 - `NEXT_PUBLIC_SERVER_URL` - Public URL for link generation
 - `CRON_SECRET` - Authenticates cron job requests
 - `PREVIEW_SECRET` - Validates draft preview requests
+- `S3_ACCESS_KEY_ID` - AWS S3 access key for media storage
+- `S3_SECRET_ACCESS_KEY` - AWS S3 secret key
+- `S3_BUCKET` - S3 bucket name for media uploads
+- `S3_REGION` - AWS region (default: us-east-1)
+- `S3_ENDPOINT` - S3 endpoint URL
+
+**Media Storage**: This project uses AWS S3 for media storage via `@payloadcms/storage-s3`. All media uploads are stored in S3, not locally. Ensure S3 credentials are configured before uploading media.
+
+## API Externa - Eureka Digital
+
+A página de obras (`/obras`) consome dados de uma API externa da plataforma Eureka Digital.
+
+### Base URL
+
+```
+https://acesso.eurekadigital.app
+```
+
+### Endpoints
+
+#### 1. Listar Produtos
+
+```
+GET /api/products
+```
+
+**Query Parameters:**
+
+| Parâmetro | Tipo | Default | Descrição |
+|-----------|------|---------|-----------|
+| `query` | string | `''` | Busca por título (case-insensitive) |
+| `offset` | number | `1` | Número da página (1-based) |
+| `limit` | number | `12` | Itens por página |
+| `categories` | string | - | IDs de categorias separados por vírgula |
+| `schoolCycles` | string | - | IDs de ciclos escolares separados por vírgula |
+
+**Resposta:**
+
+```json
+{
+  "list": [...],
+  "totalCount": 45,
+  "totalPages": 4,
+  "currentPage": 1,
+  "limit": 12
+}
+```
+
+#### 2. Opções de Filtro
+
+```
+GET /api/products/options
+```
+
+Retorna categorias, ciclos escolares e produtos disponíveis para filtros.
+
+**Resposta:**
+
+```json
+{
+  "categories": [
+    { "_id": "...", "label": "Matemática", "name": "matematica" }
+  ],
+  "schoolCycles": [
+    { "_id": "...", "label": "Ensino Fundamental", "name": "ensino-fundamental" }
+  ],
+  "products": [...]
+}
+```
+
+### Tipos de Produto
+
+Os tipos de produto são gerenciados pelo sistema de configuração em `src/services/products/config.ts`.
+
+**IDs Reais da API:**
+
+| Tipo | ID | Label | Características |
+|------|-----|-------|-----------------|
+| **Livro** | `643558e19900697552678b44` | Livro | Produto individual |
+| **Coleção** | `64355a169900697552678b45` | Coleção | Possui array `products` com volumes |
+| **Projeto** | `6493a0497ea1f7753234d078` | Projeto | Projetos especiais |
+
+**Uso no código:**
+
+```tsx
+import { getProductTypeConfig, isCollection, isBook, isProject } from '@/services/products'
+
+// Obter configuração completa (badge label, classes CSS)
+const typeConfig = getProductTypeConfig(product)
+const badgeLabel = typeConfig.getBadgeLabel(product)
+const badgeColor = typeConfig.badgeClassName
+
+// Ou usar helpers para verificação específica
+if (isCollection(product)) { ... }
+if (isBook(product)) { ... }
+if (isProject(product)) { ... }
+```
+
+**Adicionando novo tipo de produto:**
+
+1. Adicionar ID em `PRODUCT_TYPE_IDS` em `src/services/products/config.ts`
+2. Adicionar configuração em `configById` com: `key`, `getBadgeLabel`, `badgeClassName`
+3. Opcional: adicionar fallback por regex em `configByLabelPattern`
+
+```tsx
+// Exemplo: adicionando tipo "Kit"
+export const PRODUCT_TYPE_IDS = {
+  ...
+  KIT: 'novo-id-aqui',
+} as const
+
+[PRODUCT_TYPE_IDS.KIT]: {
+  key: 'kit',
+  getBadgeLabel: (p) => `Kit • ${p.products?.length || 0} itens`,
+  badgeClassName: 'bg-warning text-warning-foreground',
+},
+```
+
+### Campos do Produto
+
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| `_id` | string | ID único |
+| `title` | string | Título do produto |
+| `coverURL` | string | URL da imagem de capa |
+| `mockupURL` | string | URL da imagem de mockup (preferencial) |
+| `schoolCycles` | array | Ciclos escolares associados |
+| `categories` | array | Categorias do produto |
+| `productType` | object | `{ _id, label }` - Tipo do produto |
+| `products` | array | Produtos relacionados (para coleções) |
+
+### Implementação Local
+
+Os componentes que consomem esta API estão em:
+- `src/services/products/` - Service completo (requisições, tipos, config)
+- `src/components/Obras/` - Componentes de UI (ProductCard, ProductList, etc.)
+- `src/app/(frontend)/(pages)/obras/` - Página e layout
+
+### Autenticação
+
+Ambos endpoints são **públicos** e não requerem autenticação.
 
 ## Key Patterns
 
 **Configuring the homepage**:
-The homepage is a **Global** (not a collection) located in **Globais → Homepage** in the admin panel.
+The homepage is a **Global** (not a collection) located in **Globais → Homepage** in the admin panel. **IMPORTANT**: The homepage does NOT use the layout builder. It uses custom React components for each section.
 
 **Homepage structure** (4 customized sections):
 1. **Banners**: Array de banners (Subtítulo, Título, Link, Imagem de Fundo, Imagem em Destaque)
@@ -196,11 +345,20 @@ The homepage is a **Global** (not a collection) located in **Globais → Homepag
 
 All fields use the existing `link` field from `@/fields/link` for consistent link handling (internal pages/posts or custom URLs).
 
+**Rendering homepage sections**:
+- Homepage sections are rendered in `src/app/(frontend)/page.tsx`
+- Each section has a custom React component in `src/components/Sections/Home/`
+- Currently implemented: `BannerSection.tsx`, `SolutionsSection.tsx`
+- To add a new section: create component in `src/components/Sections/Home/`, import in `page.tsx`, and render conditionally
+
 **Configuring navigation (Header & Footer)**:
 The navigation is a **Global** (not a collection) located in **Globais → Navegação** in the admin panel.
 
 **Navigation structure**:
-1. **Menu Superior**: Array de links para o menu header (1 nível apenas)
+1. **Menu Superior**: Array de links/dropdowns para o menu header
+   - Each item can be either:
+     - **Link Simples**: Direct link using the standard `link` field
+     - **Menu Dropdown**: Dropdown menu with label and subitems (each subitem has link, optional image, and optional description)
 2. **Menu Rodapé** (3 grupos):
    - **Soluções**: Título + array de links
    - **Acesse**: Título + array de links
@@ -209,7 +367,7 @@ The navigation is a **Global** (not a collection) located in **Globais → Naveg
 4. **Endereço**: Campo textarea para endereço completo (múltiplas linhas)
 5. **Telefone**: Campo texto para número de telefone
 
-All menu links use the existing `link` field for consistent handling. Social media links use a custom structure with icon selector + URL.
+All menu links use the existing `link` field from `@/fields/link` for consistent handling. Social media links use a custom structure with icon selector + URL.
 
 **Adding a new collection**:
 1. Create collection config in `src/collections/[Name]/index.ts`
@@ -232,3 +390,287 @@ The admin panel includes a "seed database" button that populates demo content. *
 Demo credentials after seeding:
 - Email: `demo-author@payloadcms.com`
 - Password: `password`
+
+## Git Workflow and Commit Guidelines
+
+### Conventional Commits
+
+**ALWAYS** follow Conventional Commits specification for all commits. This ensures clear, semantic commit history.
+
+**Format**: `<type>(<scope>): <description>`
+
+**Types**:
+- `feat`: New feature or functionality
+- `fix`: Bug fix
+- `refactor`: Code refactoring without changing functionality
+- `style`: Formatting, styling changes (CSS, whitespace, etc)
+- `perf`: Performance improvements
+- `docs`: Documentation changes
+- `test`: Adding or updating tests
+- `chore`: Maintenance tasks, dependencies, build config
+
+**Scope** (optional): Component, file, or feature area (e.g., `header`, `solutions`, `api`)
+
+**Examples**:
+```bash
+feat(homepage): add animated banner section
+fix(navigation): resolve dropdown menu positioning
+refactor(media): simplify image upload logic
+style(solutions): adjust card typography and spacing
+docs: update environment variables in CLAUDE.md
+```
+
+### Commit Best Practices
+
+1. **Modular commits**: One logical change per commit
+   - Group related changes (e.g., all changes for one feature)
+   - Separate unrelated changes into different commits
+   - Makes code review and rollback easier
+
+2. **Complete functionality**: Commit when a feature/fix is complete and working
+   - Don't commit broken code
+   - Ensure changes don't break existing functionality
+   - Test before committing
+
+3. **Clear descriptions**: Write descriptive commit messages
+   - First line: concise summary (50-72 chars)
+   - Body (optional): detailed explanation with bullet points
+   - Include "why" not just "what"
+
+4. **Use HEREDOC for multi-line messages**:
+   ```bash
+   git commit -m "$(cat <<'EOF'
+   feat(solutions): add scroll-based animations
+
+   - Implement scroll direction detection
+   - Add conditional header animation
+   - Add animated decorative circles
+
+   🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+   Co-Authored-By: Claude <noreply@anthropic.com>
+   EOF
+   )"
+   ```
+
+5. **Always include attribution** in commits:
+   ```
+   🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+   Co-Authored-By: Claude <noreply@anthropic.com>
+   ```
+
+### Example Workflow
+
+```bash
+# 1. Check status and review changes
+git status
+git diff
+
+# 2. Stage related changes
+git add src/components/Feature.tsx
+
+# 3. Commit with conventional format
+git commit -m "feat(feature): add new feature description"
+
+# 4. Repeat for each logical change
+git add src/styles/feature.css
+git commit -m "style(feature): add feature styling"
+```
+## Convenção de Nomenclatura: Blocks (Frontend)
+
+**Regra**: Todos os componentes de seção/bloco seguem o padrão `[Nome]Block` e ficam em `src/blocks/`.
+
+### Estrutura de Diretórios
+
+```
+src/blocks/
+├── Home/                          # Blocos específicos da homepage
+│   ├── BannerBlock/Component.tsx
+│   ├── SolutionsBlock/Component.tsx
+│   ├── AboutBlock/Component.tsx
+│   ├── StoriesBlock/Component.tsx
+│   └── AIBlock/Component.tsx
+├── About/                         # Blocos específicos da página Sobre
+│   ├── IntroBlock/Component.tsx
+│   └── VideoBlock/Component.tsx
+├── Contact/                       # Blocos específicos da página Contato
+│   ├── ContactFormBlock/Component.tsx
+│   └── PressContactBlock/Component.tsx
+├── SpacerBlock/Component.tsx      # Blocos compartilhados (raiz)
+├── PageBannerBlock/Component.tsx
+├── AlternatingBlock/Component.tsx
+├── CardGridBlock/Component.tsx
+├── IconInfoListBlock/Component.tsx
+├── TextImageStackBlock/Component.tsx
+├── ImageTextGridBlock/Component.tsx
+├── OverlappingImageBlock/Component.tsx
+├── StatsBlock/Component.tsx
+├── SocialCTABlock/Component.tsx
+├── NumberedCardsBlock/
+│   ├── Component.tsx
+│   └── connectors/
+└── [blocos do Payload CMS...]     # ArchiveBlock, Banner, CallToAction, etc.
+```
+
+### Padrão de Nomenclatura
+- **Diretório**: `[Nome]Block/`
+- **Componente**: `Component.tsx`
+- **Export**: `export function [Nome]Block`
+- **Props**: `interface [Nome]BlockProps`
+
+### Tipos de Blocos
+
+1. **Blocos específicos de página** (`blocks/Home/`, `blocks/About/`, `blocks/Contact/`)
+   - Usados apenas em uma página específica
+   - Não são registrados no layout builder
+
+2. **Blocos compartilhados** (`blocks/` raiz)
+   - Reutilizáveis entre múltiplas páginas
+   - Podem ser registrados no layout builder futuramente
+
+3. **Blocos do Payload CMS** (`blocks/Content/`, `blocks/Form/`, etc.)
+   - Já registrados no layout builder
+   - Possuem `config.ts` com schema Payload
+
+### Criando um Novo Block
+
+1. Identifique o escopo (página específica ou compartilhado)
+2. Crie o diretório em `src/blocks/[Página]/[Nome]Block/` ou `src/blocks/[Nome]Block/`
+3. Crie `Component.tsx` com export nomeado
+4. Importe e use na página correspondente
+
+### Exemplo - PageBannerBlock (Compartilhado)
+
+```tsx
+import { PageBannerBlock } from '@/blocks/PageBannerBlock/Component'
+
+<PageBannerBlock
+  title="Título da Página"
+  backgroundImage="/path/to/image.jpg"
+  breadcrumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Página Atual' }
+  ]}
+/>
+```
+
+### Exemplo - AlternatingBlock (Compartilhado)
+
+```tsx
+import { AlternatingBlock } from '@/blocks/AlternatingBlock/Component'
+
+<AlternatingBlock
+  title="Eureka?"
+  subtitle="Por que"
+  showArrow={true}
+  items={[
+    {
+      primaryText: 'Texto principal com <strong>destaque</strong>',
+      secondaryText: 'Texto secundário opcional',
+      images: [
+        { src: '/mock/image-1.png', alt: 'Descrição' },
+        { src: '/mock/image-2.png', alt: 'Descrição' }
+      ]
+    }
+  ]}
+/>
+```
+
+### Exemplo - BannerBlock (Home)
+
+```tsx
+import { BannerBlock } from '@/blocks/Home/BannerBlock/Component'
+
+<BannerBlock banners={homepage.banners} />
+```
+
+## Convenção de Services
+
+Serviços externos e APIs são organizados por domínio em `src/services/`.
+
+### Estrutura de Tipos
+
+**Tipos globais** (`src/types/`):
+- `api.d.ts` - Interfaces genéricas de API (PaginatedResponse, PaginationParams)
+
+**Tipos por domínio** (`src/services/[dominio]/types/`):
+- `entities.d.ts` - Entidades específicas do domínio
+- `index.ts` - Barrel exports
+
+### Estrutura de Service
+
+```
+src/services/
+└── [dominio]/
+    ├── index.ts                  # Barrel exports públicos
+    ├── types/
+    │   ├── index.ts              # Re-exports de types do domínio
+    │   └── entities.d.ts         # Entidades do domínio
+    ├── get[Recurso].ts           # Requisição GET (params + response dentro)
+    ├── create[Recurso].ts        # Requisição POST (params + response dentro)
+    └── config.ts                 # Configurações do domínio (opcional)
+```
+
+### Convenções de Tipos
+
+1. **Interfaces genéricas** (`src/types/api.d.ts`): Padrões reutilizáveis entre domínios
+2. **Entidades** (`types/entities.d.ts`): Estruturas de dados específicas do domínio
+3. **Params/Response**: Definidos dentro do próprio arquivo da requisição
+   - Extendem interfaces genéricas de `@/types/api` quando aplicável
+   - Usam entidades de `./types` para tipagem de dados
+
+### Criando um Novo Service
+
+1. Criar pasta em `src/services/[nome-dominio]/`
+2. Criar `types/entities.d.ts` com entidades do domínio
+3. Criar `types/index.ts` com barrel exports
+4. Criar `get[Recurso].ts` para cada requisição GET
+5. Criar `index.ts` com barrel exports públicos
+6. (Opcional) Criar `config.ts` para constantes/helpers
+
+### Exemplo de Import
+
+```ts
+// De fora do service
+import { getProducts, Product, GetProductsParams } from '@/services/products'
+
+// Dentro do service (getProducts.ts)
+import type { Product } from './types'
+import type { PaginatedResponse, PaginationParams } from '@/types/api'
+```
+
+### Service Existente: Products
+
+```
+src/services/products/
+├── index.ts              # Barrel exports
+├── types/
+│   ├── index.ts
+│   └── entities.d.ts     # Product, Category, SchoolCycle, ProductType
+├── getProducts.ts        # Busca produtos com filtros
+├── getFilterOptions.ts   # Busca opções de filtro
+└── config.ts             # Configuração de tipos de produto (badges, helpers)
+```
+
+**Uso:**
+
+```tsx
+import {
+  getProducts,
+  getFilterOptions,
+  getProductTypeConfig,
+  isCollection,
+  type Product,
+  type GetProductsParams
+} from '@/services/products'
+
+// Buscar produtos
+const { list, totalPages } = await getProducts({ page: 1, limit: 12 })
+
+// Buscar opções de filtro
+const { categories, schoolCycles } = await getFilterOptions()
+
+// Verificar tipo de produto
+const typeConfig = getProductTypeConfig(product)
+```

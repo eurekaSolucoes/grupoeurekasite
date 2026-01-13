@@ -1,26 +1,37 @@
 import type { Metadata } from 'next'
 
 import { cn } from '@/utilities/ui'
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
-import React from 'react'
+
+import { Jost, Albert_Sans } from 'next/font/google'
 
 import { AdminBar } from '@/components/AdminBar'
-// TODO: Implement Navigation components for Header/Footer
-// import { Footer } from '@/Footer/Component'
-// import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
-import './globals.css'
+import '@/styles/global.css';
 import { getServerSideURL } from '@/utilities/getURL'
+
+const jost = Jost({
+  subsets: ['latin'],
+  variable: '--font-jost',
+  display: 'swap',
+})
+
+const albertSans = Albert_Sans({
+  subsets: ['latin'],
+  variable: '--font-albert-sans',
+  display: 'swap',
+})
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en">
+    <html
+      className={cn( jost.variable, albertSans.variable)}
+      lang="pt-BR"
+    >
       <head>
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
@@ -33,11 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           />
 
-          {/* TODO: Implement Header component using Navigation global */}
-          {/* <Header /> */}
           {children}
-          {/* TODO: Implement Footer component using Navigation global */}
-          {/* <Footer /> */}
         </Providers>
       </body>
     </html>
@@ -49,6 +56,5 @@ export const metadata: Metadata = {
   openGraph: mergeOpenGraph(),
   twitter: {
     card: 'summary_large_image',
-    creator: '@payloadcms',
   },
 }

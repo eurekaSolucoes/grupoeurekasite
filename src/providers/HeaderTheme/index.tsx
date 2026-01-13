@@ -1,33 +1,58 @@
 'use client'
 
-import type { Theme } from '@/providers/Theme/types'
-
-import React, { createContext, useCallback, use, useState } from 'react'
+import React, { createContext, useCallback, use, useState, useMemo } from 'react'
 
 import canUseDOM from '@/utilities/canUseDOM'
+import { EurekaLogoVariants } from '@/components/animate/EurekaLogo'
+
+/** Visual theme for the header - controls styling/colors */
+export type HeaderThemeVariant = 'secondary' | 'default'
+
+export type HeaderTheme = {
+  theme?: HeaderThemeVariant
+  logoTheme: {
+    mobile: EurekaLogoVariants | null
+    desktop: EurekaLogoVariants | null
+  } | null
+}
 
 export interface ContextType {
-  headerTheme?: Theme | null
-  setHeaderTheme: (theme: Theme | null) => void
+  headerTheme?: HeaderTheme | null
+  changeHeaderTheme: (theme: HeaderTheme | null) => void
 }
 
 const initialContext: ContextType = {
-  headerTheme: undefined,
-  setHeaderTheme: () => null,
+  headerTheme: null,
+  changeHeaderTheme: () => null,
 }
 
 const HeaderThemeContext = createContext(initialContext)
 
 export const HeaderThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [headerTheme, setThemeState] = useState<Theme | undefined | null>(
-    canUseDOM ? (document.documentElement.getAttribute('data-theme') as Theme) : undefined,
+  const [headerTheme, setHeaderTheme] = useState<HeaderTheme | undefined | null>(
+    canUseDOM
+      ? {
+          theme: document.documentElement.dataset.headerTheme as HeaderThemeVariant | undefined,
+          logoTheme: {
+            mobile:
+              (document.documentElement.dataset.logoThemeMobile as EurekaLogoVariants) ?? null,
+            desktop:
+              (document.documentElement.dataset.logoThemeDesktop as EurekaLogoVariants) ?? null,
+          },
+        }
+      : null,
   )
 
-  const setHeaderTheme = useCallback((themeToSet: Theme | null) => {
-    setThemeState(themeToSet)
+  const changeHeaderTheme = useCallback((themeToChange: HeaderTheme | null) => {
+    setHeaderTheme(themeToChange)
   }, [])
 
-  return <HeaderThemeContext value={{ headerTheme, setHeaderTheme }}>{children}</HeaderThemeContext>
+  const value = useMemo(
+    () => ({ headerTheme, changeHeaderTheme }),
+    [headerTheme, changeHeaderTheme],
+  )
+
+  return <HeaderThemeContext value={value}>{children}</HeaderThemeContext>
 }
 
 export const useHeaderTheme = (): ContextType => use(HeaderThemeContext)

@@ -71,6 +71,7 @@ export interface Config {
     posts: Post;
     projects: Project;
     media: Media;
+    documents: Document;
     categories: Category;
     users: User;
     redirects: Redirect;
@@ -89,6 +90,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    documents: DocumentsSelect<false> | DocumentsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -153,49 +155,47 @@ export interface Page {
   id: string;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
-    richText?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-    links?:
+    /**
+     * Escolha o fundo do topo da página.
+     */
+    bgTheme?: ('' | 'blue') | null;
+    title: string;
+    backgroundImage?: (string | null) | Media;
+    /**
+     * Navegação de trilha. Deixe href vazio para o item atual.
+     */
+    breadcrumbs?:
       | {
-          link: {
-            type?: ('reference' | 'custom') | null;
-            newTab?: boolean | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: string | Page;
-                } | null)
-              | ({
-                  relationTo: 'posts';
-                  value: string | Post;
-                } | null);
-            url?: string | null;
-            label: string;
-            /**
-             * Choose how the link should be rendered.
-             */
-            appearance?: ('default' | 'outline') | null;
-          };
+          label: string;
+          /**
+           * Deixe vazio para o item atual (último da trilha)
+           */
+          href?: string | null;
           id?: string | null;
         }[]
       | null;
-    media?: (string | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | SpacerBlock
+    | ContentBlock
+    | CardGridBlock
+    | TextImageStackBlock
+    | ImageTextGridBlock
+    | AlternatingBlock
+    | SplitContentBlock
+    | AccordionListBlock
+    | ImageBlock
+    | CallToActionBlock
+    | StatsBlock
+    | SocialCTABlock
+    | MediaBlock
+    | VideoBlock
+    | OverlappingImageBlock
+    | IconInfoListBlock
+    | NumberedCardsBlock
+    | FormBlock
+    | ArchiveBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -205,56 +205,6 @@ export interface Page {
     description?: string | null;
   };
   publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: string;
-  title: string;
-  heroImage?: (string | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (string | Post)[] | null;
-  categories?: (string | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (string | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (string | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -358,6 +308,117 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SpacerBlock".
+ */
+export interface SpacerBlock {
+  size: 'xs' | 'sm' | 'md' | 'lg';
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'spacerBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentBlock".
+ */
+export interface ContentBlock {
+  columns?:
+    | {
+        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+        richText?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        enableLink?: boolean | null;
+        link?: {
+          type?: ('reference' | 'custom' | 'document') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          document?: (string | null) | Document;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'content';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: string;
+  title: string;
+  heroImage?: (string | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  relatedPosts?: (string | Post)[] | null;
+  categories?: (string | Category)[] | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  authors?: (string | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -407,6 +468,308 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents".
+ */
+export interface Document {
+  id: string;
+  /**
+   * Nome descritivo do documento
+   */
+  title: string;
+  /**
+   * Descrição opcional do documento
+   */
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardGridBlock".
+ */
+export interface CardGridBlock {
+  columns?: ('2' | '3') | null;
+  items: {
+    image: string | Media;
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Link ao clicar no card
+     */
+    link?: {
+      type?: ('reference' | 'custom' | 'document') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      document?: (string | null) | Document;
+    };
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardGridBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TextImageStackBlock".
+ */
+export interface TextImageStackBlock {
+  headingText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  mainImage?: (string | null) | Media;
+  bodyText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Adicione 2 imagens para o efeito de sobreposição
+   */
+  overlappingImages?:
+    | {
+        image: string | Media;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'textImageStackBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageTextGridBlock".
+ */
+export interface ImageTextGridBlock {
+  headingText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  bodyText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  layout?: ('images-left' | 'images-right') | null;
+  images: {
+    image: string | Media;
+    size?: ('sm' | 'md' | 'lg') | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageTextGridBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AlternatingBlock".
+ */
+export interface AlternatingBlock {
+  /**
+   * Texto menor acima do título (ex: "Por que")
+   */
+  subtitle?: string | null;
+  /**
+   * Título principal em destaque (ex: "Eureka?")
+   */
+  title?: string | null;
+  showArrow?: boolean | null;
+  items: {
+    primaryText?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    secondaryText?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    /**
+     * Adicione até 2 imagens (a segunda ficará sobreposta)
+     */
+    images?:
+      | {
+          image: string | Media;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'alternatingBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SplitContentBlock".
+ */
+export interface SplitContentBlock {
+  headline: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  headlineSize?: ('large' | 'medium') | null;
+  headlineWidth?: ('narrow' | 'wide') | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  contentSize?: ('large' | 'medium') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'splitContentBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AccordionListBlock".
+ */
+export interface AccordionListBlock {
+  items: {
+    /**
+     * Selecione um ícone da biblioteca Lucide
+     */
+    iconName: string;
+    title: string;
+    /**
+     * Conteúdo exibido quando o item é expandido
+     */
+    content?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'accordionListBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageBlock".
+ */
+export interface ImageBlock {
+  image: string | Media;
+  imageRounded?: ('default' | 'small' | 'none') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
@@ -428,7 +791,7 @@ export interface CallToActionBlock {
   links?:
     | {
         link: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'custom' | 'document') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -440,6 +803,7 @@ export interface CallToActionBlock {
                 value: string | Post;
               } | null);
           url?: string | null;
+          document?: (string | null) | Document;
           label: string;
           /**
            * Choose how the link should be rendered.
@@ -455,53 +819,54 @@ export interface CallToActionBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock".
+ * via the `definition` "StatsBlock".
  */
-export interface ContentBlock {
-  columns?:
-    | {
-        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-        richText?: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        } | null;
-        enableLink?: boolean | null;
-        link?: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
+export interface StatsBlock {
+  items: {
+    /**
+     * Ex: +, R$, etc.
+     */
+    prefix?: string | null;
+    stat: number;
+    /**
+     * Ex: %, mil, anos, etc.
+     */
+    suffix?: string | null;
+    label: string;
+    id?: string | null;
+  }[];
   id?: string | null;
   blockName?: string | null;
-  blockType: 'content';
+  blockType: 'statsBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SocialCTABlock".
+ */
+export interface SocialCTABlock {
+  text: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  backgroundImage: string | Media;
+  /**
+   * Redes Sociais exibe ícones do menu rodapé. WhatsApp exibe botão de contato.
+   */
+  type?: ('social' | 'whatsapp') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'socialCTABlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -515,10 +880,59 @@ export interface MediaBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock".
+ * via the `definition` "VideoBlock".
  */
-export interface ArchiveBlock {
-  introContent?: {
+export interface VideoBlock {
+  backgroundImage: string | Media;
+  headline: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  buttonLabel: string;
+  /**
+   * Link do YouTube, Vimeo ou vídeo externo
+   */
+  videoUrl?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'videoBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OverlappingImageBlock".
+ */
+export interface OverlappingImageBlock {
+  /**
+   * Imagem que ficará sobreposta no topo do bloco colorido
+   */
+  image: string | Media;
+  title: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  content?: {
     root: {
       type: string;
       children: {
@@ -533,19 +947,102 @@ export interface ArchiveBlock {
     };
     [k: string]: unknown;
   } | null;
-  populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
-  categories?: (string | Category)[] | null;
-  limit?: number | null;
-  selectedDocs?:
-    | {
-        relationTo: 'posts';
-        value: string | Post;
-      }[]
-    | null;
+  variant?: ('primary' | 'secondary' | 'accent') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'archive';
+  blockType: 'overlappingImageBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "IconInfoListBlock".
+ */
+export interface IconInfoListBlock {
+  /**
+   * Título opcional exibido acima da lista
+   */
+  title?: string | null;
+  items: {
+    /**
+     * Selecione um ícone da biblioteca Lucide
+     */
+    icon: string;
+    label: string;
+    /**
+     * Texto do valor. Suporta múltiplas linhas.
+     */
+    value: string;
+    /**
+     * URL para tornar o valor clicável
+     */
+    href?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'iconInfoListBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NumberedCardsBlock".
+ */
+export interface NumberedCardsBlock {
+  title?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  subtitle: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  cards: {
+    /**
+     * Número exibido no card (1-9)
+     */
+    number: number;
+    title?: string | null;
+    description: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    image: string | Media;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'numberedCardsBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -746,6 +1243,40 @@ export interface Form {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArchiveBlock".
+ */
+export interface ArchiveBlock {
+  introContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  populateBy?: ('collection' | 'selection') | null;
+  relationTo?: 'posts' | null;
+  categories?: (string | Category)[] | null;
+  limit?: number | null;
+  selectedDocs?:
+    | {
+        relationTo: 'posts';
+        value: string | Post;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'archive';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -984,6 +1515,10 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
+        relationTo: 'documents';
+        value: string | Document;
+      } | null)
+    | ({
         relationTo: 'categories';
         value: string | Category;
       } | null)
@@ -1058,33 +1593,39 @@ export interface PagesSelect<T extends boolean = true> {
   hero?:
     | T
     | {
-        type?: T;
-        richText?: T;
-        links?:
+        bgTheme?: T;
+        title?: T;
+        backgroundImage?: T;
+        breadcrumbs?:
           | T
           | {
-              link?:
-                | T
-                | {
-                    type?: T;
-                    newTab?: T;
-                    reference?: T;
-                    url?: T;
-                    label?: T;
-                    appearance?: T;
-                  };
+              label?: T;
+              href?: T;
               id?: T;
             };
-        media?: T;
       };
   layout?:
     | T
     | {
-        cta?: T | CallToActionBlockSelect<T>;
+        spacerBlock?: T | SpacerBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
+        cardGridBlock?: T | CardGridBlockSelect<T>;
+        textImageStackBlock?: T | TextImageStackBlockSelect<T>;
+        imageTextGridBlock?: T | ImageTextGridBlockSelect<T>;
+        alternatingBlock?: T | AlternatingBlockSelect<T>;
+        splitContentBlock?: T | SplitContentBlockSelect<T>;
+        accordionListBlock?: T | AccordionListBlockSelect<T>;
+        imageBlock?: T | ImageBlockSelect<T>;
+        cta?: T | CallToActionBlockSelect<T>;
+        statsBlock?: T | StatsBlockSelect<T>;
+        socialCTABlock?: T | SocialCTABlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
-        archive?: T | ArchiveBlockSelect<T>;
+        videoBlock?: T | VideoBlockSelect<T>;
+        overlappingImageBlock?: T | OverlappingImageBlockSelect<T>;
+        iconInfoListBlock?: T | IconInfoListBlockSelect<T>;
+        numberedCardsBlock?: T | NumberedCardsBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        archive?: T | ArchiveBlockSelect<T>;
       };
   meta?:
     | T
@@ -1102,25 +1643,10 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock_select".
+ * via the `definition` "SpacerBlock_select".
  */
-export interface CallToActionBlockSelect<T extends boolean = true> {
-  richText?: T;
-  links?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
+export interface SpacerBlockSelect<T extends boolean = true> {
+  size?: T;
   id?: T;
   blockName?: T;
 }
@@ -1142,11 +1668,189 @@ export interface ContentBlockSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              document?: T;
               label?: T;
               appearance?: T;
             };
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardGridBlock_select".
+ */
+export interface CardGridBlockSelect<T extends boolean = true> {
+  columns?: T;
+  items?:
+    | T
+    | {
+        image?: T;
+        title?: T;
+        description?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              document?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TextImageStackBlock_select".
+ */
+export interface TextImageStackBlockSelect<T extends boolean = true> {
+  headingText?: T;
+  mainImage?: T;
+  bodyText?: T;
+  overlappingImages?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageTextGridBlock_select".
+ */
+export interface ImageTextGridBlockSelect<T extends boolean = true> {
+  headingText?: T;
+  bodyText?: T;
+  layout?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        size?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AlternatingBlock_select".
+ */
+export interface AlternatingBlockSelect<T extends boolean = true> {
+  subtitle?: T;
+  title?: T;
+  showArrow?: T;
+  items?:
+    | T
+    | {
+        primaryText?: T;
+        secondaryText?: T;
+        images?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SplitContentBlock_select".
+ */
+export interface SplitContentBlockSelect<T extends boolean = true> {
+  headline?: T;
+  headlineSize?: T;
+  headlineWidth?: T;
+  content?: T;
+  contentSize?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AccordionListBlock_select".
+ */
+export interface AccordionListBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        iconName?: T;
+        title?: T;
+        content?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageBlock_select".
+ */
+export interface ImageBlockSelect<T extends boolean = true> {
+  image?: T;
+  imageRounded?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CallToActionBlock_select".
+ */
+export interface CallToActionBlockSelect<T extends boolean = true> {
+  richText?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              document?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock_select".
+ */
+export interface StatsBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        prefix?: T;
+        stat?: T;
+        suffix?: T;
+        label?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SocialCTABlock_select".
+ */
+export interface SocialCTABlockSelect<T extends boolean = true> {
+  text?: T;
+  backgroundImage?: T;
+  type?: T;
   id?: T;
   blockName?: T;
 }
@@ -1161,15 +1865,62 @@ export interface MediaBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock_select".
+ * via the `definition` "VideoBlock_select".
  */
-export interface ArchiveBlockSelect<T extends boolean = true> {
-  introContent?: T;
-  populateBy?: T;
-  relationTo?: T;
-  categories?: T;
-  limit?: T;
-  selectedDocs?: T;
+export interface VideoBlockSelect<T extends boolean = true> {
+  backgroundImage?: T;
+  headline?: T;
+  buttonLabel?: T;
+  videoUrl?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OverlappingImageBlock_select".
+ */
+export interface OverlappingImageBlockSelect<T extends boolean = true> {
+  image?: T;
+  title?: T;
+  content?: T;
+  variant?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "IconInfoListBlock_select".
+ */
+export interface IconInfoListBlockSelect<T extends boolean = true> {
+  title?: T;
+  items?:
+    | T
+    | {
+        icon?: T;
+        label?: T;
+        value?: T;
+        href?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NumberedCardsBlock_select".
+ */
+export interface NumberedCardsBlockSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  cards?:
+    | T
+    | {
+        number?: T;
+        title?: T;
+        description?: T;
+        image?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1181,6 +1932,20 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArchiveBlock_select".
+ */
+export interface ArchiveBlockSelect<T extends boolean = true> {
+  introContent?: T;
+  populateBy?: T;
+  relationTo?: T;
+  categories?: T;
+  limit?: T;
+  selectedDocs?: T;
   id?: T;
   blockName?: T;
 }
@@ -1328,6 +2093,25 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents_select".
+ */
+export interface DocumentsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1643,8 +2427,15 @@ export interface Navigation {
   id: string;
   headerMenu?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
+        /**
+         * Escolha se este item é um link direto ou um menu dropdown com subitens
+         */
+        type: 'link' | 'dropdown';
+        /**
+         * Destino do link (página interna ou URL customizada)
+         */
+        link?: {
+          type?: ('reference' | 'custom' | 'document') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -1656,8 +2447,48 @@ export interface Navigation {
                 value: string | Post;
               } | null);
           url?: string | null;
+          document?: (string | null) | Document;
           label: string;
         };
+        /**
+         * Texto que aparecerá no botão do dropdown
+         */
+        label?: string | null;
+        /**
+         * Itens que aparecerão no menu dropdown
+         */
+        subitems?:
+          | {
+              /**
+               * Destino do subitem
+               */
+              link: {
+                type?: ('reference' | 'custom' | 'document') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null);
+                url?: string | null;
+                document?: (string | null) | Document;
+                label: string;
+              };
+              /**
+               * Imagem opcional para o subitem (aparece no menu dropdown)
+               */
+              image?: (string | null) | Media;
+              /**
+               * Descrição opcional do subitem
+               */
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -1667,7 +2498,7 @@ export interface Navigation {
       links?:
         | {
             link: {
-              type?: ('reference' | 'custom') | null;
+              type?: ('reference' | 'custom' | 'document') | null;
               newTab?: boolean | null;
               reference?:
                 | ({
@@ -1679,6 +2510,7 @@ export interface Navigation {
                     value: string | Post;
                   } | null);
               url?: string | null;
+              document?: (string | null) | Document;
               label: string;
             };
             id?: string | null;
@@ -1690,7 +2522,7 @@ export interface Navigation {
       links?:
         | {
             link: {
-              type?: ('reference' | 'custom') | null;
+              type?: ('reference' | 'custom' | 'document') | null;
               newTab?: boolean | null;
               reference?:
                 | ({
@@ -1702,6 +2534,31 @@ export interface Navigation {
                     value: string | Post;
                   } | null);
               url?: string | null;
+              document?: (string | null) | Document;
+              label: string;
+            };
+            id?: string | null;
+          }[]
+        | null;
+    };
+    compliance: {
+      title: string;
+      links?:
+        | {
+            link: {
+              type?: ('reference' | 'custom' | 'document') | null;
+              newTab?: boolean | null;
+              reference?:
+                | ({
+                    relationTo: 'pages';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'posts';
+                    value: string | Post;
+                  } | null);
+              url?: string | null;
+              document?: (string | null) | Document;
               label: string;
             };
             id?: string | null;
@@ -1746,7 +2603,7 @@ export interface Homepage {
         subtitle?: string | null;
         title: string;
         link: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'custom' | 'document') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -1758,6 +2615,7 @@ export interface Homepage {
                 value: string | Post;
               } | null);
           url?: string | null;
+          document?: (string | null) | Document;
           label: string;
         };
         backgroundImage: string | Media;
@@ -1772,11 +2630,8 @@ export interface Homepage {
       | {
           image: string | Media;
           title: string;
-          /**
-           * Link opcional para o card
-           */
-          link: {
-            type?: ('reference' | 'custom') | null;
+          link?: {
+            type?: ('reference' | 'custom' | 'document') | null;
             newTab?: boolean | null;
             reference?:
               | ({
@@ -1788,7 +2643,7 @@ export interface Homepage {
                   value: string | Post;
                 } | null);
             url?: string | null;
-            label: string;
+            document?: (string | null) | Document;
           };
           id?: string | null;
         }[]
@@ -1797,8 +2652,36 @@ export interface Homepage {
     animatedPhrase?: string | null;
   };
   about: {
-    mainText: string;
-    secondaryText?: string | null;
+    mainText: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    secondaryText?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
     rightImages?:
       | {
           image: string | Media;
@@ -1812,7 +2695,7 @@ export interface Homepage {
         }[]
       | null;
     link: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'custom' | 'document') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -1824,6 +2707,7 @@ export interface Homepage {
             value: string | Post;
           } | null);
       url?: string | null;
+      document?: (string | null) | Document;
       label: string;
     };
     animatedPhrase?: string | null;
@@ -1833,7 +2717,7 @@ export interface Homepage {
     subtitle?: string | null;
     description?: string | null;
     link: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'custom' | 'document') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -1845,6 +2729,7 @@ export interface Homepage {
             value: string | Post;
           } | null);
       url?: string | null;
+      document?: (string | null) | Document;
       label: string;
     };
     cards?:
@@ -1852,6 +2737,21 @@ export interface Homepage {
           image: string | Media;
           title: string;
           description: string;
+          link?: {
+            type?: ('reference' | 'custom' | 'document') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
+            url?: string | null;
+            document?: (string | null) | Document;
+          };
           id?: string | null;
         }[]
       | null;
@@ -1867,6 +2767,7 @@ export interface NavigationSelect<T extends boolean = true> {
   headerMenu?:
     | T
     | {
+        type?: T;
         link?:
           | T
           | {
@@ -1874,7 +2775,26 @@ export interface NavigationSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              document?: T;
               label?: T;
+            };
+        label?: T;
+        subitems?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    document?: T;
+                    label?: T;
+                  };
+              image?: T;
+              description?: T;
+              id?: T;
             };
         id?: T;
       };
@@ -1895,6 +2815,7 @@ export interface NavigationSelect<T extends boolean = true> {
                           newTab?: T;
                           reference?: T;
                           url?: T;
+                          document?: T;
                           label?: T;
                         };
                     id?: T;
@@ -1914,6 +2835,27 @@ export interface NavigationSelect<T extends boolean = true> {
                           newTab?: T;
                           reference?: T;
                           url?: T;
+                          document?: T;
+                          label?: T;
+                        };
+                    id?: T;
+                  };
+            };
+        compliance?:
+          | T
+          | {
+              title?: T;
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          document?: T;
                           label?: T;
                         };
                     id?: T;
@@ -1957,6 +2899,7 @@ export interface HomepageSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              document?: T;
               label?: T;
             };
         backgroundImage?: T;
@@ -1980,7 +2923,7 @@ export interface HomepageSelect<T extends boolean = true> {
                     newTab?: T;
                     reference?: T;
                     url?: T;
-                    label?: T;
+                    document?: T;
                   };
               id?: T;
             };
@@ -2011,6 +2954,7 @@ export interface HomepageSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              document?: T;
               label?: T;
             };
         animatedPhrase?: T;
@@ -2028,6 +2972,7 @@ export interface HomepageSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              document?: T;
               label?: T;
             };
         cards?:
@@ -2036,6 +2981,15 @@ export interface HomepageSelect<T extends boolean = true> {
               image?: T;
               title?: T;
               description?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    document?: T;
+                  };
               id?: T;
             };
       };

@@ -1,0 +1,288 @@
+@import 'tailwindcss';
+
+@import 'tw-animate-css';
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply flex min-h-screen flex-col bg-background text-foreground;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: unset;
+    font-weight: unset;
+  }
+
+  a,
+  button {
+    @apply duration-300;
+  }
+}
+
+@utility container {
+  @apply mx-auto px-5;
+}
+
+@utility underline-on-hover {
+  @apply underline decoration-transparent hover:decoration-current;
+}
+
+@utility progressive-blur {
+  @apply relative before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-white/30 before:backdrop-blur-3xl;
+}
+
+.progressive-blur::before {
+  /* Máscara cria o "fade de blur" */
+
+  mask: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 30%);
+}
+
+/* Typography Utilities - Responsive Text Styles */
+@utility typography-display {
+  @apply font-heading text-display-mobile/[1.1] tracking-tight lg:text-display-desktop/none lg:tracking-normal;
+}
+
+@utility typography-heading {
+  @apply font-heading text-heading-mobile/none tracking-tight lg:text-heading-desktop/[1.2] lg:tracking-normal;
+}
+
+@utility typography-subheading {
+  @apply font-heading text-subheading-mobile/tight lg:text-subheading-desktop/tight;
+}
+
+@utility typography-body-large {
+  @apply font-sans text-body-large-mobile/relaxed lg:text-body-large-desktop/loose;
+}
+
+@utility typography-body {
+  @apply font-sans text-body-mobile/relaxed lg:text-body-desktop/normal;
+}
+
+@utility typography-caption {
+  @apply font-sans text-caption-mobile/normal lg:text-caption-desktop/normal;
+}
+
+@theme {
+  --animate-loader-rotate: loader-rotate 1s linear infinite;
+  --animate-loader-clip-fix: loader-clip-fix 2s linear infinite;
+
+  @keyframes loader-rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes loader-clip-fix {
+    0% {
+      clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+    }
+    25% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+    }
+    50% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+    }
+    75% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+    }
+    100% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+    }
+  }
+}
+
+@utility loader-spinner {
+  @apply relative size-6 animate-loader-rotate rounded-full;
+}
+
+.loader-spinner::before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid currentColor;
+  animation: var(--animate-loader-clip-fix);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-dark-blue: var(--brand-dark-blue);
+  --color-sioux-blue: var(--sioux-blue);
+  --color-whatsapp-green: var(--whatsapp-green);
+
+  --text-display-mobile: var(--font-size-display-mobile);
+  --text-display-desktop: var(--font-size-display-desktop);
+  --text-heading-mobile: var(--font-size-heading-mobile);
+  --text-heading-desktop: var(--font-size-heading-desktop);
+  --text-subheading-mobile: var(--font-size-subheading-mobile);
+  --text-subheading-desktop: var(--font-size-subheading-desktop);
+  --text-body-large-mobile: var(--font-size-body-large-mobile);
+  --text-body-large-desktop: var(--font-size-body-large-desktop);
+  --text-body-mobile: var(--font-size-body-mobile);
+  --text-body-desktop: var(--font-size-body-desktop);
+  --text-caption-mobile: var(--font-size-caption-mobile);
+  --text-caption-desktop: var(--font-size-caption-desktop);
+
+  --font-sans: var(--font-albert-sans);
+  --font-heading: var(--font-jost);
+}
+
+/*
+  ---break---
+*/
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: #000;
+  --card: oklch(1 0 0);
+  --card-foreground: #000;
+  --popover: oklch(1 0 0);
+  --popover-foreground: #000;
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: var(--brand-blue);
+  --secondary-foreground: #fff;
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: #686868;
+  --accent: var(--brand-orange);
+  --accent-foreground: #fff;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: #e9ebf5;
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: #000;
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  --brand-orange: #f37021;
+  --brand-blue: #233e94;
+  --brand-dark-blue: #162a6b;
+
+  --sioux-blue: #0074ff;
+  --whatsapp-green: #01b13c;
+
+  /* Typography Scale - Based on Figma Design System */
+  /* Font Sizes - Mobile First */
+  --font-size-display-mobile: 2.75rem; /* 44px - Page Title Mobile */
+  --font-size-display-desktop: 5rem; /* 80px - Page Title Desktop */
+  --font-size-heading-mobile: 2.375rem; /* 38px - Section Heading Mobile */
+  --font-size-heading-desktop: 3.375rem; /* 54px - Section Heading Desktop */
+  --font-size-subheading-mobile: 1.5rem; /* 24px - Box Title Mobile */
+  --font-size-subheading-desktop: 2rem; /* 32px - Box Title Desktop */
+  --font-size-body-large-mobile: 1.125rem; /* 18px - Large Paragraph Mobile */
+  --font-size-body-large-desktop: 1.25rem; /* 20px - Large Paragraph Desktop */
+  --font-size-body-mobile: 1rem; /* 16px - Standard Paragraph Mobile */
+  --font-size-body-desktop: 1.125rem; /* 18px - Standard Paragraph Desktop */
+  --font-size-caption-mobile: 0.6875rem; /* 11px - Small Text Mobile */
+  --font-size-caption-desktop: 0.8125rem; /* 13px - Small Text Desktop */
+}
+
+/* Product Detail Tabs - Cantos convexos externos na aba ativa */
+.product-detail-tab {
+  position: relative;
+}
+
+/* Estado base - cantos invisíveis */
+.product-detail-tab::before,
+.product-detail-tab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.product-detail-tab::before {
+  left: 0;
+  transform: translateX(-100%);
+  border-bottom-right-radius: 18px;
+  box-shadow: 8px 8px 0 0 var(--input);
+}
+
+.product-detail-tab::after {
+  right: 0;
+  transform: translateX(100%);
+  border-bottom-left-radius: 18px;
+  box-shadow: -8px 8px 0 0 var(--input);
+}
+
+/* Estado ativo - cantos visíveis */
+.product-detail-tab[data-state='active']::before,
+.product-detail-tab[data-state='active']::after {
+  opacity: 1;
+}

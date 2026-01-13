@@ -7,6 +7,7 @@ import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
 import { Button } from '@/components/ui/button'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
+import Link from 'next/link'
 
 import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
@@ -114,50 +115,69 @@ export const FormBlock: React.FC<
   )
 
   return (
-    <div className="container lg:max-w-3xl">
+    <div className="container">
       {enableIntro && introContent && !hasSubmitted && (
-        <RichText className="mb-8 lg:mb-12" data={introContent} enableGutter={false} />
+        <RichText
+          className="mb-5 typography-subheading **:text-secondary!"
+          data={introContent}
+          enableGutter={false}
+        />
       )}
-      <div className="p-4 lg:p-6 border border-border rounded-[0.8rem]">
-        <FormProvider {...formMethods}>
-          {!isLoading && hasSubmitted && confirmationType === 'message' && (
-            <RichText data={confirmationMessage} />
-          )}
-          {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
-          {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
-          {!hasSubmitted && (
-            <form id={formID} onSubmit={handleSubmit(onSubmit)}>
-              <div className="mb-4 last:mb-0">
-                {formFromProps &&
-                  formFromProps.fields &&
-                  formFromProps.fields?.map((field, index) => {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const Field: React.FC<any> = fields?.[field.blockType as keyof typeof fields]
-                    if (Field) {
-                      return (
-                        <div className="mb-6 last:mb-0" key={index}>
-                          <Field
-                            form={formFromProps}
-                            {...field}
-                            {...formMethods}
-                            control={control}
-                            errors={errors}
-                            register={register}
-                          />
-                        </div>
-                      )
-                    }
-                    return null
-                  })}
-              </div>
+      <FormProvider {...formMethods}>
+        {!isLoading && hasSubmitted && confirmationType === 'message' && (
+          <RichText data={confirmationMessage} />
+        )}
+        {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
+        {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
+        {!hasSubmitted && (
+          <form id={formID} onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+              {formFromProps?.fields?.map((field, index) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const Field: React.FC<any> = fields?.[field.blockType as keyof typeof fields]
+                if (Field) {
+                  return (
+                    <Field
+                      key={index}
+                      form={formFromProps}
+                      {...field}
+                      {...formMethods}
+                      control={control}
+                      errors={errors}
+                      register={register}
+                    />
+                  )
+                }
+                return null
+              })}
+            </div>
 
-              <Button form={formID} type="submit" variant="default">
+            <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <p className="text-sm text-muted-foreground opacity-50">
+                *Ao clicar em enviar, você concorda com a{' '}
+                <Link href="/politica-de-privacidade" className="underline">
+                  Política de Privacidade
+                </Link>{' '}
+                e{' '}
+                <Link href="/termos-de-uso" className="underline">
+                  Termos de Uso
+                </Link>{' '}
+                do Grupo Eureka
+              </p>
+
+              <Button
+                form={formID}
+                type="submit"
+                variant="secondary"
+                hasIcon
+                className="self-center lg:self-auto"
+              >
                 {submitButtonLabel}
               </Button>
-            </form>
-          )}
-        </FormProvider>
-      </div>
+            </div>
+          </form>
+        )}
+      </FormProvider>
     </div>
   )
 }

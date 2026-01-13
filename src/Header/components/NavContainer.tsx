@@ -1,0 +1,41 @@
+'use client'
+import { cn } from '@/utilities/ui'
+import type { ReactNode } from 'react'
+import { useHeaderTheme, type HeaderThemeVariant } from '@/providers/HeaderTheme'
+
+interface NavContainerProps {
+  children: ReactNode
+  className?: string
+  theme?: HeaderThemeVariant
+}
+
+const headerThemeMap: Record<HeaderThemeVariant, string> = {
+  default: 'bg-[#bbb]/30',
+  secondary: 'bg-secondary/80',
+}
+
+/**
+ * NavContainer Component
+ *
+ * Container da navegação do header (desktop/mobile + botões de ação).
+ * Estilo: fundo vermelho, arredondado, espaçamento interno.
+ */
+export function NavContainer({ children, className, theme }: Readonly<NavContainerProps>) {
+  const { headerTheme } = useHeaderTheme()
+
+  // Usa prop se passada, senão usa context, senão default
+  const effectiveTheme = theme ?? headerTheme?.theme ?? 'default'
+  const bgColor = headerThemeMap[effectiveTheme]
+
+  return (
+    <div
+      className={cn(
+        'progressive-blur flex items-center gap-x-4 rounded-[calc((infinity*1px)-1px)] border-t border-white/50 p-2 lg:gap-x-2.5 lg:p-2.5',
+        className,
+        bgColor,
+      )}
+    >
+      {children}
+    </div>
+  )
+}

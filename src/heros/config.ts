@@ -1,71 +1,58 @@
 import type { Field } from 'payload'
 
-import {
-  FixedToolbarFeature,
-  HeadingFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
-
-import { linkGroup } from '@/fields/linkGroup'
-
 export const hero: Field = {
   name: 'hero',
   type: 'group',
   fields: [
     {
-      name: 'type',
+      name: 'bgTheme',
       type: 'select',
-      defaultValue: 'lowImpact',
-      label: 'Type',
+      label: 'Fundo do Header',
+      defaultValue: '',
       options: [
+        { label: 'Nenhum (hero com imagem)', value: '' },
+        { label: 'Azul', value: 'blue' },
+      ],
+      admin: {
+        description: 'Escolha o fundo do topo da página.',
+      },
+    },
+    {
+      name: 'title',
+      type: 'text',
+      label: 'Título',
+      required: true,
+    },
+    {
+      name: 'backgroundImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Imagem de Fundo',
+    },
+    {
+      name: 'breadcrumbs',
+      type: 'array',
+      label: 'Breadcrumbs',
+      admin: {
+        initCollapsed: true,
+        description: 'Navegação de trilha. Deixe href vazio para o item atual.',
+      },
+      fields: [
         {
-          label: 'None',
-          value: 'none',
+          name: 'label',
+          type: 'text',
+          label: 'Label',
+          required: true,
         },
         {
-          label: 'High Impact',
-          value: 'highImpact',
-        },
-        {
-          label: 'Medium Impact',
-          value: 'mediumImpact',
-        },
-        {
-          label: 'Low Impact',
-          value: 'lowImpact',
+          name: 'href',
+          type: 'text',
+          label: 'URL',
+          admin: {
+            description: 'Deixe vazio para o item atual (último da trilha)',
+          },
         },
       ],
-      required: true,
-    },
-    {
-      name: 'richText',
-      type: 'richText',
-      editor: lexicalEditor({
-        features: ({ rootFeatures }) => {
-          return [
-            ...rootFeatures,
-            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-            FixedToolbarFeature(),
-            InlineToolbarFeature(),
-          ]
-        },
-      }),
-      label: false,
-    },
-    linkGroup({
-      overrides: {
-        maxRows: 2,
-      },
-    }),
-    {
-      name: 'media',
-      type: 'upload',
-      admin: {
-        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
-      },
-      relationTo: 'media',
-      required: true,
     },
   ],
   label: false,

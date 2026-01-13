@@ -17,12 +17,85 @@ export const Navigation: GlobalConfig = {
       type: 'array',
       label: 'Menu Superior',
       fields: [
+        {
+          name: 'type',
+          type: 'select',
+          label: 'Tipo de Item',
+          options: [
+            { label: 'Link Simples', value: 'link' },
+            { label: 'Menu Dropdown', value: 'dropdown' },
+          ],
+          defaultValue: 'link',
+          required: true,
+          admin: {
+            description: 'Escolha se este item é um link direto ou um menu dropdown com subitens',
+          },
+        },
         link({
           appearances: false,
           overrides: {
             name: 'link',
+            label: 'Link',
+            admin: {
+              condition: (data, siblingData) => siblingData?.type === 'link',
+              description: 'Destino do link (página interna ou URL customizada)',
+            },
           },
         }),
+        {
+          name: 'label',
+          type: 'text',
+          label: 'Texto do Menu Dropdown',
+          required: true,
+          admin: {
+            condition: (data, siblingData) => siblingData?.type === 'dropdown',
+            description: 'Texto que aparecerá no botão do dropdown',
+          },
+        },
+        {
+          name: 'subitems',
+          type: 'array',
+          label: 'Subitens do Dropdown',
+          minRows: 1,
+          admin: {
+            condition: (data, siblingData) => siblingData?.type === 'dropdown',
+            initCollapsed: true,
+            description: 'Itens que aparecerão no menu dropdown',
+            components: {
+              RowLabel: '@/Navigation/RowLabel#SubitemRowLabel',
+            },
+          },
+          fields: [
+            link({
+              appearances: false,
+              overrides: {
+                name: 'link',
+                label: 'Link',
+                admin: {
+                  description: 'Destino do subitem',
+                },
+              },
+            }),
+            {
+              name: 'image',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Imagem',
+              admin: {
+                description: 'Imagem opcional para o subitem (aparece no menu dropdown)',
+              },
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+              label: 'Descrição',
+              admin: {
+                description: 'Descrição opcional do subitem',
+                rows: 2,
+              },
+            },
+          ],
+        },
       ],
       maxRows: 8,
       admin: {
@@ -80,6 +153,39 @@ export const Navigation: GlobalConfig = {
               type: 'text',
               label: 'Título',
               defaultValue: 'Acesse',
+              required: true,
+            },
+            {
+              name: 'links',
+              type: 'array',
+              label: 'Links',
+              fields: [
+                link({
+                  appearances: false,
+                  overrides: {
+                    name: 'link',
+                  },
+                }),
+              ],
+              admin: {
+                initCollapsed: true,
+                components: {
+                  RowLabel: '@/Navigation/RowLabel#FooterLinkRowLabel',
+                },
+              },
+            },
+          ],
+        },
+        {
+          name: 'compliance',
+          type: 'group',
+          label: 'Compliance',
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Título',
+              defaultValue: 'Compliance',
               required: true,
             },
             {
