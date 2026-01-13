@@ -1,16 +1,15 @@
 'use client'
 import { cn } from '@/utilities/ui'
 import type { ReactNode } from 'react'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
-import { Theme } from '@/providers/Theme/types'
+import { useHeaderTheme, type HeaderThemeVariant } from '@/providers/HeaderTheme'
 
 interface NavContainerProps {
   children: ReactNode
   className?: string
-  theme?: Theme
+  theme?: HeaderThemeVariant
 }
 
-const headerThemeMap: Record<Theme, string> = {
+const headerThemeMap: Record<HeaderThemeVariant, string> = {
   default: 'bg-[#bbb]/30',
   secondary: 'bg-secondary/80',
 }

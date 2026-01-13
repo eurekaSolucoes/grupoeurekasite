@@ -1,5 +1,5 @@
 import { Header, type BgTheme } from '@/Header/Component'
-import { queryPageBySlug } from './page'
+import { queryPageBySlug } from './queries'
 
 type LayoutProps = {
   children: React.ReactNode

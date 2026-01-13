@@ -1,14 +1,15 @@
 'use client'
 
-import type { Theme } from '@/providers/Theme/types'
-
 import React, { createContext, useCallback, use, useState, useMemo } from 'react'
 
 import canUseDOM from '@/utilities/canUseDOM'
 import { EurekaLogoVariants } from '@/components/animate/EurekaLogo'
 
+/** Visual theme for the header - controls styling/colors */
+export type HeaderThemeVariant = 'secondary' | 'default'
+
 export type HeaderTheme = {
-  theme?: Theme
+  theme?: HeaderThemeVariant
   logoTheme: {
     mobile: EurekaLogoVariants | null
     desktop: EurekaLogoVariants | null
@@ -31,7 +32,7 @@ export const HeaderThemeProvider = ({ children }: { children: React.ReactNode })
   const [headerTheme, setHeaderTheme] = useState<HeaderTheme | undefined | null>(
     canUseDOM
       ? {
-          theme: document.documentElement.dataset.theme as Theme,
+          theme: document.documentElement.dataset.headerTheme as HeaderThemeVariant | undefined,
           logoTheme: {
             mobile:
               (document.documentElement.dataset.logoThemeMobile as EurekaLogoVariants) ?? null,

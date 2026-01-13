@@ -1,6 +1,6 @@
 'use client'
 
-import { useHeaderTheme, HeaderTheme } from '@/providers/HeaderTheme'
+import { useHeaderTheme, HeaderTheme, HeaderThemeVariant } from '@/providers/HeaderTheme'
 import { EurekaLogoVariants } from '@/components/animate/EurekaLogo'
 import {
   useEffect,
@@ -10,7 +10,6 @@ import {
   type ComponentPropsWithoutRef,
   useMemo,
 } from 'react'
-import type { Theme } from '@/providers/Theme/types'
 import { useScroll, useTransform } from 'motion/react'
 
 type ValidTags = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer'
@@ -18,8 +17,8 @@ type ValidTags = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer'
 interface HeaderThemeSetterOwnProps<T extends ValidTags = 'div'> {
   /** Tag HTML do wrapper (default: 'div') */
   as?: T
-  /** General theme (affects overall styling) */
-  theme?: Theme
+  /** Visual theme for header styling (secondary/default) */
+  theme?: HeaderThemeVariant
   /** Logo variant for mobile screens */
   logoMobile?: EurekaLogoVariants
   /** Logo variant for desktop screens */
