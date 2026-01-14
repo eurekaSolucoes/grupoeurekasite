@@ -21,6 +21,16 @@ export const CardGridBlock: Block = {
       ],
     },
     {
+      name: 'orientation',
+      type: 'select',
+      label: 'Orientação dos Cards',
+      defaultValue: 'horizontal',
+      options: [
+        { label: 'Horizontal (paisagem)', value: 'horizontal' },
+        { label: 'Vertical (retrato)', value: 'vertical' },
+      ],
+    },
+    {
       name: 'items',
       type: 'array',
       label: 'Cards',

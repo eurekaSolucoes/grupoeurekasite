@@ -498,6 +498,7 @@ export interface Document {
  */
 export interface CardGridBlock {
   columns?: ('2' | '3') | null;
+  orientation?: ('horizontal' | 'vertical') | null;
   items: {
     image: string | Media;
     title?: string | null;
@@ -1683,6 +1684,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
  */
 export interface CardGridBlockSelect<T extends boolean = true> {
   columns?: T;
+  orientation?: T;
   items?:
     | T
     | {

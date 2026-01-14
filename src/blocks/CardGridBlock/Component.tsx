@@ -19,9 +19,15 @@ const columnClasses: Record<'2' | '3', string> = {
   '3': 'lg:grid-cols-3',
 }
 
+const orientationClasses: Record<'horizontal' | 'vertical', string> = {
+  horizontal: 'aspect-[3/2]',
+  vertical: 'aspect-[2/3]',
+}
+
 export function CardGridBlock({
   items,
   columns = '2',
+  orientation = 'horizontal',
   className,
 }: Readonly<CardGridBlockProps>) {
   return (
@@ -36,7 +42,7 @@ export function CardGridBlock({
       <ul className={cn('grid grid-cols-1 gap-5 lg:gap-6', columnClasses[columns || '2'])}>
         {items.map((card, index) => (
           <FadeIn key={card.id || index} variant="fadeUp" delay={index * 0.08} viewportAmount={0.2}>
-            <CardItemComponent card={card} />
+            <CardItemComponent card={card} orientation={orientation || 'horizontal'} />
           </FadeIn>
         ))}
       </ul>
@@ -46,9 +52,10 @@ export function CardGridBlock({
 
 interface CardItemComponentProps {
   card: CardItem
+  orientation: 'horizontal' | 'vertical'
 }
 
-function CardItemComponent({ card }: Readonly<CardItemComponentProps>) {
+function CardItemComponent({ card, orientation }: Readonly<CardItemComponentProps>) {
   const cardContent = (
     <>
       {/* Background Image */}
@@ -81,7 +88,8 @@ function CardItemComponent({ card }: Readonly<CardItemComponentProps>) {
   )
 
   const cardClassName = cn(
-    'relative z-10 flex h-70 flex-col overflow-hidden rounded-[20px] p-6 shadow-[0_12px_24px_0_rgba(0,0,0,0.24)] lg:rounded-[30px] lg:px-7.5 lg:py-8',
+    'relative z-10 flex flex-col overflow-hidden rounded-[20px] p-6 shadow-[0_12px_24px_0_rgba(0,0,0,0.24)] lg:rounded-[30px] lg:px-7.5 lg:py-8',
+    orientationClasses[orientation],
   )
 
   // If card has link, wrap in CMSLink and HoverScaleCard
