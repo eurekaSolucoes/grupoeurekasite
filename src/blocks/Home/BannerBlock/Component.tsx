@@ -116,9 +116,9 @@ export function BannerBlock({ banners = [] }: Readonly<BannerBlockProps>) {
       aria-atomic="false"
       onKeyDown={handleKeyDown}
       tabIndex={0}
-      className="sticky top-0 h-screen w-full overflow-hidden bg-background focus-visible:outline-none"
+      className="sticky top-0 min-h-svh w-full overflow-hidden bg-background focus-visible:outline-none"
     >
-      <div ref={sliderRef} className="relative size-full select-none">
+      <div ref={sliderRef} className="relative size-full min-h-[inherit] select-none">
         {banners.map((banner, index) => {
           const backgroundImage = banner.backgroundImage as MediaType
           const featuredImage = banner.featuredImage as MediaType
@@ -130,7 +130,7 @@ export function BannerBlock({ banners = [] }: Readonly<BannerBlockProps>) {
               role="group"
               aria-roledescription="slide"
               aria-label={`Slide ${index + 1} de ${banners.length}: ${banner.title || 'Banner'}`}
-              className="group/slide absolute top-0 flex size-full cursor-grab items-end pt-40 lg:pt-10"
+              className="group/slide absolute top-0 flex size-full min-h-fit cursor-grab items-end pt-[84px] lg:pt-[120px]"
               style={{ opacity: opacities[index] ?? 0 }}
             >
               {/* Background Image */}

@@ -77,7 +77,7 @@ function NumberedCardItem({ card, index }: { card: NumberedCard; index: number }
   const isEven = index % 2 === 1
 
   return (
-    <li className="group/card relative z-10 mt-15 pt-22 pr-6 first:pt-19 lg:mt-0 lg:flex lg:items-center lg:gap-10 lg:pt-0 lg:pr-0 lg:first:pt-0 odd:lg:flex-row even:lg:flex-row-reverse">
+    <li className="group/card relative mt-15 pt-22 pr-6 first:pt-19 lg:mt-0 lg:flex lg:items-center lg:gap-10 lg:pt-0 lg:pr-0 lg:first:pt-0 odd:lg:flex-row even:lg:flex-row-reverse">
       {/* Número grande - Mobile: absoluto; Desktop: absoluto atrás do texto */}
       <FadeIn variant="fade" viewportAmount={0.2}>
         <span
@@ -115,7 +115,7 @@ function NumberedCardItem({ card, index }: { card: NumberedCard; index: number }
           variant={isEven ? 'fadeRight' : 'fadeLeft'}
           delay={0.1}
           viewportAmount={0.2}
-          className="relative mt-4 h-45 w-full shrink-0 overflow-hidden rounded-[30px] shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)] lg:mt-0 lg:h-[350px] lg:w-[628px] lg:rounded-[40px]"
+          className="relative z-10 mt-4 h-45 w-full shrink-0 overflow-hidden rounded-[30px] shadow-[12px_12px_24px_0_rgba(0,0,0,0.24)] lg:mt-0 lg:h-[350px] lg:w-[628px] lg:rounded-[40px]"
         >
           <Media
             resource={card.image}
