@@ -157,11 +157,16 @@ export function BannerBlock({ banners = [] }: Readonly<BannerBlockProps>) {
                       </p>
                     )}
 
-                    {banner.title && (
-                      <h2 className="text-center typography-heading font-bold text-pretty group-first/slide:animate-in group-first/slide:delay-200 group-first/slide:duration-1500 group-first/slide:ease-in-out group-first/slide:fade-in group-first/slide:slide-in-from-left lg:text-left">
-                        {banner.title}
-                      </h2>
-                    )}
+                    {banner.title &&
+                      (index === 0 ? (
+                        <h1 className="text-center typography-heading font-bold text-pretty group-first/slide:animate-in group-first/slide:delay-200 group-first/slide:duration-1500 group-first/slide:ease-in-out group-first/slide:fade-in group-first/slide:slide-in-from-left lg:text-left">
+                          {banner.title}
+                        </h1>
+                      ) : (
+                        <h2 className="text-center typography-heading font-bold text-pretty group-first/slide:animate-in group-first/slide:delay-200 group-first/slide:duration-1500 group-first/slide:ease-in-out group-first/slide:fade-in group-first/slide:slide-in-from-left lg:text-left">
+                          {banner.title}
+                        </h2>
+                      ))}
 
                     {banner.link && (
                       <div className="mt-7 group-first/slide:animate-in group-first/slide:delay-500 group-first/slide:duration-1500 group-first/slide:ease-out group-first/slide:fade-in group-first/slide:slide-in-from-left">

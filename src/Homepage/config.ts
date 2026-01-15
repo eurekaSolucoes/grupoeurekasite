@@ -268,6 +268,43 @@ export const Homepage: GlobalConfig = {
             },
           ],
         },
+        {
+          label: 'SEO',
+          fields: [
+            {
+              name: 'meta',
+              type: 'group',
+              label: 'Configurações de SEO',
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: 'Título SEO',
+                  admin: {
+                    description: 'Título que aparece nos resultados de busca e redes sociais. Recomendado: 50-60 caracteres.',
+                  },
+                },
+                {
+                  name: 'description',
+                  type: 'textarea',
+                  label: 'Descrição SEO',
+                  admin: {
+                    description: 'Descrição que aparece nos resultados de busca. Recomendado: 150-160 caracteres.',
+                  },
+                },
+                {
+                  name: 'image',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'Imagem OG (Open Graph)',
+                  admin: {
+                    description: 'Imagem que aparece ao compartilhar nas redes sociais. Tamanho recomendado: 1200x630 pixels.',
+                  },
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
   ],

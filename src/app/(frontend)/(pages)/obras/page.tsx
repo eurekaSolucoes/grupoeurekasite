@@ -18,11 +18,18 @@ import {
 } from '@/components/ui/breadcrumb'
 import { SearchFilterBar } from '@/components/Obras/SearchFilterBar'
 import { Suspense } from 'react'
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 
 export const metadata: Metadata = {
   title: 'Nossas Obras | Grupo Eureka',
   description:
     'Conheça as obras e coleções do Grupo Eureka. Materiais didáticos para transformar a educação pública brasileira.',
+  openGraph: mergeOpenGraph({
+    title: 'Nossas Obras | Grupo Eureka',
+    description:
+      'Conheça as obras e coleções do Grupo Eureka. Materiais didáticos para transformar a educação pública brasileira.',
+    url: '/obras',
+  }),
 }
 
 interface ObrasPageProps {

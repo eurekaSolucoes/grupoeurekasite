@@ -23,12 +23,18 @@ export const generateMeta = async (args: {
   doc: Partial<Page> | Partial<Post> | null
 }): Promise<Metadata> => {
   const { doc } = args
+  const serverUrl = getServerSideURL()
 
   const ogImage = getImageURL(doc?.meta?.image)
 
   const title = doc?.meta?.title
     ? doc?.meta?.title + ' | Grupo Eureka'
     : 'Grupo Eureka'
+
+  // Gera o path para canonical e OpenGraph
+  const slug = Array.isArray(doc?.slug) ? doc?.slug.join('/') : doc?.slug
+  const path = !slug || slug === 'home' ? '' : `/${slug}`
+  const canonicalUrl = `${serverUrl}${path}`
 
   return {
     description: doc?.meta?.description,
@@ -42,8 +48,11 @@ export const generateMeta = async (args: {
           ]
         : undefined,
       title,
-      url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
+      url: path || '/',
     }),
     title,
+    alternates: {
+      canonical: canonicalUrl,
+    },
   }
 }

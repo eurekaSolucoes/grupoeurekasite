@@ -2758,6 +2758,20 @@ export interface Homepage {
         }[]
       | null;
   };
+  meta?: {
+    /**
+     * Título que aparece nos resultados de busca e redes sociais. Recomendado: 50-60 caracteres.
+     */
+    title?: string | null;
+    /**
+     * Descrição que aparece nos resultados de busca. Recomendado: 150-160 caracteres.
+     */
+    description?: string | null;
+    /**
+     * Imagem que aparece ao compartilhar nas redes sociais. Tamanho recomendado: 1200x630 pixels.
+     */
+    image?: (string | null) | Media;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2994,6 +3008,13 @@ export interface HomepageSelect<T extends boolean = true> {
                   };
               id?: T;
             };
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;
