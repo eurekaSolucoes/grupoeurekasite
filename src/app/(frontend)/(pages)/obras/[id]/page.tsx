@@ -5,6 +5,7 @@ import { getProductById, getRelatedProducts } from '@/services/products'
 import { ProductDetailHeroBlock } from '@/blocks/ProductDetail/HeroBlock/Component'
 import { ProductDetailSpecificationsBlock } from '@/blocks/ProductDetail/SpecificationsBlock/Component'
 import { ProductDetailRelatedProductsBlock } from '@/blocks/ProductDetail/RelatedProductsBlock/Component'
+import { getServerSideURL } from '@/utilities/getURL'
 
 interface ProductDetailPageProps {
   params: Promise<{ id: string }>
@@ -20,13 +21,19 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
     }
   }
 
+  const description =
+    product.description?.slice(0, 160) || `Conheça ${product.title} do Grupo Eureka.`
+  const ogImage = product.mockupURL || product.coverURL || `${getServerSideURL()}/website-template-OG.webp`
+
   return {
     title: `${product.title} | Grupo Eureka`,
-    description: product.description?.slice(0, 160) || `Conheça ${product.title} do Grupo Eureka.`,
+    description,
     openGraph: {
       title: product.title,
-      description: product.description?.slice(0, 160),
-      images: product.mockupURL || product.coverURL ? [{ url: product.mockupURL || product.coverURL || '' }] : [],
+      description,
+      images: [{ url: ogImage }],
+      siteName: 'Grupo Eureka',
+      type: 'website',
     },
   }
 }

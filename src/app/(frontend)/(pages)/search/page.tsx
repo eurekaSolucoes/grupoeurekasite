@@ -85,6 +85,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Search`,
+    title: 'Busca | Grupo Eureka',
+    description: 'Busque por conteúdos, posts e informações no site do Grupo Eureka.',
   }
 }

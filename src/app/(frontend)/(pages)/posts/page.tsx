@@ -60,6 +60,7 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Posts`,
+    title: 'Posts | Grupo Eureka',
+    description: 'Confira os últimos posts e novidades do Grupo Eureka sobre educação e materiais didáticos.',
   }
 }
