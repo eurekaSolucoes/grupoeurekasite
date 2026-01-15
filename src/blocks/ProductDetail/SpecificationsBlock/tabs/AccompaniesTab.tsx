@@ -18,7 +18,7 @@ export function AccompaniesTab({ product }: AccompaniesTabProps) {
   }
 
   return (
-    <div className="flex flex-col gap-5 lg:gap-9">
+    <div className="space-y-5 lg:space-y-9">
       {/* Header com descrição fixa */}
       <div className="flex flex-col gap-3 lg:gap-4">
         <h3 className="hidden text-xl leading-relaxed font-bold text-foreground lg:block">
@@ -39,17 +39,14 @@ export function AccompaniesTab({ product }: AccompaniesTabProps) {
       </div>
 
       {/* Lista de acompanhamentos */}
-      <ul className="contents">
+      <ul>
         {activeFeatures.map((feature) => {
           const Icon = feature.icon
           return (
             <li
               key={feature.key}
-              className="flex flex-col gap-3 border-t border-muted-foreground/30 pt-5 lg:flex-row lg:gap-4 lg:pt-0 lg:border-t-0"
+              className="flex flex-col gap-3 border-t border-muted-foreground/30 pt-5 lg:flex-row lg:items-start lg:gap-4 lg:py-6 lg:last:pb-0"
             >
-              {/* Desktop: Divisor antes do item */}
-              <div className="mb-0 hidden h-px w-full bg-muted-foreground/30 lg:mb-9 lg:block" />
-
               {/* Ícone */}
               <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary lg:size-10">
                 <Icon className="size-5 text-white lg:size-6" aria-hidden="true" />
