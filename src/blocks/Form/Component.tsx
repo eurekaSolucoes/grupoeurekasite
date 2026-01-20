@@ -50,19 +50,14 @@ export const FormBlock: React.FC<
 
   const onSubmit = useCallback(
     (data: FormFieldBlock[]) => {
-      let loadingTimerID: ReturnType<typeof setTimeout>
       const submitForm = async () => {
         setError(undefined)
+        setIsLoading(true)
 
         const dataToSend = Object.entries(data).map(([name, value]) => ({
           field: name,
           value,
         }))
-
-        // delay loading indicator by 1s
-        loadingTimerID = setTimeout(() => {
-          setIsLoading(true)
-        }, 1000)
 
         try {
           const req = await fetch(`${getClientSideURL()}/api/form-submissions`, {
@@ -77,8 +72,6 @@ export const FormBlock: React.FC<
           })
 
           const res = await req.json()
-
-          clearTimeout(loadingTimerID)
 
           if (req.status >= 400) {
             setIsLoading(false)
@@ -125,10 +118,9 @@ export const FormBlock: React.FC<
         />
       )}
       <FormProvider {...formMethods}>
-        {!isLoading && hasSubmitted && confirmationType === 'message' && (
+        {hasSubmitted && confirmationType === 'message' && (
           <RichText data={confirmationMessage} />
         )}
-        {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
         {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
         {!hasSubmitted && (
           <form id={formID} onSubmit={handleSubmit(onSubmit)}>
@@ -172,8 +164,9 @@ export const FormBlock: React.FC<
                 variant="secondary"
                 hasIcon
                 className="self-center lg:self-auto"
+                disabled={isLoading}
               >
-                {submitButtonLabel}
+                {isLoading ? 'Enviando...' : submitButtonLabel}
               </Button>
             </div>
           </form>

@@ -1,5 +1,6 @@
 // storage-adapter-import-placeholder
 import { s3Storage } from '@payloadcms/storage-s3'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { pt } from '@payloadcms/translations/languages/pt'
 
@@ -81,6 +82,19 @@ export default buildConfig({
   },
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.SMTP_FROM_ADDRESS || 'noreply@eureka.com.br',
+    defaultFromName: process.env.SMTP_FROM_NAME || 'Grupo Eureka',
+    transportOptions: {
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: process.env.SMTP_SECURE === 'true',
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    },
+  }),
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),

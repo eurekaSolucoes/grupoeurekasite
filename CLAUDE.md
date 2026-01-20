@@ -195,8 +195,17 @@ Required variables (see `.env.example`):
 - `S3_BUCKET` - S3 bucket name for media uploads
 - `S3_REGION` - AWS region (default: us-east-1)
 - `S3_ENDPOINT` - S3 endpoint URL
+- `SMTP_HOST` - SMTP server hostname
+- `SMTP_PORT` - SMTP port (default: 587)
+- `SMTP_SECURE` - Use TLS (true for port 465, false for others)
+- `SMTP_USER` - SMTP authentication username
+- `SMTP_PASS` - SMTP authentication password
+- `SMTP_FROM_ADDRESS` - Default sender email address
+- `SMTP_FROM_NAME` - Default sender name
 
 **Media Storage**: This project uses AWS S3 for media storage via `@payloadcms/storage-s3`. All media uploads are stored in S3, not locally. Ensure S3 credentials are configured before uploading media.
+
+**Email**: This project uses `@payloadcms/email-nodemailer` for sending form submission notifications via SMTP. Configure the SMTP variables to enable email functionality.
 
 ## API Externa - Eureka Digital
 
@@ -382,6 +391,26 @@ All menu links use the existing `link` field from `@/fields/link` for consistent
 4. Update `RenderBlocks.tsx` to render the new component
 
 **Creating previews**: Collections with `versions.drafts` enabled automatically get preview functionality via `generatePreviewPath` utility. Frontend routes handle `?draft=true` query param to fetch draft versions.
+
+**Configuring form email notifications**:
+Forms can send email notifications when submitted. To configure:
+1. Go to **Globais → Forms** in the admin panel
+2. Create or edit a form
+3. In the **Emails** section, click "Add Email"
+4. Configure the email:
+   - **Email To**: Destination email (e.g., `lead@eureka.com.br`)
+   - **CC/BCC**: Optional copy recipients
+   - **Reply To**: Email for replies (useful: `{{email}}` to use submitter's email)
+   - **Email From**: Sender address (uses default if empty)
+   - **Subject**: Email subject (supports `{{field}}` placeholders)
+   - **Message**: Email body (supports `{{field}}` placeholders, or `{{*:table}}` for all fields as HTML table)
+
+**Template placeholders**:
+- `{{fieldName}}` - Replaced with the field value (e.g., `{{email}}`, `{{nome}}`)
+- `{{*}}` - Outputs all submitted fields
+- `{{*:table}}` - Outputs all fields as a formatted HTML table
+
+**Example**: A lead form sending to `lead@eureka.com.br` with subject "Novo lead - {{nome}}" and message using `{{*:table}}` to show all submitted data.
 
 ## Database Seeding
 
