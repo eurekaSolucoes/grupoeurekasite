@@ -30,6 +30,9 @@ importers:
       '@payloadcms/db-mongodb':
         specifier: ^3.62.1
         version: 3.62.1(@aws-sdk/credential-providers@3.922.0)(payload@3.62.1(graphql@16.12.0)(typescript@5.9.3))
+      '@payloadcms/email-nodemailer':
+        specifier: ^3.72.0
+        version: 3.72.0(payload@3.62.1(graphql@16.12.0)(typescript@5.9.3))
       '@payloadcms/live-preview-react':
         specifier: 3.62.1
         version: 3.62.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -1258,6 +1261,12 @@ packages:
     engines: {node: ^18.20.2 || >=20.9.0}
     peerDependencies:
       payload: 3.62.1
+
+  '@payloadcms/email-nodemailer@3.72.0':
+    resolution: {integrity: sha512-X3J6FFqwg3SwxDj2jvqdbC/Vk/tD1O6TNFGkXbM1CAUKP5ThraXzTrhyaJ9TgRuiuHQRbLijxsTFIMeecfFGKg==}
+    engines: {node: ^18.20.2 || >=20.9.0}
+    peerDependencies:
+      payload: 3.72.0
 
   '@payloadcms/graphql@3.62.1':
     resolution: {integrity: sha512-3M2yUwfgELPDKb/15rXe2Q1q/LZg8qQYSHFekg++vH/Gj2gMfM/9Tn5xK25ecoArmlznaxOwpxaYVXn9qQoKSw==}
@@ -6753,6 +6762,11 @@ snapshots:
       - supports-color
 
   '@payloadcms/email-nodemailer@3.62.1(payload@3.62.1(graphql@16.12.0)(typescript@5.9.3))':
+    dependencies:
+      nodemailer: 7.0.12
+      payload: 3.62.1(graphql@16.12.0)(typescript@5.9.3)
+
+  '@payloadcms/email-nodemailer@3.72.0(payload@3.62.1(graphql@16.12.0)(typescript@5.9.3))':
     dependencies:
       nodemailer: 7.0.12
       payload: 3.62.1(graphql@16.12.0)(typescript@5.9.3)
