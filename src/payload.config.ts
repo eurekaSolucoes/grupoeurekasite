@@ -83,15 +83,15 @@ export default buildConfig({
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   email: nodemailerAdapter({
-    defaultFromAddress: process.env.SMTP_FROM_ADDRESS || 'noreply@eureka.com.br',
-    defaultFromName: process.env.SMTP_FROM_NAME || 'Grupo Eureka',
+    defaultFromAddress: 'contato@grupoeureka.com.br',
+    defaultFromName: 'Grupo Eureka',
     transportOptions: {
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: process.env.SMTP_SECURE === 'true',
+      host: process.env.NX_EMAIL_HOST,
+      port: parseInt(process.env.NX_EMAIL_PORT || '587'),
+      secure: false,
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.NX_EMAIL_EUREKA,
+        pass: process.env.NX_PASSWORD_EUREKA,
       },
     },
   }),
