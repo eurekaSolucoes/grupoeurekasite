@@ -1,12 +1,26 @@
-import type { BannerBlock as BannerBlockProps } from 'src/payload-types'
-
 import { cn } from '@/utilities/ui'
 import React from 'react'
 import RichText from '@/components/RichText'
 
 type Props = {
   className?: string
-} & BannerBlockProps
+  content: {
+    root: {
+      type: string
+      children: {
+        type: string
+        version: number
+        [k: string]: unknown
+      }[]
+      direction: ('ltr' | 'rtl') | null
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+      indent: number
+      version: number
+    }
+    [k: string]: unknown
+  }
+  style?: 'info' | 'error' | 'success' | 'warning' | null
+}
 
 export const BannerBlock: React.FC<Props> = ({ className, content, style }) => {
   return (
