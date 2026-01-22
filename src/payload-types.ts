@@ -220,22 +220,14 @@ export interface Page {
  */
 export interface Media {
   id: string;
-  alt?: string | null;
-  caption?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+  /**
+   * Texto alternativo para acessibilidade e SEO. Descreva o conteúdo da imagem.
+   */
+  alt: string;
+  /**
+   * Legenda opcional. Aparece como título ao passar o mouse sobre a imagem.
+   */
+  caption?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
