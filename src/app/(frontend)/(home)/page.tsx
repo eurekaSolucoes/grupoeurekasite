@@ -4,7 +4,6 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
-import { homeStatic } from '@/endpoints/seed/home-static'
 
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
@@ -21,15 +20,10 @@ export default async function HomePage() {
 
   const payload = await getPayload({ config: configPromise })
 
-  let homepage = await payload.findGlobal({
+  const homepage = await payload.findGlobal({
     slug: 'homepage',
     draft,
   })
-
-  // Remove this code once your website is seeded
-  if (!homepage) {
-    homepage = homeStatic as any
-  }
 
   return (
     <article>
@@ -49,7 +43,7 @@ export default async function HomePage() {
 
       {!!homepage.stories && <StoriesBlock stories={homepage.stories} />}
 
-      <AIBlock />
+      {homepage.showAISection && homepage.ai && <AIBlock ai={homepage.ai} />}
     </article>
   )
 }
