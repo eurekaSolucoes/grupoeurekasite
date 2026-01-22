@@ -6,11 +6,12 @@ const defaultOpenGraph: Metadata['openGraph'] = {
   description: 'Site oficial do Grupo Eureka',
   images: [
     {
-      url: `${getServerSideURL()}/website-template-OG.webp`,
+      url: `${getServerSideURL()}/website-template-OG.png`,
     },
   ],
   siteName: 'Grupo Eureka',
   title: 'Grupo Eureka',
+  locale: 'pt_BR',
 }
 
 export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'] => {
