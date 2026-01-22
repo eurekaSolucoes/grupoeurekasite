@@ -1,134 +1,95 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import Image from "next/image";
 import {
   ScrollAnimatedWrapper,
   useScrollAnimation,
-} from '@/components/animate/ScrollAnimatedWrapper'
-import { motion } from 'motion/react'
-import { HeaderThemeSetter } from '@/Header/HeaderThemeSetter'
+} from "@/components/animate/ScrollAnimatedWrapper";
+import { motion } from "motion/react";
+import { HeaderThemeSetter } from "@/Header/HeaderThemeSetter";
+import { ChatInterface } from "@/components/ui/chat";
+import type { Homepage } from "@/payload-types";
+import RichText from "@/components/RichText";
 
 export interface AIBlockProps {
-  title?: string
-  subtitle?: string
-  description?: React.ReactNode
-  buttonLabel?: string
-  buttonHref?: string
-  backgroundImage?: string
-  avatarImage?: string
-  avatarAlt?: string
+  ai: Homepage['ai'];
 }
 
-const defaultDescription = (
-  <>
-    A <span className="font-bold">inteligência artificial</span> do Grupo Eureka e estou aqui para
-    facilitar seu dia a dia na busca de novas ferramentas de ensino.{' '}
-    <a href="#" title="Clique aqui para iniciarmos">
-      Clique aqui para iniciarmos
-    </a>{' '}
-    essa jornada.
-  </>
-)
+export function AIBlock({ ai }: Readonly<AIBlockProps>) {
+  const scrollAnimation = useScrollAnimation({ scrollRange: [0, 0.4] });
 
-export function AIBlock({
-  title = 'Olá, educador!',
-  subtitle = 'Sou a Maria de Fátima.',
-  description = defaultDescription,
-  buttonLabel = 'Iniciar teste',
-  buttonHref = '#',
-  backgroundImage = '/assets/ai-section-background.png',
-  avatarImage = '/assets/ai-maria-fatima.png',
-  avatarAlt = 'Maria de Fátima - Assistente de IA do Grupo Eureka',
-}: Readonly<AIBlockProps>) {
-  const scrollAnimation = useScrollAnimation({ scrollRange: [0, 0.4] })
+  // Don't render if section is hidden or no messages
+  if (!ai?.messages || ai.messages.length === 0) {
+    return null;
+  }
+
+  // Transform CMS data to ChatMessage format
+  const messages = ai.messages.map((msg, idx) => ({
+    id: msg.id || `msg-${idx}`,
+    type: msg.type as 'ai' | 'user',
+    content: <RichText data={msg.content} enableGutter={false} enableProse={false} />,
+  }));
+
+  const backgroundImage = "/assets/ai-section-background.png";
+  const avatarImage = "/assets/ai-maria-fatima.png";
+  const avatarAlt = "Maria de Fátima - Assistente de IA do Grupo Eureka";
 
   return (
     <HeaderThemeSetter logoMobile="icon-white" logoDesktop="icon-white">
-      <ScrollAnimatedWrapper scrollAnimation={scrollAnimation} background="bg-accent">
-      <section
-        aria-labelledby="ai-section-title"
-        className="relative z-10 flex min-h-177 w-full items-center justify-center overflow-hidden py-15 lg:min-h-screen"
+      <ScrollAnimatedWrapper
+        scrollAnimation={scrollAnimation}
+        background="bg-accent"
       >
-        {/* Background Image - decorativo */}
-        <Image src={backgroundImage} alt="" fill className="object-cover" aria-hidden="true" />
+        <section
+          aria-label="Chat com Maria de Fátima"
+          className="relative z-10 flex min-h-[708px] w-full items-center justify-center overflow-hidden py-15 lg:min-h-screen"
+        >
+          {/* Background Image - decorativo */}
+          <Image
+            src={backgroundImage}
+            alt=""
+            fill
+            className="object-cover"
+            aria-hidden="true"
+          />
 
-        {/* Gradient Overlay - decorativo */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 z-1 bg-linear-to-t from-secondary/65 from-31% to-primary/65 to-86% mix-blend-multiply"
-        />
+          {/* Gradient Overlay - decorativo */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 z-1 bg-linear-to-t from-secondary/65 from-31% to-primary/65 to-86% mix-blend-multiply"
+          />
 
-        {/* Content */}
-        <div className="relative z-10 container flex w-full flex-col lg:max-w-[937px]">
-          {/* Header */}
-          <header className="mb-4 self-center text-center *:w-fit lg:mb-14 lg:w-full lg:max-w-[calc(100%-300px)] lg:self-end lg:text-start">
-            <motion.h2
-              initial={{ x: 'var(--entry-distance-x)' }}
-              whileInView={{ x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{
-                amount: 0.8,
-                once: true,
-              }}
-              id="ai-section-title"
-              className="pb-1 font-heading text-[2.75rem]/[1.1] font-bold text-secondary-foreground [--entry-distance-x:-25px] md:[--entry-distance-x:-50px] lg:typography-display"
-            >
-              {title}
-            </motion.h2>
-            <motion.p
-              initial={{ x: 'var(--entry-distance-x)' }}
-              whileInView={{ x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{
-                amount: 0.8,
-                once: true,
-              }}
-              className="font-heading text-[2rem]/[33px] text-accent [--entry-distance-x:25px] md:[--entry-distance-x:50px] lg:ml-auto lg:typography-heading lg:text-[3.375rem]/[1.2]"
-            >
-              {subtitle}
-            </motion.p>
-          </header>
+          {/* Content */}
+          <div className="container lg:max-w-[937px]">
+            {/* Chat + Avatar wrapper */}
 
-          <div className="mb-6 flex w-full flex-col items-center justify-center lg:relative lg:flex-row lg:justify-normal">
-            {/* Avatar */}
-            <motion.figure
-              initial={{ x: 'var(--entry-distance-x)' }}
-              whileInView={{ x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{
-                amount: 0.8,
-                once: true,
-              }}
-              className="lg:[--entry-distance-x]:-25px flex h-[228px] w-[231px] items-center justify-center overflow-hidden lg:absolute lg:bottom-0 lg:-left-5 lg:h-[407px] lg:w-[415px]"
-            >
-              <Image
-                src={avatarImage}
-                alt={avatarAlt}
-                width={415}
-                height={407}
-                className="-scale-y-100 rotate-180"
+            <div className="relative z-10 lg:flex lg:items-end">
+              <ChatInterface
+                messages={messages}
+                className="w-full lg:max-w-[573px] "
+                containerClassName="min-h-[350px] lg:min-h-[422px] pb-26 lg:pb-10 lg:relative lg:-z-2"
               />
-            </motion.figure>
+              <motion.figure
+                initial={{ x: "var(--entry-distance-x)", opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ amount: 0.3, once: true }}
+                className="flex -mt-24 relative h-[223px] lg:order-first lg:shrink-0 w-[228px] items-center justify-center overflow-hidden [--entry-distance-x:-25px] lg:h-[407px] lg:w-[415px] lg:mt-0 lg:-mr-6 "
+              >
+                <Image
+                  src={avatarImage}
+                  alt={avatarAlt}
+                  width={415}
+                  height={407}
+                  className="-scale-y-100 rotate-180"
+                />
+              </motion.figure>
 
-            {/* Info Card */}
-            <article className="w-full rounded-[30px] bg-white p-7 lg:rounded-[40px] lg:py-10 lg:pr-20 lg:pl-83">
-              <p className="typography-body text-pretty [&_a]:font-bold [&_a]:text-accent [&_a]:underline [&_a]:decoration-transparent [&_a]:hover:decoration-current">
-                {description}
-              </p>
-            </article>
+              <div className=" absolute bottom-0 w-full -z-1 -mt-10 h-10 bg-linear-to-tl border-t border-t-white/30 from-brand-dark-blue to-brand-blue rounded-full" />
+            </div>
           </div>
-
-          {/* CTA Button */}
-          <Button asChild hasIcon className="min-w-62 self-end">
-            <Link href={buttonHref}>
-              <span>{buttonLabel}</span>
-            </Link>
-          </Button>
-        </div>
-      </section>
-    </ScrollAnimatedWrapper>
+        </section>
+      </ScrollAnimatedWrapper>
     </HeaderThemeSetter>
-  )
+  );
 }

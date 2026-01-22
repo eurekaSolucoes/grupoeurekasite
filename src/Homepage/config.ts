@@ -269,6 +269,170 @@ export const Homepage: GlobalConfig = {
           ],
         },
         {
+          label: 'Assistente de IA',
+          fields: [
+            {
+              name: 'showAISection',
+              type: 'checkbox',
+              label: 'Exibir Seção de IA',
+              defaultValue: true,
+              admin: {
+                description:
+                  'Desmarque para ocultar completamente a seção de IA na página inicial.',
+              },
+            },
+            {
+              name: 'ai',
+              type: 'group',
+              fields: [
+                {
+                  name: 'messages',
+                  type: 'array',
+                  label: 'Mensagens do Chat',
+                  minRows: 1,
+                  fields: [
+                    {
+                      name: 'type',
+                      type: 'radio',
+                      options: [
+                        { label: 'IA (Maria de Fátima)', value: 'ai' },
+                        { label: 'Usuário', value: 'user' },
+                      ],
+                      defaultValue: 'ai',
+                      required: true,
+                      admin: {
+                        layout: 'horizontal',
+                      },
+                    },
+                    {
+                      name: 'content',
+                      type: 'richText',
+                      editor: defaultLexical,
+                      label: 'Conteúdo da Mensagem',
+                      required: true,
+                      admin: {
+                        description:
+                          'Você pode adicionar links para páginas, URLs personalizadas ou documentos (PDFs).',
+                      },
+                    },
+                  ],
+                  defaultValue: [
+                    {
+                      type: 'ai',
+                      content: {
+                        root: {
+                          type: 'root',
+                          children: [
+                            {
+                              type: 'paragraph',
+                              children: [
+                                { type: 'text', text: 'Olá, professor!' },
+                                { type: 'linebreak' },
+                                { type: 'text', text: 'Eu sou a ' },
+                                { type: 'text', text: 'Mária de Fátima', format: 'bold' },
+                                { type: 'text', text: ', a inteligência artificial do ' },
+                                { type: 'text', text: 'Grupo Eureka', format: 'bold' },
+                                { type: 'text', text: '. Como posso colaborar?' },
+                              ],
+                            },
+                          ],
+                          direction: 'ltr',
+                          format: '',
+                          indent: 0,
+                          version: 1,
+                        },
+                      },
+                    },
+                    {
+                      type: 'user',
+                      content: {
+                        root: {
+                          type: 'root',
+                          children: [
+                            {
+                              type: 'paragraph',
+                              children: [
+                                {
+                                  type: 'text',
+                                  text: 'Oi Maria! Eu sou o Luis, professor de Ensino Médio em uma escola de Goiana, Pernambuco. Pode me ajudar a montar um plano de aula sobre como explorar elementos básicos do texto literário e estimular o prazer da leitura?',
+                                },
+                              ],
+                            },
+                          ],
+                          direction: 'ltr',
+                          format: '',
+                          indent: 0,
+                          version: 1,
+                        },
+                      },
+                    },
+                    {
+                      type: 'ai',
+                      content: {
+                        root: {
+                          type: 'root',
+                          children: [
+                            {
+                              type: 'paragraph',
+                              children: [
+                                { type: 'text', text: 'Olá, professor Luis. Claro!' },
+                                { type: 'linebreak' },
+                                { type: 'text', text: 'Segue um ' },
+                                {
+                                  type: 'link',
+                                  fields: {
+                                    linkType: 'custom',
+                                    url: '#',
+                                  },
+                                  children: [{ type: 'text', text: 'plano de aula' }],
+                                },
+                                {
+                                  type: 'text',
+                                  text: ' que acabei de construir! O que achou? Estou aqui para colaborar com você!',
+                                },
+                              ],
+                            },
+                          ],
+                          direction: 'ltr',
+                          format: '',
+                          indent: 0,
+                          version: 1,
+                        },
+                      },
+                    },
+                    {
+                      type: 'user',
+                      content: {
+                        root: {
+                          type: 'root',
+                          children: [
+                            {
+                              type: 'paragraph',
+                              children: [
+                                { type: 'text', text: 'Maria isso já me ajuda muito, obrigado!' },
+                              ],
+                            },
+                          ],
+                          direction: 'ltr',
+                          format: '',
+                          indent: 0,
+                          version: 1,
+                        },
+                      },
+                    },
+                  ],
+                  admin: {
+                    initCollapsed: true,
+                    components: {
+                      RowLabel: '@/Homepage/RowLabel#AIMessageRowLabel',
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
           label: 'SEO',
           fields: [
             {
