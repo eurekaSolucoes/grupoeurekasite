@@ -148,6 +148,8 @@ export function EurekaLogo({
     <motion.svg
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Logo Grupo Eureka"
       animate={{
         viewBox: isIcon ? VIEWBOX.ICON : VIEWBOX.FULL,
         width: isIcon ? SVG_DIMENSIONS.ICON_WIDTH : SVG_DIMENSIONS.WIDTH,

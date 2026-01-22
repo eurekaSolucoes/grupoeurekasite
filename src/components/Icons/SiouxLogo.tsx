@@ -6,6 +6,8 @@ export function SiouxLogo(props: Readonly<React.SVGProps<SVGSVGElement>>) {
       height="13"
       viewBox="0 0 49 13"
       fill="none"
+      role="img"
+      aria-label="Sioux Digital"
       {...props}
     >
       <path

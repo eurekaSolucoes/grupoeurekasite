@@ -93,14 +93,16 @@ export function SolutionsBlock({ solutions }: Readonly<SolutionsBlockProps>) {
             </p>
             <Image
               src="/assets/arrow-down-mobile.svg"
-              alt="Arrow down"
+              alt=""
+              aria-hidden="true"
               width={67}
               height={70}
               className="absolute top-5 right-2 lg:hidden"
             />
             <Image
               src="/assets/arrow-down-desktop.svg"
-              alt="Arrow down"
+              alt=""
+              aria-hidden="true"
               width={177}
               height={96}
               className="absolute top-5 right-2 hidden lg:block"

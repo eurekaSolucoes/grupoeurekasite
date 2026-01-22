@@ -34,6 +34,10 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
       images: [{ url: ogImage }],
       siteName: 'Grupo Eureka',
       type: 'website',
+      locale: 'pt_BR',
+    },
+    alternates: {
+      canonical: `${getServerSideURL()}/obras/${id}`,
     },
   }
 }
@@ -50,7 +54,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const relatedProducts = await getRelatedProducts(product, 4)
 
   return (
-    <main>
+    <main id="main-content">
       <article>
         <ProductDetailHeroBlock product={product} />
         <ProductDetailSpecificationsBlock product={product} />

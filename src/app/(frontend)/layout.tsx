@@ -5,6 +5,7 @@ import { cn } from '@/utilities/ui'
 import { Jost, Albert_Sans } from 'next/font/google'
 
 import { AdminBar } from '@/components/AdminBar'
+import { SkipLink } from '@/components/SkipLink'
 import { Providers } from '@/providers'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
@@ -38,6 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
       </head>
       <body>
+        <SkipLink />
         <Providers>
           <AdminBar
             adminBarProps={{

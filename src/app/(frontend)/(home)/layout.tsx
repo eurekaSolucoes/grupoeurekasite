@@ -5,7 +5,7 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
   return (
     <>
       <Header />
-      <main className="relative z-10">{children}</main>
+      <main id="main-content" className="relative z-10">{children}</main>
       <Footer className="sticky bottom-0 z-0" />
     </>
   )

@@ -19,6 +19,7 @@ import {
 import { SearchFilterBar } from '@/components/Obras/SearchFilterBar'
 import { Suspense } from 'react'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { getServerSideURL } from '@/utilities/getURL'
 
 export const metadata: Metadata = {
   title: 'Nossas Obras | Grupo Eureka',
@@ -30,6 +31,9 @@ export const metadata: Metadata = {
       'Conheça as obras e coleções do Grupo Eureka. Materiais didáticos para transformar a educação pública brasileira.',
     url: '/obras',
   }),
+  alternates: {
+    canonical: `${getServerSideURL()}/obras`,
+  },
 }
 
 interface ObrasPageProps {
@@ -45,7 +49,7 @@ export default async function ObrasPage({ searchParams }: Readonly<ObrasPageProp
   return (
     <>
       <Header bgTheme="blue" />
-      <main className="container">
+      <main id="main-content" className="container">
         <HeaderThemeSetter
           downThreshold={0.6}
           theme="secondary"
