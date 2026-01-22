@@ -1,4 +1,4 @@
-import type { Document, Media, Page, Post } from '@/payload-types'
+import type { Document, Media, Page } from '@/payload-types'
 
 // Tipo que espelha o campo Link (@/fields/link)
 export interface LinkField {
@@ -7,8 +7,8 @@ export interface LinkField {
   url?: string | null
   newTab?: boolean | null
   reference?: {
-    relationTo: 'pages' | 'posts'
-    value: string | Page | Post
+    relationTo: 'pages'
+    value: string | Page
   } | null
   document?: string | Document | null
 }
