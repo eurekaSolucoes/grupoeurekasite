@@ -1,7 +1,8 @@
 import type { Product } from './types'
 import type { PaginatedResponse, PaginationParams } from '@/types/api'
+import { clientEnv } from '@/lib/env'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL
+const API_BASE = clientEnv.NEXT_PUBLIC_API_URL
 
 /**
  * Parâmetros para busca de produtos

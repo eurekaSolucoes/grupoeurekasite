@@ -1,6 +1,7 @@
 import type { Category, SchoolCycle } from './types'
+import { clientEnv } from '@/lib/env'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL
+const API_BASE = clientEnv.NEXT_PUBLIC_API_URL
 
 /**
  * Resposta das opções de filtro

@@ -1,6 +1,7 @@
 import type { ProductDetail } from './types'
+import { clientEnv } from '@/lib/env'
 
-const API_BASE = process.env.NEXT_PUBLIC_PRODUCT_DETAILS_API_URL
+const API_BASE = clientEnv.NEXT_PUBLIC_PRODUCT_DETAILS_API_URL
 
 /**
  * Busca um produto pelo ID

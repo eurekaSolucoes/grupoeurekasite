@@ -14,8 +14,9 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import { FilterDrawerForm } from './FilterDrawerForm'
 import type { GetFilterOptionsResponse } from '@/services/products'
+import { clientEnv } from '@/lib/env'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL
+const API_BASE = clientEnv.NEXT_PUBLIC_API_URL
 
 export function FilterDrawer() {
   const [open, setOpen] = useState(false)

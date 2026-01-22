@@ -9,28 +9,26 @@ import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
-import { Categories } from './collections/Categories'
 import { Documents } from './collections/Documents'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
-import { Posts } from './collections/Posts'
-import { Projects } from './collections/Projects'
 import { Users } from './collections/Users'
 import { Navigation } from './Navigation/config'
 import { Homepage } from './Homepage/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { serverEnv } from '@/lib/env'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const autoLoginEmail = process.env.NEXT_AUTO_LOGIN_EMAIL
-const autoLoginPassword = process.env.NEXT_AUTO_LOGIN_PASSWORD
+const autoLoginEmail = serverEnv.NEXT_AUTO_LOGIN_EMAIL
+const autoLoginPassword = serverEnv.NEXT_AUTO_LOGIN_PASSWORD
 
 const hasAutoLogin = !!autoLoginEmail && !!autoLoginPassword
 
-const isDevelopment = process.env.NODE_ENV === 'development'
+const isDevelopment = serverEnv.NODE_ENV === 'development'
 
 export default buildConfig({
   admin: {
@@ -83,22 +81,22 @@ export default buildConfig({
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   email: nodemailerAdapter({
-    defaultFromAddress: 'contato@grupoeureka.com.br',
+    defaultFromAddress: serverEnv.NX_EMAIL_FROM || 'contato@grupoeureka.com.br',
     defaultFromName: 'Grupo Eureka',
     transportOptions: {
-      host: process.env.NX_EMAIL_HOST,
-      port: parseInt(process.env.NX_EMAIL_PORT || '587'),
+      host: serverEnv.NX_EMAIL_HOST,
+      port: parseInt(serverEnv.NX_EMAIL_PORT),
       secure: false,
       auth: {
-        user: process.env.NX_EMAIL_EUREKA,
-        pass: process.env.NX_PASSWORD_EUREKA,
+        user: serverEnv.NX_EMAIL_EUREKA,
+        pass: serverEnv.NX_EMAIL_PASS,
       },
     },
   }),
   db: mongooseAdapter({
-    url: process.env.DATABASE_URI || '',
+    url: serverEnv.DATABASE_URI,
   }),
-  collections: [Pages, Posts, Projects, Media, Documents, Categories, Users],
+  collections: [Pages, Media, Documents, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Navigation, Homepage],
   plugins: [
@@ -109,17 +107,17 @@ export default buildConfig({
         media: true,
         documents: true,
       },
-      bucket: process.env.S3_BUCKET || '',
+      bucket: serverEnv.S3_BUCKET || '',
       config: {
         credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+          accessKeyId: serverEnv.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: serverEnv.S3_SECRET_ACCESS_KEY || '',
         },
-        region: process.env.S3_REGION || 'us-east-1',
+        region: serverEnv.S3_REGION,
       },
     }),
   ],
-  secret: process.env.PAYLOAD_SECRET,
+  secret: serverEnv.PAYLOAD_SECRET,
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
@@ -138,7 +136,7 @@ export default buildConfig({
         // for the Vercel Cron secret to be present as an
         // Authorization header:
         const authHeader = req.headers.get('authorization')
-        return authHeader === `Bearer ${process.env.CRON_SECRET}`
+        return authHeader === `Bearer ${serverEnv.CRON_SECRET}`
       },
     },
     tasks: [],
