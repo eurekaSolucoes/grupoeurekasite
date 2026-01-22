@@ -197,12 +197,13 @@ Required variables (see `.env.example`):
 - `S3_ENDPOINT` - S3 endpoint URL
 - `NX_EMAIL_HOST` - SMTP server hostname
 - `NX_EMAIL_PORT` - SMTP port (default: 587)
-- `NX_EMAIL_EUREKA` - SMTP authentication username
-- `NX_PASSWORD_EUREKA` - SMTP authentication password
+- `NX_EMAIL_EUREKA` - SMTP authentication username (AWS SES SMTP credentials)
+- `NX_EMAIL_PASS` - SMTP authentication password
+- `NX_EMAIL_FROM` - Sender email address
 
 **Media Storage**: This project uses AWS S3 for media storage via `@payloadcms/storage-s3`. All media uploads are stored in S3, not locally. Ensure S3 credentials are configured before uploading media.
 
-**Email**: This project uses `@payloadcms/email-nodemailer` for sending form submission notifications via SMTP. Configure the NX_EMAIL_* variables to enable email functionality. Default sender is hardcoded as `contato@grupoeureka.com.br` (Grupo Eureka).
+**Email**: This project uses `@payloadcms/email-nodemailer` for sending form submission notifications via SMTP. Configure the NX_EMAIL_* variables to enable email functionality. Default sender is configured via `NX_EMAIL_FROM` (fallback: `contato@grupoeureka.com.br`).
 
 ## API Externa - Eureka Digital
 
