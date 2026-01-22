@@ -61,53 +61,6 @@ async function getCmsPages(): Promise<SitemapEntry[]> {
 }
 
 // ============================================================================
-// CMS Posts
-// ============================================================================
-
-async function getCmsPosts(): Promise<SitemapEntry[]> {
-  const payload = await getPayload({ config: configPromise })
-
-  const { docs } = await payload.find({
-    collection: 'posts',
-    draft: false,
-    limit: 1000,
-    pagination: false,
-    select: { slug: true, updatedAt: true },
-  })
-
-  return docs.map((post) =>
-    createEntry(`/posts/${post.slug}`, {
-      lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.6,
-    }),
-  )
-}
-
-// ============================================================================
-// CMS Projects (desabilitado - collection vazia)
-// ============================================================================
-
-// async function getCmsProjects(): Promise<SitemapEntry[]> {
-//   const payload = await getPayload({ config: configPromise })
-//
-//   const { docs } = await payload.find({
-//     collection: 'projects',
-//     draft: false,
-//     limit: 1000,
-//     pagination: false,
-//     select: { slug: true, updatedAt: true },
-//   })
-//
-//   return docs.map((project) =>
-//     createEntry(`/projetos/${project.slug}`, {
-//       lastModified: project.updatedAt ? new Date(project.updatedAt) : new Date(),
-//       priority: 0.7,
-//     }),
-//   )
-// }
-
-// ============================================================================
 // External API: Obras (Eureka Digital)
 // ============================================================================
 
@@ -132,18 +85,7 @@ async function getObrasPages(): Promise<SitemapEntry[]> {
 // ============================================================================
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [cmsPages, cmsPosts, obrasPages] = await Promise.all([
-    getCmsPages(),
-    getCmsPosts(),
-    // getCmsProjects(), // desabilitado - collection vazia
-    getObrasPages(),
-  ])
+  const [cmsPages, obrasPages] = await Promise.all([getCmsPages(), getObrasPages()])
 
-  return [
-    ...getStaticPages(),
-    ...cmsPages,
-    ...cmsPosts,
-    // ...cmsProjects, // desabilitado - collection vazia
-    ...obrasPages,
-  ]
+  return [...getStaticPages(), ...cmsPages, ...obrasPages]
 }
