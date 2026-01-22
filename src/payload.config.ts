@@ -40,7 +40,24 @@ export default buildConfig({
             prefillOnly: true,
           }
         : false,
-
+    meta: {
+      icons: [
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          url: '/favicon.ico',
+        },
+        {
+          rel: 'icon',
+          type: 'image/svg+xml',
+          url: '/favicon.svg',
+        },
+        {
+          rel: 'apple-touch-icon',
+          url: '/apple-touch-icon.png',
+        },
+      ],
+    },
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below.
