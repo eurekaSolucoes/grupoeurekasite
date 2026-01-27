@@ -43,7 +43,7 @@ const nextConfig = {
       // Vercel deployments (all preview and production URLs)
       {
         protocol: 'https',
-        hostname: '*.vercel.app',
+        hostname: '**.vercel.app',
       },
       // Generic AWS S3 patterns (wildcard support)
       {
