@@ -40,6 +40,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'eurekadigital.s3.sa-east-1.amazonaws.com',
       },
+      // Vercel preview deployments
+      {
+        protocol: 'https',
+        hostname: '**.vercel.app',
+      },
       // Generic AWS S3 patterns (wildcard support)
       {
         protocol: 'https',
