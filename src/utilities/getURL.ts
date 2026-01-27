@@ -5,8 +5,8 @@ import { serverEnv } from '@/lib/env/server'
 export const getServerSideURL = () => {
   return (
     clientEnv.NEXT_PUBLIC_SERVER_URL ||
-    (serverEnv.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${serverEnv.VERCEL_PROJECT_PRODUCTION_URL}`
+    (serverEnv.VERCEL_URL
+      ? `https://${serverEnv.VERCEL_URL}`
       : 'http://localhost:3000')
   )
 }
@@ -20,8 +20,8 @@ export const getClientSideURL = () => {
     return `${protocol}//${domain}${port ? `:${port}` : ''}`
   }
 
-  if (serverEnv.VERCEL_PROJECT_PRODUCTION_URL) {
-    return `https://${serverEnv.VERCEL_PROJECT_PRODUCTION_URL}`
+  if (serverEnv.VERCEL_URL) {
+    return `https://${serverEnv.VERCEL_URL}`
   }
 
   return clientEnv.NEXT_PUBLIC_SERVER_URL || ''

@@ -14,6 +14,7 @@ export const serverEnv = createEnv({
     PREVIEW_SECRET: z.string().optional(),
 
     // Vercel
+    VERCEL_URL: z.string().optional(),
     VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
 
     // Auto Login (development only)
