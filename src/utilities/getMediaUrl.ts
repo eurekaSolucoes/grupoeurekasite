@@ -1,5 +1,4 @@
 import type { Media } from '@/payload-types'
-import { getClientSideURL } from '@/utilities/getURL'
 
 /**
  * Processes media resource URL to ensure proper formatting
@@ -14,14 +13,14 @@ export const getMediaUrl = (url: string | null | undefined, cacheTag?: string | 
     cacheTag = encodeURIComponent(cacheTag)
   }
 
-  // Check if URL already has http/https protocol
+  // Check if URL already has http/https protocol (external URLs like S3)
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return cacheTag ? `${url}?${cacheTag}` : url
   }
 
-  // Otherwise prepend client-side URL
-  const baseUrl = getClientSideURL()
-  return cacheTag ? `${baseUrl}${url}?${cacheTag}` : `${baseUrl}${url}`
+  // For local URLs (like /api/media/file/...), keep them relative
+  // This allows Next.js Image to use localPatterns instead of remotePatterns
+  return cacheTag ? `${url}?${cacheTag}` : url
 }
 
 /**
