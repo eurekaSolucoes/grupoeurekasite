@@ -101,7 +101,7 @@ export default buildConfig({
     defaultFromName: 'Grupo Eureka',
     transportOptions: {
       host: serverEnv.NX_EMAIL_HOST,
-      port: parseInt(serverEnv.NX_EMAIL_PORT),
+      port: Number(serverEnv.NX_EMAIL_PORT),
       secure: false,
       auth: {
         user: serverEnv.NX_EMAIL_EUREKA,
@@ -130,6 +130,9 @@ export default buildConfig({
           secretAccessKey: serverEnv.S3_SECRET_ACCESS_KEY || '',
         },
         region: serverEnv.S3_REGION,
+        // Only use endpoint if explicitly set (for S3-compatible services like DigitalOcean Spaces)
+        // AWS S3 uses region-based endpoints by default
+        ...(serverEnv.S3_ENDPOINT ? { endpoint: serverEnv.S3_ENDPOINT } : {}),
       },
     }),
   ],

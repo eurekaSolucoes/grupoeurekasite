@@ -40,6 +40,15 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'eurekadigital.s3.sa-east-1.amazonaws.com',
       },
+      // Generic AWS S3 patterns (wildcard support)
+      {
+        protocol: 'https',
+        hostname: '**.s3.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.s3.*.amazonaws.com',
+      },
     ],
     // Add quality 100 to support Payload CMS image optimization
     // Next.js 16 changed default from [1..100] to just [75]
