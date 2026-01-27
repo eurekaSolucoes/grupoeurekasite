@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import type { Media, Page, Post, Config } from '../payload-types'
+import type { Media, Page, Config } from '../payload-types'
 
 import { mergeOpenGraph } from './mergeOpenGraph'
 import { getServerSideURL } from './getURL'
@@ -26,9 +26,7 @@ const HOMEPAGE_DEFAULTS = {
     'Grupo Eureka: 26 anos transformando a educação pública brasileira. Soluções educacionais inovadoras, plataforma digital e formação docente para redes de ensino.',
 }
 
-export const generateMeta = async (args: {
-  doc: Partial<Page> | Partial<Post> | null
-}): Promise<Metadata> => {
+export const generateMeta = async (args: { doc: Partial<Page> | null }): Promise<Metadata> => {
   const { doc } = args
   const serverUrl = getServerSideURL()
 
@@ -49,7 +47,8 @@ export const generateMeta = async (args: {
       ? HOMEPAGE_DEFAULTS.title
       : 'Grupo Eureka'
 
-  const description = doc?.meta?.description || (isHomepage ? HOMEPAGE_DEFAULTS.description : undefined)
+  const description =
+    doc?.meta?.description || (isHomepage ? HOMEPAGE_DEFAULTS.description : undefined)
 
   // Gera o path para canonical e OpenGraph
   const path = isHomepage ? '' : `/${slug}`

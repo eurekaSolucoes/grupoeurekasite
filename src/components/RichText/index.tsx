@@ -14,7 +14,6 @@ import {
 import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
 
 import type {
-  BannerBlock as BannerBlockProps,
   CallToActionBlock as CTABlockProps,
   MediaBlock as MediaBlockProps,
 } from '@/payload-types'
@@ -24,9 +23,9 @@ import { cn } from '@/utilities/ui'
 
 type NodeTypes =
   | DefaultNodeTypes
-  | SerializedBlockNode<CTABlockProps | MediaBlockProps | BannerBlockProps | CodeBlockProps>
+  | SerializedBlockNode<CTABlockProps | MediaBlockProps | CodeBlockProps>
 
-const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
+const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }): string => {
   const doc = linkNode.fields.doc!
   if (typeof doc.value !== 'object') {
     throw new Error('Expected value to be an object')
@@ -34,21 +33,20 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
 
   // Documents use .url property, Pages use .slug
   if (doc.relationTo === 'documents') {
-    return doc.value.url
+    return typeof doc.value.url === 'string' ? doc.value.url : ''
   }
 
   // Default to slug-based URL for pages
-  return `/${doc.value.slug}`
+  return typeof doc.value.slug === 'string' ? `/${doc.value.slug}` : ''
 }
 
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
   blocks: {
-    banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
     mediaBlock: ({ node }) => (
       <MediaBlock
-        className="col-start-1 col-span-3"
+        className="col-span-3 col-start-1"
         imgClassName="m-0"
         {...node.fields}
         captionClassName="mx-auto max-w-3xl"
@@ -77,7 +75,7 @@ export default function RichText(props: Props) {
         {
           container: enableGutter,
           'max-w-none': !enableGutter,
-          'mx-auto prose md:prose-md': enableProse,
+          'prose md:prose-md mx-auto': enableProse,
         },
         className,
       )}

@@ -2,7 +2,6 @@ import { PayloadRequest, CollectionSlug } from 'payload'
 import { serverEnv } from '@/lib/env'
 
 const collectionPrefixMap: Partial<Record<CollectionSlug, string>> = {
-  posts: '/posts',
   pages: '',
 }
 
