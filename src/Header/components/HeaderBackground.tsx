@@ -20,7 +20,7 @@ export function HeaderBackground({ bgTheme }: HeaderBackgroundProps) {
       logoMobile={config.logoMobile}
       logoDesktop={config.logoDesktop}
       aria-hidden
-      className={cn('mb-7 h-28 rounded-b-3xl md:h-42', config.className)}
+      className={cn('mb-7 h-28 rounded-b-3xl lg:h-42', config.className)}
       children={null}
     />
   )
