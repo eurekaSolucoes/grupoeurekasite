@@ -2,6 +2,10 @@
 import { s3Storage } from '@payloadcms/storage-s3'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
+// import { pt } from '@payloadcms/translations/languages/pt'
+// import { en } from '@payloadcms/translations/languages/en'
+import { en } from 'payload/i18n/en'
+import { pt } from 'payload/i18n/pt'
 
 import sharp from 'sharp' // sharp-import
 import path from 'node:path'
@@ -142,6 +146,7 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   i18n: {
+    supportedLanguages: { pt, en },
     fallbackLanguage: 'pt',
   },
   jobs: {
