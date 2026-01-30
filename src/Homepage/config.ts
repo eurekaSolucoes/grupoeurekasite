@@ -52,7 +52,6 @@ export const Homepage: GlobalConfig = {
                   type: 'upload',
                   relationTo: 'media',
                   label: 'Imagem em Destaque',
-                  required: true,
                 },
               ],
               admin: {
