@@ -60,20 +60,27 @@ export function BannerBlock({ banners = [] }: Readonly<BannerBlockProps>) {
     const isActive = index === currentSlide
     const isFirst = index === 0
 
+    // Primeiro render: animação inicial apenas no primeiro slide
+    if (isFirst && !slideDirection) {
+      return 'self-end group-first/slide:animate-in group-first/slide:duration-1500 group-first/slide:ease-in-out group-first/slide:slide-in-from-left-5 group-first/slide:fade-in'
+    }
+
+    // Slides inativos: sem animação
+    if (!isActive) {
+      return 'self-end'
+    }
+
+    // Slide ativo: anima baseado na direção
     return cn(
-      'self-end',
-      // Animação de entrada no primeiro render (apenas primeiro slide)
-      isFirst &&
-        !slideDirection &&
-        'group-first/slide:animate-in group-first/slide:duration-1500 group-first/slide:ease-in-out group-first/slide:slide-in-from-left-5 group-first/slide:fade-in',
-      // Animação de transição ao trocar slides (sem fade - opacidade controlada pelo keen-slider)
-      isActive &&
-        slideDirection === 'next' &&
-        'animate-in duration-1000 ease-out slide-in-from-right-20',
-      isActive &&
-        slideDirection === 'prev' &&
-        'animate-in duration-1000 ease-out slide-in-from-left-20',
+      'animate-in self-end duration-1000 ease-out',
+      slideDirection === 'next' && 'slide-in-from-right-20',
+      slideDirection === 'prev' && 'slide-in-from-left-20',
     )
+  }
+
+  // Gera chave única para forçar remontagem do elemento quando muda de direção
+  const getFeaturedImageKey = (index: number) => {
+    return `featured-${index}-${slideDirection || 'initial'}`
   }
 
   // Keyboard navigation
@@ -187,7 +194,7 @@ export function BannerBlock({ banners = [] }: Readonly<BannerBlockProps>) {
                   </div>
 
                   {/* Featured Image */}
-                  <div className={getFeaturedImageClasses(index)}>
+                  <div key={getFeaturedImageKey(index)} className={getFeaturedImageClasses(index)}>
                     {featuredImage && (
                       <div className="relative aspect-square size-full md:max-h-[min(50vh,var(--breakpoint-md))] lg:max-h-full">
                         <Media
@@ -224,9 +231,11 @@ export function BannerBlock({ banners = [] }: Readonly<BannerBlockProps>) {
               key={i}
               aria-current={currentSlide === i}
               onClick={() => instanceRef.current?.moveToIdx(i)}
-              className="w-10 cursor-pointer rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white aria-current:h-1.25 aria-current:bg-white aria-[current=false]:h-0.5 aria-[current=false]:bg-white/40"
+              className="group/indicator relative flex cursor-pointer items-center justify-center py-4"
               aria-label={banner.title ?? `Slide ${i + 1}${currentSlide === i ? ' (atual)' : ''}`}
-            />
+            >
+              <span className="w-10 rounded-full transition-all duration-300 group-focus-visible/indicator:outline-2 group-focus-visible/indicator:outline-offset-2 group-focus-visible/indicator:outline-white group-aria-current/indicator:h-1.25 group-aria-current/indicator:bg-white group-aria-[current=false]/indicator:h-0.5 group-aria-[current=false]/indicator:bg-white/40" />
+            </button>
           ))}
         </nav>
       </div>
