@@ -25,6 +25,10 @@ export const plugins: Plugin[] = [
   redirectsPlugin({
     collections: ['pages'],
     overrides: {
+      labels: {
+        singular: 'Redirecionamento',
+        plural: 'Redirecionamentos',
+      },
       admin: {
         group: 'Globais',
       },
@@ -34,9 +38,47 @@ export const plugins: Plugin[] = [
           if ('name' in field && field.name === 'from') {
             return {
               ...field,
+              label: 'De (URL origem)',
               admin: {
-                description: 'You will need to rebuild the website when changing this field.',
+                description: 'Você precisará refazer o deploy do site ao alterar este campo.',
               },
+            }
+          }
+          if ('name' in field && field.name === 'to') {
+            return {
+              ...field,
+              // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
+              fields: field.fields?.map((subField) => {
+                if ('name' in subField && subField.name === 'type') {
+                  return {
+                    ...subField,
+                    label: 'Tipo de redirecionamento',
+                    // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
+                    options: subField.options?.map((opt) => {
+                      if (opt.value === 'reference') {
+                        return { ...opt, label: 'Link interno' }
+                      }
+                      if (opt.value === 'custom') {
+                        return { ...opt, label: 'URL personalizada' }
+                      }
+                      return opt
+                    }),
+                  }
+                }
+                if ('name' in subField && subField.name === 'reference') {
+                  return {
+                    ...subField,
+                    label: 'Documento para redirecionar',
+                  }
+                }
+                if ('name' in subField && subField.name === 'url') {
+                  return {
+                    ...subField,
+                    label: 'URL personalizada',
+                  }
+                }
+                return subField
+              }),
             }
           }
           return field
@@ -56,6 +98,10 @@ export const plugins: Plugin[] = [
       payment: false,
     },
     formOverrides: {
+      labels: {
+        singular: 'Formulário',
+        plural: 'Formulários',
+      },
       admin: {
         group: 'Globais',
       },
@@ -80,6 +126,10 @@ export const plugins: Plugin[] = [
       },
     },
     formSubmissionOverrides: {
+      labels: {
+        singular: 'Submissão de formulário',
+        plural: 'Submissões de formulário',
+      },
       admin: {
         group: 'Globais',
       },
