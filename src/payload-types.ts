@@ -360,7 +360,7 @@ export interface ContentBlock {
           document?: (string | null) | Document;
           label: string;
           /**
-           * Choose how the link should be rendered.
+           * Escolha como o link deve ser renderizado.
            */
           appearance?: ('default' | 'outline') | null;
         };
@@ -702,7 +702,7 @@ export interface CallToActionBlock {
           document?: (string | null) | Document;
           label: string;
           /**
-           * Choose how the link should be rendered.
+           * Escolha como o link deve ser renderizado.
            */
           appearance?: ('default' | 'outline') | null;
         };
@@ -1172,7 +1172,7 @@ export interface User {
 export interface Redirect {
   id: string;
   /**
-   * You will need to rebuild the website when changing this field.
+   * Você precisará refazer o deploy do site ao alterar este campo.
    */
   from: string;
   to?: {
@@ -2413,7 +2413,7 @@ export interface Homepage {
           label: string;
         };
         backgroundImage: string | Media;
-        featuredImage: string | Media;
+        featuredImage?: (string | null) | Media;
         id?: string | null;
       }[]
     | null;
