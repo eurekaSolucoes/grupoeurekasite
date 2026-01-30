@@ -16,19 +16,19 @@ const columnFields: Field[] = [
     defaultValue: 'oneThird',
     options: [
       {
-        label: 'One Third',
+        label: 'Um Terço',
         value: 'oneThird',
       },
       {
-        label: 'Half',
+        label: 'Metade',
         value: 'half',
       },
       {
-        label: 'Two Thirds',
+        label: 'Dois Terços',
         value: 'twoThirds',
       },
       {
-        label: 'Full',
+        label: 'Inteiro',
         value: 'full',
       },
     ],
