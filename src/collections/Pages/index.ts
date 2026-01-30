@@ -37,6 +37,10 @@ import {
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
+  labels: {
+    singular: 'Página',
+    plural: 'Páginas',
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -118,7 +122,7 @@ export const Pages: CollectionConfig<'pages'> = {
               },
             },
           ],
-          label: 'Content',
+          label: 'Conteúdo',
         },
         {
           name: 'meta',
